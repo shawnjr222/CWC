@@ -199,7 +199,7 @@ hr {
     
     body {
         padding-top: 0vh;   /* Adjust top padding for mobile */
-        padding-left: 0vw;
+        padding-left: -10vw;
     }
 
     .container {

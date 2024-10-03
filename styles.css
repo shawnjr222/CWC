@@ -1,0 +1,228 @@
+/* Define custom font using @font-face */
+@font-face {
+    font-family: 'TAYBigBird';
+    src: url('fonts/TAYBigBird.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'TAYBigBird', sans-serif;
+    background-color: #222222; /* Background color */
+    color: #ffffff; /* Font color */
+    height: 100vh;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 10vh; /* Slightly increased top padding */
+    padding-left: 4vw; /* Slightly smaller left padding */
+}
+
+.container {
+    text-align: left; /* Align text to the left */
+    max-width: 140vw; /* Slightly decreased width for the paragraph */
+    padding: 15vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Headline (Paragraph) */
+h1 {
+    font-size: 2.2rem;  /* Responsive font size */
+    line-height: 4rem; /* Responsive line height */
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+}
+
+/* Links */
+.links a {
+    display: block; /* Keeps the elements stacked vertically while limiting the clickable area to the text */
+    font-size: 1.34rem;  /* Responsive font size for links */
+    line-height: 2.2rem; /* Responsive line height for links */
+    color: #ffffff; /* Ensure link text is white */
+    margin-bottom: 15px;
+    text-decoration: none;
+    transition: color 0.3s;
+    letter-spacing: 2px;
+    width: fit-content; /* Limits the clickable area to the width of the text */
+}
+
+.links a:hover {
+    color: #444444;
+}
+
+.worked {
+    width: 95%;
+    padding: 0vh;
+}
+
+/* Work items styling */
+.work-item {
+    display: flex;
+    justify-content: space-between; /* Left-align title, right-align date */
+    align-items: center;
+    padding: 20px 0;
+}
+
+/* Updated the work-title to be clickable */
+.work-title a {
+    font-size: 1.6rem;
+    color: #ffffff;
+    text-align: left;
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s;
+}
+
+.work-title a:hover {
+    color: #444444; /* Lighter color on hover */
+}
+
+.work-date {
+    font-size: 1.6rem;
+    color: #ffffff;
+    text-align: right;
+}
+
+hr {
+    border: 0;
+    border-top: 2px solid #333333;
+    margin: 10px 0;
+    width: 100%; /* Make sure the hr takes up the full width of the container */
+}
+
+/* =============== BREAKPOINTS =============== */
+
+/* Desktop - (min-width: 1367px) */
+@media only screen and (min-width: 1367px) {
+    h1 {
+        font-size: 2.2rem;  /* Responsive font size */
+    line-height: 4rem; /* Responsive line height */
+    }
+
+    .links a {
+        font-size: 1.34rem;  /* Responsive font size for links */
+    line-height: 2.2rem; /* Responsive line height for links */
+    }
+
+    .work-title a {
+        font-size: 1.6rem;
+    }
+
+    .work-date {
+        font-size: 1.6rem;
+    }
+}
+
+/* Desktop Split 1 - Portrait orientation */
+@media only screen and (min-width: 1367px) and (orientation: portrait) {
+    body {
+        padding-left: 6vw; /* Adjust left padding for portrait mode */
+    }
+
+    .container {
+        max-width: 120vw; /* Narrower width in portrait mode */
+    }
+
+    h1 {
+        font-size: 2.5rem;  /* Slightly smaller font in portrait mode */
+    }
+
+    .links a {
+        font-size: 1.5rem;  /* Adjust font size for links */
+    }
+}
+
+/* Tablet - (min-width: 1040px) and (max-width: 1366px) */
+@media only screen and (min-width: 1040px) and (max-width: 1366px) {
+    body {
+        padding-top: 8vh;   /* Adjust top padding for tablets */
+        padding-left: 5vw;  /* Adjust left padding */
+    }
+
+    h1 {
+        font-size: 2.4rem;   /* Slightly smaller font size */
+        line-height: 3.8rem; /* Adjusted line height */
+    }
+
+    .links a {
+        font-size: 1.4rem;   /* Slightly smaller font size for links */
+    }
+
+    .work-title a {
+        font-size: 1.4rem;
+    }
+
+    .work-date {
+        font-size: 1.4rem;
+    }
+}
+
+/* Desktop Split 2 - (min-width: 574px) and (max-width: 1039px) */
+@media only screen and (min-width: 574px) and (max-width: 1039px) {
+    body {
+        padding-top: 6vh;   /* Adjust top padding */
+        padding-left: 5vw;
+    }
+
+    h1 {
+        font-size: 1.6rem;  /* Adjusted font size */
+        line-height: 3rem;
+    }
+
+    .links a {
+        font-size: 1.1rem;
+    }
+
+    .work-title a {
+        font-size: 1.1rem;
+    }
+
+    .work-date {
+        font-size: 1.1rem;
+    }
+}
+
+/* Mobile - (max-width: 573px) */
+@media only screen and (max-width: 573px) {
+    body {
+        padding-top: 5vh;   /* Adjust top padding for mobile */
+        padding-left: 4vw;
+    }
+
+    h1 {
+        font-size: 2rem;     /* Smaller font size for mobile */
+        line-height: 3rem;
+    }
+
+    .links a {
+        font-size: 1.2rem;   /* Smaller link font size for mobile */
+        line-height: 2rem;
+    }
+
+    .work-title a {
+        font-size: 1.2rem; /* Smaller font size for links on mobile */
+        line-height: 2rem;
+    }
+
+    .work-date {
+        font-size: 1.2rem;
+        line-height: 2rem;
+    }
+
+    .work-item {
+        flex-direction: column; /* Stack items vertically on mobile */
+        align-items: flex-start;
+    }
+
+    .work-date {
+        text-align: left; /* Align dates to the left on mobile */
+        margin-top: 10px; /* Add space between title and date */
+    }
+}

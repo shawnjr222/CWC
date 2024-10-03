@@ -199,11 +199,11 @@ hr {
     
     body {
         padding-top: 0vh;   /* Adjust top padding for mobile */
-        padding-left: 1vw;
+        padding-left: 0vw;
     }
 
     .container {
-    padding: 20vh;
+    padding: 10vh;
 }
 
     h1 {
@@ -229,7 +229,7 @@ hr {
     .work-item {
         flex-direction: column; /* Stack items vertically on mobile */
         align-items: flex-start;
-        padding: 15px 0;
+        padding: 10px 0;
     }
     
     .work-date {

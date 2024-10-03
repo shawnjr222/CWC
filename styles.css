@@ -216,22 +216,22 @@ hr {
 }
 
     h1 {
-        font-size: 1.5rem;     /* Smaller font size for mobile */
+        font-size: 1.1rem;     /* Smaller font size for mobile */
         line-height: 2rem;
     }
 
     .links a {
-        font-size: .8rem;   /* Smaller link font size for mobile */
+        font-size: .9rem;   /* Smaller link font size for mobile */
         line-height: 1rem;
     }
 
     .work-title a {
-        font-size: .8rem; /* Smaller font size for links on mobile */
+        font-size: .9rem; /* Smaller font size for links on mobile */
         line-height: 1rem;
     }
 
     .work-date {
-        font-size: .8rem;
+        font-size: .9rem;
         line-height: 1rem;
     }
 

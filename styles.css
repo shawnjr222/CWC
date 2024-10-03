@@ -196,19 +196,19 @@ hr {
 
 /* Mobile - (max-width: 573px) */
 @media only screen and (max-width: 573px) {
-   .container {
-    width: 95%; 
-} 
     
     body {
         padding-top: 0vh;   /* Adjust top padding for mobile */
         padding-left: 0vw;
-         height: 10vh;
     }
 
+    .container {
+    padding: 0vh;
+}
+
     h1 {
-        font-size: 2rem;     /* Smaller font size for mobile */
-        line-height: 2rem;
+        font-size: 1rem;     /* Smaller font size for mobile */
+        line-height: 1rem;
     }
 
     .links a {

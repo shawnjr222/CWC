@@ -199,17 +199,17 @@ hr {
     
     body {
         padding-top: 0vh;   /* Adjust top padding for mobile */
-        padding-left: .1vw;
+        padding-left: 0vw;
     }
 
     .container {
-    padding: 12vh;
+    padding: 0vh;
     text-align: left; /* Align text to the left */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    max-width: 95%; /* Fits content within the viewport width */
-    width: 95%;
+    max-width: 200%; /* Fits content within the viewport width */
+    width: 200%;
 }
 
     h1 {

@@ -200,11 +200,15 @@ hr {
     body {
         padding-top: 0vh;   /* Adjust top padding for mobile */
         padding-left: 0vw;
-      height: 100%;
     }
 
     .container {
     padding: 12vh;
+    text-align: left; /* Align text to the left */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* max-width removed */
 }
 
     h1 {

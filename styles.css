@@ -142,7 +142,7 @@ hr {
 /* Tablet - (min-width: 1040px) and (max-width: 1366px) */
 @media only screen and (min-width: 1040px) and (max-width: 1366px) {
     body {
-        padding-top: 2vh;   /* Adjust top padding for tablets */
+        padding-top: 4vh;   /* Adjust top padding for tablets */
         padding-left: 5vw;  /* Adjust left padding */
     }
 
@@ -163,6 +163,10 @@ hr {
     .work-date {
         font-size: 1.4rem;
     }
+
+    .worked {
+    padding: 2vh;
+}
 }
 
 /* Desktop Split 2 - (min-width: 574px) and (max-width: 1039px) */

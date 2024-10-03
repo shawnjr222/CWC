@@ -200,6 +200,7 @@ hr {
     body {
         padding-top: 0vh;   /* Adjust top padding for mobile */
         padding-left: 0vw;
+        width: 100vw
     }
 
     .container {
@@ -208,8 +209,7 @@ hr {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    max-width: 200%; /* Fits content within the viewport width */
-    width: 200%;
+    width: 10px;
 }
 
     h1 {
@@ -218,17 +218,17 @@ hr {
     }
 
     .links a {
-        font-size: .8rem;   /* Smaller link font size for mobile */
+        font-size: .7rem;   /* Smaller link font size for mobile */
         line-height: 1rem;
     }
 
     .work-title a {
-        font-size: .8rem; /* Smaller font size for links on mobile */
+        font-size: .7rem; /* Smaller font size for links on mobile */
         line-height: 1rem;
     }
 
     .work-date {
-        font-size: .8rem;
+        font-size: .7rem;
         line-height: 1rem;
     }
 

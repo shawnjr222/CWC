@@ -203,7 +203,8 @@ hr {
     }
 
     .container {
-    padding: 10vh;
+    padding: 15vh;
+    width: 100%; 
 }
 
     h1 {

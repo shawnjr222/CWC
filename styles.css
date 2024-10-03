@@ -204,7 +204,7 @@ hr {
     }
 
     .container {
-        padding-top: 20vh;
+        padding-top: 17vh;
         padding-right: 0vh;
         padding-bottom: 0vh;
         padding-left: 0vh;
@@ -216,22 +216,22 @@ hr {
 }
 
     h1 {
-        font-size: 1rem;     /* Smaller font size for mobile */
-        line-height: 1.3rem;
+        font-size: 1.5rem;     /* Smaller font size for mobile */
+        line-height: 2rem;
     }
 
     .links a {
-        font-size: .7rem;   /* Smaller link font size for mobile */
+        font-size: 1rem;   /* Smaller link font size for mobile */
         line-height: 1rem;
     }
 
     .work-title a {
-        font-size: .7rem; /* Smaller font size for links on mobile */
+        font-size: 1rem; /* Smaller font size for links on mobile */
         line-height: 1rem;
     }
 
     .work-date {
-        font-size: .7rem;
+        font-size: 1rem;
         line-height: 1rem;
     }
 

@@ -112,11 +112,11 @@ hr {
     }
 
     .work-title a {
-        font-size: 1.6rem;
+        font-size: 1.34rem;
     }
 
     .work-date {
-        font-size: 1.6rem;
+        font-size: 1.34rem;
     }
 }
 
@@ -142,17 +142,18 @@ hr {
 /* Tablet - (min-width: 1040px) and (max-width: 1366px) */
 @media only screen and (min-width: 1040px) and (max-width: 1366px) {
     body {
-        padding-top: 8vh;   /* Adjust top padding for tablets */
+        padding-top: 2vh;   /* Adjust top padding for tablets */
         padding-left: 5vw;  /* Adjust left padding */
     }
 
     h1 {
-        font-size: 2.4rem;   /* Slightly smaller font size */
-        line-height: 3.8rem; /* Adjusted line height */
+          font-size: 2.2rem;  /* Responsive font size */
+    line-height: 4rem; /* Responsive line height */
     }
 
     .links a {
-        font-size: 1.4rem;   /* Slightly smaller font size for links */
+           font-size: 1.34rem;  /* Responsive font size for links */
+    line-height: 2.2rem; /* Responsive line height for links */
     }
 
     .work-title a {

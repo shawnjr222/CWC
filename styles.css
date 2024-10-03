@@ -165,7 +165,7 @@ hr {
     }
 
     .worked {
-    padding: 3vh;
+    padding: 4vh;
 }
 }
 
@@ -202,23 +202,23 @@ hr {
     }
 
     h1 {
-        font-size: 2rem;     /* Smaller font size for mobile */
-        line-height: 3rem;
+        font-size: 1rem;     /* Smaller font size for mobile */
+        line-height: 2rem;
     }
 
     .links a {
-        font-size: 1.2rem;   /* Smaller link font size for mobile */
-        line-height: 2rem;
+        font-size: .8rem;   /* Smaller link font size for mobile */
+        line-height: 1rem;
     }
 
     .work-title a {
-        font-size: 1.2rem; /* Smaller font size for links on mobile */
-        line-height: 2rem;
+        font-size: .8rem; /* Smaller font size for links on mobile */
+        line-height: 1rem;
     }
 
     .work-date {
-        font-size: 1.2rem;
-        line-height: 2rem;
+        font-size: .8rem;
+        line-height: 1rem;
     }
 
     .work-item {

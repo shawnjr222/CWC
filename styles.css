@@ -199,11 +199,11 @@ hr {
     
     body {
         padding-top: 0vh;   /* Adjust top padding for mobile */
-        padding-left: 0vw;
+        padding-left: 2vw;
     }
 
     .container {
-    padding: 0vh;
+    padding: 8vh;
 }
 
     h1 {
@@ -235,4 +235,8 @@ hr {
         text-align: left; /* Align dates to the left on mobile */
         margin-top: 10px; /* Add space between title and date */
     }
+
+    .worked {
+    padding: 4vh;
+}
 }

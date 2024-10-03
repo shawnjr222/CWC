@@ -196,9 +196,13 @@ hr {
 
 /* Mobile - (max-width: 573px) */
 @media only screen and (max-width: 573px) {
+   .container {
+    width: 90%; 
+} 
+    
     body {
-        padding-top: 5vh;   /* Adjust top padding for mobile */
-        padding-left: 4vw;
+        padding-top: 1vh;   /* Adjust top padding for mobile */
+        padding-left: 1vw;
     }
 
     h1 {
@@ -207,17 +211,17 @@ hr {
     }
 
     .links a {
-        font-size: .8rem;   /* Smaller link font size for mobile */
+        font-size: 11rem;   /* Smaller link font size for mobile */
         line-height: 1rem;
     }
 
     .work-title a {
-        font-size: .8rem; /* Smaller font size for links on mobile */
+        font-size: 1rem; /* Smaller font size for links on mobile */
         line-height: 1rem;
     }
 
     .work-date {
-        font-size: .8rem;
+        font-size: 18rem;
         line-height: 1rem;
     }
 

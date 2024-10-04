@@ -217,7 +217,7 @@ hr {
 
     h1 {
         font-size: 1.23rem;     /* Smaller font size for mobile */
-        line-height: 2rem;
+        line-height: 1.45rem;
     }
 
     .links a {

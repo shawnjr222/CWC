@@ -55,7 +55,7 @@ h1 {
 }
 
 .links a:hover {
-    color: #88A0CC;
+    color: #AAB6CC;
 }
 
 .worked {
@@ -81,7 +81,7 @@ h1 {
 }
 
 .work-title a:hover {
-    color: #88A0CC; /* Lighter color on hover */
+    color: #AAB6CC; /* Lighter color on hover */
 }
 
 .work-date {

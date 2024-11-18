@@ -46,7 +46,7 @@ h1 {
     display: block; /* Keeps the elements stacked vertically while limiting the clickable area to the text */
     font-size: 1.34rem;  /* Responsive font size for links */
     line-height: 2.2rem; /* Responsive line height for links */
-    color: #222222; 
+    color: #2066EA; 
     margin-bottom: 15px;
     text-decoration: none;
     transition: color 0.3s;
@@ -55,7 +55,7 @@ h1 {
 }
 
 .links a:hover {
-    color: #777777;
+    color: #6D99EB;
 }
 
 .worked {
@@ -74,14 +74,14 @@ h1 {
 /* Updated the work-title to be clickable */
 .work-title a {
     font-size: 1.6rem;
-    color: #222222;
+    color: #2066EA;
     text-align: left;
     text-decoration: none; /* Remove underline */
     transition: color 0.3s;
 }
 
 .work-title a:hover {
-    color: #777777; /* Lighter color on hover */
+    color: #6D99EB; /* Lighter color on hover */
 }
 
 .work-date {

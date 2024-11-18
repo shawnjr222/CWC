@@ -92,7 +92,7 @@ h1 {
 
 hr {
     border: 0;
-    border-top: 2px solid #f2f2f2;
+    border-top: 2px solid #e0e0e0;
     margin: 10px 0;
     width: 100%; /* Make sure the hr takes up the full width of the container */
 }

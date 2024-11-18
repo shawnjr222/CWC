@@ -15,7 +15,7 @@
 body {
     font-family: 'TAYBigBird', sans-serif;
     background-color: #ffffff; /* Background color */
-    color: #222222; /* Font color */
+    color: #1250C4; /* Font color */
     height: 100vh;
     display: flex;
     justify-content: flex-start;
@@ -46,7 +46,7 @@ h1 {
     display: block; /* Keeps the elements stacked vertically while limiting the clickable area to the text */
     font-size: 1.34rem;  /* Responsive font size for links */
     line-height: 2.2rem; /* Responsive line height for links */
-    color: #2066EA; 
+    color: #1250C4; 
     margin-bottom: 15px;
     text-decoration: none;
     transition: color 0.3s;
@@ -55,7 +55,7 @@ h1 {
 }
 
 .links a:hover {
-    color: #6D99EB;
+    color: #3466C3;
 }
 
 .worked {
@@ -74,19 +74,19 @@ h1 {
 /* Updated the work-title to be clickable */
 .work-title a {
     font-size: 1.6rem;
-    color: #2066EA;
+    color: #1250C4;
     text-align: left;
     text-decoration: none; /* Remove underline */
     transition: color 0.3s;
 }
 
 .work-title a:hover {
-    color: #6D99EB; /* Lighter color on hover */
+    color: #3466C3; /* Lighter color on hover */
 }
 
 .work-date {
     font-size: 1.6rem;
-    color: #2066EA;
+    color: #1250C4;
     text-align: right;
 }
 

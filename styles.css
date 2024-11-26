@@ -4,8 +4,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60%; /* Adjust width to maintain ratio */
-    height: calc(60% * 0.5625); /* Calculate height dynamically for 16:9 ratio */
+    width: 60%; /* Adjust width for container */
+    height: calc(60% * 0.6); /* Slightly taller than 16:9 */
     background: #1250C4; /* Default blue background */
     border-radius: 8px;
     overflow: hidden; /* Prevent content from overflowing the rounded corners */
@@ -18,13 +18,14 @@
     background-position: center; /* Center image content */
 }
 
-/* Content Styling (future use for specific previews) */
+/* Content Styling (Images) */
 #hover-preview img {
     width: 100%;
     height: 100%;
-    object-fit: fill; /* Ensures images or GIFs scale proportionally */
+    object-fit: fill; /* Prevent cropping by stretching the image */
     display: none; /* No inline image for now */
 }
+
 
 
 

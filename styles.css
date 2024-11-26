@@ -15,8 +15,8 @@
     background-size: contain; /* Ensure the image fits without distortion */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent tiling of images */
-    max-width: 70%; /* Maximum width as percentage of the viewport */
-    max-height: 60%; /* Maximum height as percentage of the viewport */
+    max-width: 75%; /* Maximum width as percentage of the viewport */
+    max-height: 65%; /* Maximum height as percentage of the viewport */
 }
 
 

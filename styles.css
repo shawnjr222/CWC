@@ -1,3 +1,4 @@
+
 /* Hover Preview Container */
 #hover-preview {
     position: fixed;
@@ -14,7 +15,10 @@
     background-size: contain; /* Ensure the image fits without distortion */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent tiling of images */
+    max-width: 80%; /* Maximum width as percentage of the viewport */
+    max-height: 70%; /* Maximum height as percentage of the viewport */
 }
+
 
 
 /* Content Styling (Images) */

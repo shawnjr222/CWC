@@ -65,26 +65,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const preview = document.getElementById('hover-preview');
     const links = document.querySelectorAll('.work-title a');
 
-    // Preload images
-    const preloadImages = () => {
-        links.forEach(link => {
-            const previewImage = link.getAttribute('data-preview-image');
-            if (previewImage) {
-                const img = new Image();
-                img.src = previewImage; // Start loading the image
-            }
-        });
-    };
-
-    preloadImages(); // Call preload function on page load
+    // Preload images and store dimensions
+    const imageData = {};
+    links.forEach(link => {
+        const previewImage = link.getAttribute('data-preview-image');
+        if (previewImage) {
+            const img = new Image();
+            img.src = previewImage;
+            img.onload = () => {
+                // Store image dimensions
+                imageData[previewImage] = {
+                    width: img.naturalWidth,
+                    height: img.naturalHeight
+                };
+            };
+        }
+    });
 
     // Hover effect
     links.forEach(link => {
         link.addEventListener('mouseover', () => {
             const previewImage = link.getAttribute('data-preview-image');
 
-            // Set the preview background to the preloaded image
-            if (previewImage) {
+            if (previewImage && imageData[previewImage]) {
+                const { width, height } = imageData[previewImage];
+
+                // Adjust preview size to match image dimensions
+                preview.style.width = `${width}px`;
+                preview.style.height = `${height}px`;
+
+                // Set background image
                 preview.style.backgroundImage = `url(${previewImage})`;
                 preview.style.opacity = '1'; // Show preview
             }
@@ -96,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
     </script>

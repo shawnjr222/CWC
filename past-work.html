@@ -8,94 +8,82 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Hover Preview Container -->
-    <div id="hover-preview"></div>
-
     <!-- Past Work Links -->
     <div class="worked">
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="https://www.youtube.com/watch?v=7AEyqsBuvRQ" data-preview-image="images/mday24.png">
+                <a href="https://www.youtube.com/watch?v=7AEyqsBuvRQ" class="hover-link" data-preview-id="preview-1">
                     MEDIUM DAY SPEECH →
                 </a>
             </div>
             <div class="work-date">AUGUST 17, 2024</div>
         </div>
+        <img id="preview-1" src="images/mday24.png" class="hover-preview" alt="Preview">
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="https://www.youtube.com/watch?v=0CJalj1_jTU" data-preview-image="images/panel23.png">
+                <a href="https://www.youtube.com/watch?v=0CJalj1_jTU" class="hover-link" data-preview-id="preview-2">
                     Publication Editors Panel Discussion →
                 </a>
             </div>
             <div class="work-date">MARCH 19, 2024</div>
         </div>
+        <img id="preview-2" src="images/panel23.png" class="hover-preview" alt="Preview">
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="https://thisishowwecope.com" data-preview-image="images/tihwc.gif">
+                <a href="https://thisishowwecope.com" class="hover-link" data-preview-id="preview-3">
                     THIS IS HOW WE COPE CARD GAME →
                 </a>
             </div>
             <div class="work-date">MARCH 1, 2024</div>
         </div>
+        <img id="preview-3" src="images/tihwc.gif" class="hover-preview" alt="Preview">
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="https://shawnjr.medium.com/list/cwc-interview-series-ad4f8055a587" data-preview-image="images/is.png">
+                <a href="https://shawnjr.medium.com/list/cwc-interview-series-ad4f8055a587" class="hover-link" data-preview-id="preview-4">
                     INTERVIEW SERIES →
                 </a>
             </div>
             <div class="work-date">NOVEMBER 20, 2023</div>
         </div>
+        <img id="preview-4" src="images/is.png" class="hover-preview" alt="Preview">
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="https://medium.com/coping-with-capitalism" data-preview-image="images/pub.png">
+                <a href="https://medium.com/coping-with-capitalism" class="hover-link" data-preview-id="preview-5">
                     MEDIUM PUBLICATION →
                 </a>
             </div>
             <div class="work-date">MARCH 28, 2023</div>
         </div>
+        <img id="preview-5" src="images/pub.png" class="hover-preview" alt="Preview">
     </div>
 
-    <!-- Inline JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const preview = document.getElementById('hover-preview');
-            const links = document.querySelectorAll('.work-title a');
+            const links = document.querySelectorAll('.hover-link');
 
-            // Preload images
-            const preloadImages = () => {
-                links.forEach(link => {
-                    const previewImage = link.getAttribute('data-preview-image');
-                    if (previewImage) {
-                        const img = new Image();
-                        img.src = previewImage; // Start preloading the image
-                    }
-                });
-            };
-
-            preloadImages(); // Preload all images on page load
-
-            // Hover effect
             links.forEach(link => {
                 link.addEventListener('mouseover', () => {
-                    const previewImage = link.getAttribute('data-preview-image');
+                    const previewId = link.getAttribute('data-preview-id');
+                    const preview = document.getElementById(previewId);
 
-                    if (previewImage) {
-                        // Set the background image of the hover preview container
-                        preview.style.backgroundImage = `url(${previewImage})`;
-                        preview.style.opacity = '1'; // Show preview
+                    if (preview) {
+                        preview.style.opacity = '1'; // Show the preview
                         preview.style.pointerEvents = 'none'; // Prevent interference
                     }
                 });
 
                 link.addEventListener('mouseout', () => {
-                    // Hide the preview on mouse out
-                    preview.style.opacity = '0';
-                    preview.style.backgroundImage = 'none';
+                    const previewId = link.getAttribute('data-preview-id');
+                    const preview = document.getElementById(previewId);
+
+                    if (preview) {
+                        preview.style.opacity = '0'; // Hide the preview
+                    }
                 });
             });
         });

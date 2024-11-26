@@ -15,7 +15,7 @@
     background-position: center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents tiling */
     max-width: 65%; /* Limits the width of the preview */
-    max-height: 55%; /* Limits the height of the preview */
+    max-height: 60%; /* Limits the height of the preview */
 }
 
 

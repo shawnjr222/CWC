@@ -61,7 +61,7 @@
     </div>
 
     <script>
-       document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const preview = document.getElementById('hover-preview');
     const links = document.querySelectorAll('.work-title a');
 
@@ -86,21 +86,17 @@
             // Set the preview background to the preloaded image
             if (previewImage) {
                 preview.style.backgroundImage = `url(${previewImage})`;
-            } else {
-                preview.style.backgroundImage = 'none';
-                preview.style.backgroundColor = '#1250C4'; // Default blue
+                preview.style.opacity = '1'; // Show preview
             }
-
-            preview.style.opacity = '1'; // Show preview
         });
 
         link.addEventListener('mouseout', () => {
             preview.style.opacity = '0'; // Hide preview
             preview.style.backgroundImage = 'none'; // Clear background image
-            preview.style.backgroundColor = '#1250C4'; // Reset to default blue
         });
     });
 });
+
 
     </script>
 </body>

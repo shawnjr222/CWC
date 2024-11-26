@@ -61,32 +61,47 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const preview = document.getElementById('hover-preview');
-            const links = document.querySelectorAll('.work-title a');
+       document.addEventListener('DOMContentLoaded', () => {
+    const preview = document.getElementById('hover-preview');
+    const links = document.querySelectorAll('.work-title a');
 
-            links.forEach(link => {
-                link.addEventListener('mouseover', () => {
-                    const previewImage = link.getAttribute('data-preview-image'); // Get the data-preview-image attribute
-
-                    // Set the preview background to the image or fallback to blue
-                    if (previewImage) {
-                        preview.style.backgroundImage = `url(${previewImage})`; // Set background image
-                    } else {
-                        preview.style.backgroundImage = 'none'; // Fallback to no image
-                        preview.style.backgroundColor = '#1250C4'; // Default blue background
-                    }
-
-                    preview.style.opacity = '1'; // Make the preview visible
-                });
-
-                link.addEventListener('mouseout', () => {
-                    preview.style.opacity = '0'; // Hide the preview
-                    preview.style.backgroundImage = 'none'; // Clear the background image
-                    preview.style.backgroundColor = '#1250C4'; // Reset to blue background
-                });
-            });
+    // Preload images
+    const preloadImages = () => {
+        links.forEach(link => {
+            const previewImage = link.getAttribute('data-preview-image');
+            if (previewImage) {
+                const img = new Image();
+                img.src = previewImage; // Start loading the image
+            }
         });
+    };
+
+    preloadImages(); // Call preload function on page load
+
+    // Hover effect
+    links.forEach(link => {
+        link.addEventListener('mouseover', () => {
+            const previewImage = link.getAttribute('data-preview-image');
+
+            // Set the preview background to the preloaded image
+            if (previewImage) {
+                preview.style.backgroundImage = `url(${previewImage})`;
+            } else {
+                preview.style.backgroundImage = 'none';
+                preview.style.backgroundColor = '#1250C4'; // Default blue
+            }
+
+            preview.style.opacity = '1'; // Show preview
+        });
+
+        link.addEventListener('mouseout', () => {
+            preview.style.opacity = '0'; // Hide preview
+            preview.style.backgroundImage = 'none'; // Clear background image
+            preview.style.backgroundColor = '#1250C4'; // Reset to default blue
+        });
+    });
+});
+
     </script>
 </body>
 </html>

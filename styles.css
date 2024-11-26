@@ -1,20 +1,16 @@
-#hover-preview {
+/* Hover Preview Images */
+.hover-preview {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    max-width: 65%; /* Maintain aspect ratio */
+    max-height: 60%;
     border-radius: 8px; /* Rounded corners */
-    overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     opacity: 0; /* Hidden by default */
-    pointer-events: none; /* Prevent interference with links */
     transition: opacity 0.3s ease-in-out;
     z-index: 1000;
-    background-size: cover; /* Ensure the image fills the container */
-    background-position: center;
-    background-repeat: no-repeat;
-    max-width: 65%; /* Maximum width as percentage of viewport */
-    max-height: 60%; /* Maximum height as percentage of viewport */
 }
 
 

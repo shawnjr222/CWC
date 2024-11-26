@@ -4,12 +4,11 @@
     bottom: 0;
     left: 0;
     width: 100%; /* Full width of the page */
-    background-color: #1250C4; /* Matches your primary font color */
-    color: #ffffff; /* Contrasts with the background */
+    background-color: #ffffff; /* Matches your primary font color */
+    color: #1250C4; /* Contrasts with the background */
     text-align: center; /* Centered text */
     padding: 10px 0; /* Small padding for comfort */
     font-size: 0.9rem; /* Small, but legible font size */
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for separation */
     z-index: 1000; /* Ensures it stays above other content */
     font-family: 'TAYBigBird', sans-serif; /* Use your custom font */
     letter-spacing: 1px; /* Adds spacing for readability */

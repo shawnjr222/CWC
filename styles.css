@@ -13,8 +13,8 @@
     background-size: cover; /* Ensure the image fills the container */
     background-position: center;
     background-repeat: no-repeat;
-    max-width: 80%; /* Maximum width as percentage of viewport */
-    max-height: 70%; /* Maximum height as percentage of viewport */
+    max-width: 65%; /* Maximum width as percentage of viewport */
+    max-height: 60%; /* Maximum height as percentage of viewport */
 }
 
 

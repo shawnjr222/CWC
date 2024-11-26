@@ -4,8 +4,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 40%;
-    height: 70%;
+    width: 60%; /* Adjust width to maintain ratio */
+    height: calc(60% * 0.5625); /* Calculate height dynamically for 16:9 ratio */
     background: #1250C4; /* Default blue background */
     border-radius: 8px;
     overflow: hidden; /* Prevent content from overflowing the rounded corners */
@@ -22,9 +22,10 @@
 #hover-preview img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensures images or GIFs scale proportionally */
+    object-fit: fill; /* Ensures images or GIFs scale proportionally */
     display: none; /* No inline image for now */
 }
+
 
 
 

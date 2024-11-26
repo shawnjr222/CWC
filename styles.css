@@ -1,22 +1,22 @@
-/* Hover Preview Container */
 #hover-preview {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 8px; /* Keeps corners rounded */
-    overflow: hidden; /* Prevents content overflow */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow for better visibility */
-    opacity: 0; /* Hidden by default */
-    pointer-events: none; /* Prevent interference with other elements */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
     transition: opacity 0.3s ease-in-out;
-    z-index: 10000; /* High z-index to ensure it's above all other elements */
-    background-size: cover; /* Scales image to fill container */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents tiling */
-    max-width: 65%; /* Limits the width of the preview */
-    max-height: 60%; /* Limits the height of the preview */
+    z-index: 1000;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    max-width: 80%;
+    max-height: 70%;
 }
+
 
 
 

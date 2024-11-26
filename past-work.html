@@ -16,7 +16,7 @@
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="#" data-preview-image="images/mday24.png">
+                <a href="https://www.youtube.com/watch?v=7AEyqsBuvRQ" data-preview-image="images/mday24.png">
                     MEDIUM DAY SPEECH →
                 </a>
             </div>
@@ -25,7 +25,7 @@
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="#" data-preview-image="images/panel23.png">
+                <a href="https://www.youtube.com/watch?v=0CJalj1_jTU" data-preview-image="images/panel23.png">
                     Publication Editors Panel Discussion →
                 </a>
             </div>
@@ -34,7 +34,7 @@
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="#" data-preview-image="images/tihwc.gif">
+                <a href="https://thisishowwecope.com" data-preview-image="images/tihwc.gif">
                     THIS IS HOW WE COPE CARD GAME →
                 </a>
             </div>
@@ -43,7 +43,7 @@
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="#" data-preview-image="images/is.png">
+                <a href="https://shawnjr.medium.com/list/cwc-interview-series-ad4f8055a587" data-preview-image="images/is.png">
                     INTERVIEW SERIES →
                 </a>
             </div>
@@ -52,7 +52,7 @@
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="#" data-preview-image="images/pub.png">
+                <a href="https://medium.com/coping-with-capitalism" data-preview-image="images/pub.png">
                     MEDIUM PUBLICATION →
                 </a>
             </div>
@@ -60,73 +60,44 @@
         </div>
     </div>
 
+    <!-- Inline JavaScript -->
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const preview = document.getElementById('hover-preview');
-    const links = document.querySelectorAll('.work-title a');
+        document.addEventListener('DOMContentLoaded', () => {
+            const preview = document.getElementById('hover-preview');
+            const links = document.querySelectorAll('.work-title a');
 
-    // Preload images and store dimensions
-    const imageData = {};
-    links.forEach(link => {
-        const previewImage = link.getAttribute('data-preview-image');
-        if (previewImage) {
-            const img = new Image();
-            img.src = previewImage;
-            img.onload = () => {
-                // Store image dimensions
-                imageData[previewImage] = {
-                    width: img.naturalWidth,
-                    height: img.naturalHeight
-                };
+            // Preload images
+            const preloadImages = () => {
+                links.forEach(link => {
+                    const previewImage = link.getAttribute('data-preview-image');
+                    if (previewImage) {
+                        const img = new Image();
+                        img.src = previewImage; // Start preloading the image
+                    }
+                });
             };
-        }
-    });
 
-    // Hover effect
-    links.forEach(link => {
-        link.addEventListener('mouseover', () => {
-            const previewImage = link.getAttribute('data-preview-image');
+            preloadImages(); // Preload all images on page load
 
-            if (previewImage && imageData[previewImage]) {
-                const { width, height } = imageData[previewImage];
+            // Hover effect
+            links.forEach(link => {
+                link.addEventListener('mouseover', () => {
+                    const previewImage = link.getAttribute('data-preview-image');
 
-                // Dynamically scale the container size while respecting max limits
-                const maxWidth = window.innerWidth * 0.8; // 80% of viewport width
-                const maxHeight = window.innerHeight * 0.7; // 70% of viewport height
+                    if (previewImage) {
+                        // Set the background image of the hover preview container
+                        preview.style.backgroundImage = `url(${previewImage})`;
+                        preview.style.opacity = '1'; // Show preview
+                        preview.style.pointerEvents = 'none'; // Prevent interference
+                    }
+                });
 
-                // Scale the image dimensions proportionally to fit within the max dimensions
-                let adjustedWidth = width;
-                let adjustedHeight = height;
-
-                if (width > maxWidth) {
-                    adjustedWidth = maxWidth;
-                    adjustedHeight = (height / width) * maxWidth;
-                }
-                if (adjustedHeight > maxHeight) {
-                    adjustedHeight = maxHeight;
-                    adjustedWidth = (width / height) * maxHeight;
-                }
-
-                preview.style.width = `${adjustedWidth}px`;
-                preview.style.height = `${adjustedHeight}px`;
-
-                // Set background image
-                preview.style.backgroundImage = `url(${previewImage})`;
-                preview.style.opacity = '1'; // Show preview
-            }
+                link.addEventListener('mouseout', () => {
+                    preview.style.opacity = '0'; // Hide preview
+                    preview.style.backgroundImage = 'none'; // Clear background image
+                });
+            });
         });
-
-        link.addEventListener('mouseout', () => {
-            preview.style.opacity = '0'; // Hide preview
-            preview.style.backgroundImage = 'none'; // Clear background image
-        });
-    });
-});
-
-
-
-
-
     </script>
 </body>
 </html>

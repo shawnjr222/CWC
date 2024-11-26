@@ -1,3 +1,33 @@
+/* Hover Preview Container */
+#hover-preview {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    height: 70%;
+    background: #1250C4; /* Default blue background */
+    border-radius: 8px;
+    overflow: hidden; /* Prevent content from overflowing the rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0; /* Hidden by default */
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1000;
+    background-size: cover; /* Scale images to fit */
+    background-position: center; /* Center image content */
+}
+
+/* Content Styling (future use for specific previews) */
+#hover-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures images or GIFs scale proportionally */
+    display: none; /* No inline image for now */
+}
+
+
+
 /* Define custom font using @font-face */
 @font-face {
     font-family: 'TAYBigBird';

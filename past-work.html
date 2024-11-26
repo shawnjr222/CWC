@@ -8,43 +8,85 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Hover Preview Container -->
+    <div id="hover-preview"></div>
+
+    <!-- Past Work Links -->
     <div class="worked">
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="https://www.youtube.com/watch?v=7AEyqsBuvRQ">MEDIUM DAY SPEECH →</a> <!-- Link -->
+                <a href="#" data-preview-image="images/mday24.png">
+                    MEDIUM DAY SPEECH →
+                </a>
             </div>
             <div class="work-date">AUGUST 17, 2024</div>
         </div>
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="https://www.youtube.com/watch?v=0CJalj1_jTU&t=1s">Publication Editors Panel Discussion →</a> <!-- Link -->
+                <a href="#" data-preview-image="images/panel23.png">
+                    Publication Editors Panel Discussion →
+                </a>
             </div>
             <div class="work-date">MARCH 19, 2024</div>
         </div>
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="https://thisishowwecope.com">THIS IS HOW WE COPE CARD GAME →</a> <!-- Link -->
+                <a href="#" data-preview-image="images/tihwc.gif">
+                    THIS IS HOW WE COPE CARD GAME →
+                </a>
             </div>
             <div class="work-date">MARCH 1, 2024</div>
         </div>
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="https://shawnjr.medium.com/list/cwc-interview-series-ad4f8055a587">INTERVIEW SERIES →</a> <!-- Link -->
+                <a href="#" data-preview-image="images/is.png">
+                    INTERVIEW SERIES →
+                </a>
             </div>
             <div class="work-date">NOVEMBER 20, 2023</div>
         </div>
         <hr>
         <div class="work-item">
             <div class="work-title">
-                <a href="https://medium.com/coping-with-capitalism">MEDIUM PUBLICATION →</a> <!-- Link -->
+                <a href="#" data-preview-image="images/pub.png">
+                    MEDIUM PUBLICATION →
+                </a>
             </div>
             <div class="work-date">MARCH 28, 2023</div>
         </div>
     </div>
-</body>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const preview = document.getElementById('hover-preview');
+            const links = document.querySelectorAll('.work-title a');
+
+            links.forEach(link => {
+                link.addEventListener('mouseover', () => {
+                    const previewImage = link.getAttribute('data-preview-image'); // Get the data-preview-image attribute
+
+                    // Set the preview background to the image or fallback to blue
+                    if (previewImage) {
+                        preview.style.backgroundImage = `url(${previewImage})`; // Set background image
+                    } else {
+                        preview.style.backgroundImage = 'none'; // Fallback to no image
+                        preview.style.backgroundColor = '#1250C4'; // Default blue background
+                    }
+
+                    preview.style.opacity = '1'; // Make the preview visible
+                });
+
+                link.addEventListener('mouseout', () => {
+                    preview.style.opacity = '0'; // Hide the preview
+                    preview.style.backgroundImage = 'none'; // Clear the background image
+                    preview.style.backgroundColor = '#1250C4'; // Reset to blue background
+                });
+            });
+        });
+    </script>
+</body>
 </html>

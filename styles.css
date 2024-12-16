@@ -31,6 +31,7 @@
     opacity: 0; /* Hidden by default */
     transition: opacity 0.3s ease-in-out;
     z-index: 1000;
+    pointer-events: none; /* Prevent it from blocking interactions */
 }
 
 

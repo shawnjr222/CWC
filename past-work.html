@@ -53,6 +53,16 @@
         <hr>
         <div class="work-item">
             <div class="work-title">
+                <a href="#" class="hover-link" data-preview-id="preview-6">
+                    DESIGN THINKING WORKSHOP + PRESENTATION FOR INCARCERATED YOUTH →
+                </a>
+            </div>
+            <div class="work-date">APRIL 28, 2023</div>
+        </div>
+        <img id="preview-6" src="images/iy.png" class="hover-preview" alt="Preview">
+        <hr>
+        <div class="work-item">
+            <div class="work-title">
                 <a href="https://medium.com/coping-with-capitalism" class="hover-link" data-preview-id="preview-5">
                     MEDIUM PUBLICATION →
                 </a>
@@ -62,53 +72,53 @@
         <img id="preview-5" src="images/pub.png" class="hover-preview" alt="Preview">
     </div>
 
- <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const links = document.querySelectorAll('.hover-link');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('.hover-link');
 
-        links.forEach(link => {
-            // Show the preview on hover
-            link.addEventListener('mouseover', () => {
-                const previewId = link.getAttribute('data-preview-id');
-                const preview = document.getElementById(previewId);
+            links.forEach(link => {
+                // Show the preview on hover
+                link.addEventListener('mouseover', () => {
+                    const previewId = link.getAttribute('data-preview-id');
+                    const preview = document.getElementById(previewId);
 
-                if (preview) {
-                    preview.style.opacity = '1'; // Show the preview
-                    preview.style.pointerEvents = 'none'; // Prevent interference
-                }
-            });
+                    if (preview) {
+                        preview.style.opacity = '1'; // Show the preview
+                        preview.style.pointerEvents = 'none'; // Prevent interference
+                    }
+                });
 
-            // Hide the preview on mouse out
-            link.addEventListener('mouseout', () => {
-                const previewId = link.getAttribute('data-preview-id');
-                const preview = document.getElementById(previewId);
+                // Hide the preview on mouse out
+                link.addEventListener('mouseout', () => {
+                    const previewId = link.getAttribute('data-preview-id');
+                    const preview = document.getElementById(previewId);
 
-                if (preview) {
-                    preview.style.opacity = '0'; // Hide the preview
-                }
-            });
+                    if (preview) {
+                        preview.style.opacity = '0'; // Hide the preview
+                    }
+                });
 
-            // Hide the preview and open link in a new tab on click
-            link.addEventListener('click', (event) => {
-                event.preventDefault(); // Prevent the default behavior temporarily
+                // Hide the preview and open link in a new tab on click
+                link.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent the default behavior temporarily
 
-                const previewId = link.getAttribute('data-preview-id');
-                const preview = document.getElementById(previewId);
+                    const previewId = link.getAttribute('data-preview-id');
+                    const preview = document.getElementById(previewId);
 
-                if (preview) {
-                    preview.style.opacity = '0'; // Hide the preview
-                }
+                    if (preview) {
+                        preview.style.opacity = '0'; // Hide the preview
+                    }
 
-                const url = link.getAttribute('href');
-                if (url) {
-                    window.open(url, '_blank'); // Open the link in a new tab
-                }
+                    const url = link.getAttribute('href');
+                    if (url) {
+                        window.open(url, '_blank'); // Open the link in a new tab
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 </body>
-    <footer class="footer">
-      <p>Coping With Capitalism © 2024. All Rights Reserved. </a></p>
-      </footer>
+<footer class="footer">
+    <p>Coping With Capitalism © 2024. All Rights Reserved. </p>
+</footer>
 </html>

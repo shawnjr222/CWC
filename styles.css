@@ -10,7 +10,7 @@
     padding: 2vh 0; /* Small padding for comfort */
     font-size: 0.9rem; /* Small, but legible font size */
     z-index: 1000; /* Ensures it stays above other content */
-    font-family: 'TAYBigBird', sans-serif; /* Use your custom font */
+    font-family: 'Courier', monospace; /* Updated to Courier font */
     letter-spacing: 1px; /* Adds spacing for readability */
 }
 
@@ -40,8 +40,8 @@
 
 /* Define custom font using @font-face */
 @font-face {
-    font-family: 'TAYBigBird';
-    src: url('fonts/TAYBigBird.woff2') format('woff2');
+    font-family: 'Courier';
+    src: local('Courier');
     font-weight: normal;
     font-style: normal;
 }
@@ -53,7 +53,7 @@
 }
 
 body {
-    font-family: 'TAYBigBird', sans-serif;
+    font-family: 'Courier', monospace; /* Updated to Courier font */
     background-color: #ffffff; /* Background color */
     color: #1250C4; /* Font color */
     height: 100vh;
@@ -75,6 +75,7 @@ body {
 
 /* Headline (Paragraph) */
 h1 {
+    font-family: 'Courier', monospace; /* Updated to Courier font */
     font-size: 2.2rem;  /* Responsive font size */
     line-height: 4rem; /* Responsive line height */
     margin-bottom: 40px;
@@ -83,6 +84,7 @@ h1 {
 
 /* Links */
 .links a {
+    font-family: 'Courier', monospace; /* Updated to Courier font */
     display: block; /* Keeps the elements stacked vertically while limiting the clickable area to the text */
     font-size: 1.34rem;  /* Responsive font size for links */
     line-height: 2.2rem; /* Responsive line height for links */
@@ -113,6 +115,7 @@ h1 {
 
 /* Updated the work-title to be clickable */
 .work-title a {
+    font-family: 'Courier', monospace; /* Updated to Courier font */
     font-size: 1.6rem;
     color: #1250C4;
     text-align: left;
@@ -125,6 +128,7 @@ h1 {
 }
 
 .work-date {
+    font-family: 'Courier', monospace; /* Updated to Courier font */
     font-size: 1.6rem;
     color: #1250C4;
     text-align: right;

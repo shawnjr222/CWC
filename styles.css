@@ -218,7 +218,7 @@ hr {
 /* Desktop Split 2 - (min-width: 574px) and (max-width: 1039px) */
 @media only screen and (min-width: 574px) and (max-width: 1039px) {
     body {
-        padding-top: 6vh;   /* Adjust top padding */
+        padding-top: 3vh;   /* Adjust top padding */
         padding-left: 5vw;
     }
 
@@ -296,4 +296,10 @@ hr {
         padding-top: 0vh;   /* Adjust top padding for mobile */
         padding-left: 1vw;
 }
+
+    .footer {
+    font-size: 0.75rem; /* Small, but legible font size */
+
+}
+
 }

@@ -267,17 +267,17 @@ hr {
     }
 
     .links a {
-        font-size: .9rem;   /* Smaller link font size for mobile */
+        font-size: .85rem;   /* Smaller link font size for mobile */
         line-height: 1rem;
     }
 
     .work-title a {
-        font-size: .9rem; /* Smaller font size for links on mobile */
+        font-size: .85rem; /* Smaller font size for links on mobile */
         line-height: 1rem;
     }
 
     .work-date {
-        font-size: .9rem;
+        font-size: .85rem;
         line-height: 1rem;
     }
 

@@ -75,12 +75,14 @@ body {
 
 /* Headline (Paragraph) */
 h1 {
-    font-family: 'Courier', monospace; /* Updated to Courier font */
+    font-family: 'Courier', monospace; /* Use Courier font */
     font-size: 2.2rem;  /* Responsive font size */
     line-height: 4rem; /* Responsive line height */
     margin-bottom: 40px;
     letter-spacing: 2px;
+    font-weight: normal; /* Adjust font weight to normal */
 }
+
 
 /* Links */
 .links a {

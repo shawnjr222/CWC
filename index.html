@@ -23,7 +23,8 @@
         .menu-container {
             position: relative; /* Needed for absolute positioning of the sliding box */
             width: 400px; /* Matches the width of the text box */
-            z-index: 2; /* Keep the hamburger above other elements */
+            z-index: 3; /* Keep the hamburger above other elements */
+             background-color: #ffffff; /* Add a white background to hide the sliding box's content */
         }
 
         /* Hamburger Menu */
@@ -79,7 +80,7 @@
             align-items: center;
             flex-direction: column; /* Stack links vertically */
             text-align: left; /* Align all content in the sliding box to the left */
-            padding-top: 2vh; /* Add space above the links */
+            padding-top: 3vh; /* Add space above the links */
         }
 
         .sliding-box.open {

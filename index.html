@@ -140,7 +140,7 @@
             100% { opacity: 1; }
         }
 
-        /* Ensure the hamburger menu and text are fixed in place on mobile */
+/* Adjust the menu positioning for mobile */
 @media (max-width: 573px) {
     body {
         padding-top: 10vh; /* Reduced top padding for mobile */
@@ -149,26 +149,23 @@
     }
 
     .menu-container {
-        width: 100%; /* Ensure the menu spans the full width of the screen */
+        width: 90%; /* Match the width of the text box */
         display: flex;
-        justify-content: center; /* Center the hamburger menu */
-        position: fixed; /* Fix the menu at the top of the screen */
-        top: 0;
-        z-index: 3; /* Keep it above the sliding box */
-        background-color: #ffffff; /* Match the background for a seamless look */
-        padding: 10px 0; /* Add some vertical padding */
+        justify-content: flex-start; /* Align the hamburger menu to the left */
+        position: relative; /* Align relative to the text box */
+        margin-bottom: 10px; /* Add spacing below the menu */
     }
 
     .sliding-box {
-        width: 90%; /* Ensure the sliding box is wide enough for mobile content */
+        width: 90%; /* Ensure the sliding box matches the text box width */
         margin: 0 auto; /* Center the sliding box */
     }
 
     .box {
         width: 90%; /* Adjust the text box width for smaller screens */
-        margin-top: 20vh; /* Add spacing below the fixed menu */
     }
 }
+
 
     </style>
 </head>

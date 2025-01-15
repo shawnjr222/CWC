@@ -242,11 +242,10 @@ hr {
 
 /* Mobile - (max-width: 573px) */
 @media only screen and (max-width: 573px) {
-    
     body {
-        padding-top: 5vh;   /* Adjust top padding for mobile */
+        padding-top: 2vh; /* Reduce top padding for mobile */
         padding-left: 8vw;
-        width: 95%
+        width: 95%;
     }
 
     .container {
@@ -254,30 +253,30 @@ hr {
         padding-right: 0vh;
         padding-bottom: 0vh;
         padding-left: 0vh;
-    text-align: left; /* Align text to the left */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width:  100%
-}
+        text-align: left; /* Align text to the left */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 100%;
+    }
 
     h1 {
-        font-size: 1.23rem;     /* Smaller font size for mobile */
+        font-size: 1.23rem; /* Smaller font size for mobile */
         line-height: 1.45rem;
     }
 
     .links a {
-        font-size: .85rem;   /* Smaller link font size for mobile */
+        font-size: 0.85rem; /* Smaller link font size for mobile */
         line-height: 1rem;
     }
 
     .work-title a {
-        font-size: .85rem; /* Smaller font size for links on mobile */
+        font-size: 0.85rem; /* Smaller font size for links on mobile */
         line-height: 1rem;
     }
 
     .work-date {
-        font-size: .85rem;
+        font-size: 0.85rem;
         line-height: 1rem;
     }
 
@@ -286,20 +285,19 @@ hr {
         align-items: flex-start;
         padding: 10px 0;
     }
-    
+
     .work-date {
         text-align: left; /* Align dates to the left on mobile */
         margin-top: 10px; /* Add space between title and date */
     }
 
     .worked {
-        padding-top: 0vh;   /* Adjust top padding for mobile */
+        padding-top: 0vh; /* Remove extra padding on mobile */
         padding-left: 1vw;
-}
+    }
 
     .footer {
-    font-size: 0.6rem; /* Small, but legible font size */
-
+        font-size: 0.6rem; /* Small, but legible font size */
+    }
 }
 
-}

@@ -88,7 +88,7 @@ h1 {
 .links a {
     font-family: 'Courier', monospace; /* Updated to Courier font */
     display: block; /* Keeps the elements stacked vertically while limiting the clickable area to the text */
-    font-size: 1.34rem;  /* Responsive font size for links */
+    font-size: 1.23rem;  /* Responsive font size for links */
     line-height: 2.2rem; /* Responsive line height for links */
     color: #1250C4; 
     margin-bottom: 15px;
@@ -118,7 +118,7 @@ h1 {
 /* Updated the work-title to be clickable */
 .work-title a {
     font-family: 'Courier', monospace; /* Updated to Courier font */
-    font-size: 1.6rem;
+    font-size: 1.23rem;
     color: #1250C4;
     text-align: left;
     text-decoration: none; /* Remove underline */
@@ -131,7 +131,7 @@ h1 {
 
 .work-date {
     font-family: 'Courier', monospace; /* Updated to Courier font */
-    font-size: 1.6rem;
+    font-size: 1.23rem;
     color: #1250C4;
     text-align: right;
 }

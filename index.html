@@ -140,21 +140,36 @@
             100% { opacity: 1; }
         }
 
-        /* Responsive Styles */
-        @media (max-width: 573px) {
-            .menu-container {
-                width: 90%; /* Adjust menu width for smaller screens */
-            }
+        /* Ensure the hamburger menu and text are fixed in place on mobile */
+@media (max-width: 573px) {
+    body {
+        padding-top: 10vh; /* Reduced top padding for mobile */
+        justify-content: flex-start; /* Keep content anchored at the top */
+        align-items: center; /* Center horizontally */
+    }
 
-            .box {
-                width: 90%; /* Adjust box width for smaller screens */
-                height: auto;
-            }
+    .menu-container {
+        width: 100%; /* Ensure the menu spans the full width of the screen */
+        display: flex;
+        justify-content: center; /* Center the hamburger menu */
+        position: fixed; /* Fix the menu at the top of the screen */
+        top: 0;
+        z-index: 3; /* Keep it above the sliding box */
+        background-color: #ffffff; /* Match the background for a seamless look */
+        padding: 10px 0; /* Add some vertical padding */
+    }
 
-            .sliding-box {
-                width: 90%; /* Adjust sliding box width for smaller screens */
-            }
-        }
+    .sliding-box {
+        width: 90%; /* Ensure the sliding box is wide enough for mobile content */
+        margin: 0 auto; /* Center the sliding box */
+    }
+
+    .box {
+        width: 90%; /* Adjust the text box width for smaller screens */
+        margin-top: 20vh; /* Add spacing below the fixed menu */
+    }
+}
+
     </style>
 </head>
 <body>

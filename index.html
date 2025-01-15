@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coping With Capitalism</title>
+    <title>Coping With Capitalsim</title>
     <style>
+        /* Reset and Global Styles */
         body {
             margin: 0;
             padding: 0;
@@ -14,39 +15,115 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column; /* Stack elements vertically */
+            overflow: hidden; /* Prevent scrollbars during animation */
         }
 
+        /* Menu and Sliding Box Container */
+        .menu-container {
+            position: relative; /* Needed for absolute positioning of the sliding box */
+            width: 400px; /* Matches the width of the text box */
+            z-index: 2; /* Keep the hamburger above other elements */
+        }
+
+        /* Hamburger Menu */
+        .menu-icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 4vh;
+            height: 2.4vh;
+            cursor: pointer;
+            position: relative;
+            z-index: 3; /* Keep above the sliding box */
+        }
+
+        .menu-icon span {
+            display: block;
+            background-color: #AAB6CC;
+            height: 0.3vh; /* Updated line thickness */
+            width: 100%; /* Full width of the menu icon */
+            border-radius: 2px;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+        }
+
+        /* Transform top bar into an X */
+        .menu-icon.open span:nth-child(1) {
+            transform: translateY(1.05vh) rotate(45deg); /* Adjusted for .3vh height */
+        }
+
+        /* Hide middle bar */
+        .menu-icon.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        /* Transform bottom bar into an X */
+        .menu-icon.open span:nth-child(3) {
+            transform: translateY(-1.05vh) rotate(-45deg); /* Adjusted for .3vh height */
+        }
+
+        /* Sliding Box */
+        .sliding-box {
+            position: absolute;
+            top: -100%; /* Start hidden above the menu-container */
+            left: 0;
+            width: 100%; /* Match the width of the container */
+            height: 0; /* Hidden by default */
+            background-color: #ffffff; /* White background for menu content */
+            overflow: hidden;
+            transition: height 0.5s ease-in-out, top 0.5s ease-in-out;
+            z-index: 1; /* Below the hamburger menu */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Stack links vertically */
+            text-align: left; /* Align all content in the sliding box to the left */
+        }
+
+        .sliding-box.open {
+            height: 250px; /* Height of the sliding menu when open */
+            top: 0; /* Make it fully visible */
+        }
+
+        /* Sliding Box Content */
+        .sliding-box a {
+            font-size: 1.2rem;
+            color: #1250C4;
+            text-decoration: none;
+            margin: 10px 0; /* Space between links */
+            opacity: 0; /* Initially hidden */
+            transform: translateY(20px); /* Start below position */
+            transition: opacity 0.5s ease-in-out 0.75s, transform 0.5s ease-in-out;
+        }
+
+        .sliding-box.open a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sliding-box a:hover {
+            text-decoration: underline;
+        }
+
+        /* Typewriter Box */
         .box {
             width: 400px;
-            height: 150px; /* Pre-allocate height for all lines */
+            height: 150px;
             padding: 20px;
             text-align: left;
             white-space: pre-wrap;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* Ensure text starts at the top */
+            justify-content: flex-start;
+            z-index: 0; /* Below the sliding box */
         }
-
-        /* Mobile - (max-width: 573px) */
-    @media only screen and (max-width: 573px) {
-    .box {
-             height: 250px; /* Slightly larger height for better readability */
-    }
-        body {
-    display: flex;
-    justify-content: flex-start; /* Keep content starting from the top */
-    align-items: flex-start; /* Ensure content aligns to the top */
-    padding-top: 24vh; /* Reduce top padding further for all devices */
-}
-
-    }
-
 
         #typewriter {
             font-size: 20px;
             color: #1250C4;
-            line-height: 1.6; /* Ensure consistent line spacing */
+            line-height: 1.6;
         }
 
         .cursor {
@@ -63,35 +140,63 @@
             100% { opacity: 1; }
         }
 
-        a {
-            color: #1250C4;
-            text-decoration: none;
-        }
+        /* Responsive Styles */
+        @media (max-width: 573px) {
+            .menu-container {
+                width: 90%; /* Adjust menu width for smaller screens */
+            }
 
-        a:hover {
-            text-decoration: underline;
+            .box {
+                width: 90%; /* Adjust box width for smaller screens */
+                height: auto;
+            }
+
+            .sliding-box {
+                width: 90%; /* Adjust sliding box width for smaller screens */
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Menu and Sliding Box Container -->
+    <div class="menu-container">
+        <!-- Hamburger Menu -->
+        <div class="menu-icon" id="menuIcon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <!-- Sliding Box -->
+        <div class="sliding-box" id="slidingBox">
+            <a href="https://medium.com/coping-with-capitalism" target="_blank">Explore paths to care →</a>
+            <a href="https://copingwithcapitalism.com/past-work.html">View past projects →</a>
+            <a href="https://ko-fi.com/shawnjr" target="_blank">Support the community →</a>
+            <a href="https://shawn-jr.kit.com/c2470e4deb" target="_blank">Join our newsletter →</a>
+        </div>
+    </div>
+
+    <!-- Typewriter Text Box -->
     <div class="box">
         <p><span id="typewriter"></span><span class="cursor" id="cursor">|</span></p>
     </div>
 
     <script>
+        // Hamburger Menu and Sliding Box Interaction
+        const menuIcon = document.getElementById('menuIcon');
+        const slidingBox = document.getElementById('slidingBox');
+
+        menuIcon.addEventListener('click', () => {
+            menuIcon.classList.toggle('open'); // Toggle the 'open' class
+            slidingBox.classList.toggle('open'); // Slide the box down or up
+        });
+
+        // Typewriter Effect
         const paragraphs = [
             "When human labor is commodified to generate profit, the exploitation of that labor inevitably exists.",
             "In a system that thrives on exploitation, mutual care is an essential balancing act.",
             "Coping With Capitalism is a community that provides clear & accessible paths to personal and collective care.",
             "By embracing and promoting a culture of mutual care, we will co-create a more inclusive & supportive world for all."
         ];
-
-        const linksHTML = `
-            <br><br>
-            <a href="https://medium.com/coping-with-capitalism" target="_blank">Explore paths to care →</a><br>
-            <a href="https://copingwithcapitalism.com/past-work.html" target="_blank">View past initiatives →</a><br>
-            <a href="https://ko-fi.com/shawnjr" target="_blank">Support the community →</a>
-        `;
 
         const speed = 50; // Typing speed in ms
         const backspaceSpeed = 30; // Backspacing speed in ms
@@ -104,7 +209,7 @@
         let isBackspacing = false;
 
         function typeEffect() {
-            const plainText = paragraphs[currentParagraph]; // No line breaks processing
+            const plainText = paragraphs[currentParagraph];
 
             if (!isBackspacing) {
                 // Typing forward
@@ -113,18 +218,15 @@
                     charIndex++;
                     setTimeout(typeEffect, speed);
                 } else {
-                    // Pause after typing
-                    if (currentParagraph === paragraphs.length - 1) {
-                        // Add links at the bottom and remove cursor after final paragraph
+                    // Pause after typing the paragraph
+                    if (currentParagraph < paragraphs.length - 1) {
                         setTimeout(() => {
-                            typewriter.innerHTML += linksHTML;
-                            cursor.style.display = "none";
-                        }, pauseBetweenParagraphs);
-                    } else {
-                        setTimeout(() => {
-                            isBackspacing = true;
+                            isBackspacing = true; // Start backspacing
                             typeEffect();
                         }, pauseBetweenParagraphs);
+                    } else {
+                        // Stop typing after the last paragraph
+                        cursor.style.display = "none"; // Hide the blinking cursor
                     }
                 }
             } else {

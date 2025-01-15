@@ -23,7 +23,6 @@
         .menu-container {
             position: relative; /* Needed for absolute positioning of the sliding box */
             width: 400px; /* Matches the width of the text box */
-            height: 50px; /* Adjust height to fully cover sliding content */
             z-index: 3; /* Keep the hamburger above other elements */
             background-color: #ffffff; /* Add a white background to hide the sliding box's content */
         }
@@ -201,9 +200,26 @@
         const slidingBox = document.getElementById('slidingBox');
 
         menuIcon.addEventListener('click', () => {
-            menuIcon.classList.toggle('open'); // Toggle the 'open' class
-            slidingBox.classList.toggle('open'); // Slide the box down or up
+    menuIcon.classList.toggle('open'); // Toggle the 'open' class
+    slidingBox.classList.toggle('open'); // Slide the box down or up
+
+    if (!slidingBox.classList.contains('open')) {
+        // Speed up opacity transition when closing
+        document.querySelectorAll('.sliding-box a').forEach((link) => {
+            link.style.transition = 'opacity 0.2s ease-in-out, transform 0.5s ease-in-out'; // Faster opacity
+            link.style.opacity = '0'; // Hide links immediately
         });
+    } else {
+        // Restore normal opacity transition when opening
+        setTimeout(() => {
+            document.querySelectorAll('.sliding-box a').forEach((link) => {
+                link.style.transition = 'opacity 0.5s ease-in-out 0.75s, transform 0.5s ease-in-out'; // Normal delay
+                link.style.opacity = '1'; // Ensure links are visible
+            });
+        }, 100); // Slight delay to allow the box to fully open
+    }
+});
+
 
         // Typewriter Effect
         const paragraphs = [

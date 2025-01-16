@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coping With Capitalsim</title>
+    <title>Coping With Capitalism</title>
     <style>
         /* Reset and Global Styles */
         body {
@@ -17,6 +17,12 @@
             height: 100vh;
             flex-direction: column; /* Stack elements vertically */
             overflow: hidden; /* Prevent scrollbars during animation */
+        }
+
+        /* Hide menu and footer initially */
+        .menu-container, .footer {
+            opacity: 0; /* Hidden initially */
+            transition: opacity 2s ease-in; /* Smooth fade-in effect */
         }
 
         /* Menu and Sliding Box Container */
@@ -143,56 +149,50 @@
         }
 
         /* Footer Styling */
-.footer {
-    position: fixed; /* Sticks the footer at the bottom */
-    bottom: 0;
-    left: 0;
-    width: 100%; /* Full width of the page */
-    background-color: #ffffff; /* Matches your primary font color */
-    color: #1250C4; /* Contrasts with the background */
-    text-align: center; /* Centered text */
-    padding: 2vh 0; /* Small padding for comfort */
-    font-size: 0.9rem; /* Small, but legible font size */
-    z-index: 1000; /* Ensures it stays above other content */
-    font-family: 'Courier', monospace; /* Updated to Courier font */
-    letter-spacing: 1px; /* Adds spacing for readability */
-}
+        .footer {
+            position: fixed; /* Sticks the footer at the bottom */
+            bottom: 0;
+            left: 0;
+            width: 100%; /* Full width of the page */
+            background-color: #ffffff; /* Matches your primary font color */
+            color: #1250C4; /* Contrasts with the background */
+            text-align: center; /* Centered text */
+            padding: 2vh 0; /* Small padding for comfort */
+            font-size: 0.9rem; /* Small, but legible font size */
+            z-index: 1000; /* Ensures it stays above other content */
+            font-family: 'Courier', monospace; /* Updated to Courier font */
+            letter-spacing: 1px; /* Adds spacing for readability */
+        }
 
-/* Adjust the menu positioning for mobile */
-@media (max-width: 573px) {
-    body {
-        padding-top: 25vh; /* Reduced top padding for mobile */
-        justify-content: flex-start; /* Keep content anchored at the top */
-        align-items: center; /* Center horizontally */
-    }
+        /* Adjust the menu positioning for mobile */
+        @media (max-width: 573px) {
+            body {
+                padding-top: 25vh; /* Reduced top padding for mobile */
+                justify-content: flex-start; /* Keep content anchored at the top */
+                align-items: center; /* Center horizontally */
+            }
 
-    .menu-container {
-        width: 90%; /* Match the width of the text box */
-        display: flex;
-        justify-content: flex-start; /* Align the hamburger menu to the left */
-        position: relative; /* Align relative to the text box */
-        margin-bottom: 10px; /* Add spacing below the menu */
-    }
+            .menu-container {
+                width: 90%; /* Match the width of the text box */
+                display: flex;
+                justify-content: flex-start; /* Align the hamburger menu to the left */
+                position: relative; /* Align relative to the text box */
+                margin-bottom: 10px; /* Add spacing below the menu */
+            }
 
-    .sliding-box {
-        width: 100%; /* Ensure the sliding box matches the text box width */
-        margin: 0 auto; /* Center the sliding box */
-    }
+            .sliding-box {
+                width: 100%; /* Ensure the sliding box matches the text box width */
+                margin: 0 auto; /* Center the sliding box */
+            }
 
-    .box {
-        width: 90%; /* Adjust the text box width for smaller screens */
-    }
-    
-    .footer {
-        font-size: 0.6rem; /* Small, but legible font size */
-    }
-}
-
-
-
-
-
-
+            .box {
+                width: 90%; /* Adjust the text box width for smaller screens */
+            }
+            
+            .footer {
+                font-size: 0.6rem; /* Small, but legible font size */
+            }
+        }
     </style>
 </head>
 <body>
@@ -218,32 +218,41 @@
         <p><span id="typewriter"></span><span class="cursor" id="cursor">|</span></p>
     </div>
 
+    <footer class="footer">
+        <p>Coping With Capitalism © 2025. All Rights Reserved. </p>
+    </footer>
+
     <script>
+        // Fade in menu and footer after 52 seconds
+        setTimeout(() => {
+            document.querySelector('.menu-container').style.opacity = '1';
+            document.querySelector('.footer').style.opacity = '1';
+        }, 42000);
+
         // Hamburger Menu and Sliding Box Interaction
         const menuIcon = document.getElementById('menuIcon');
         const slidingBox = document.getElementById('slidingBox');
 
         menuIcon.addEventListener('click', () => {
-    menuIcon.classList.toggle('open'); // Toggle the 'open' class
-    slidingBox.classList.toggle('open'); // Slide the box down or up
+            menuIcon.classList.toggle('open'); // Toggle the 'open' class
+            slidingBox.classList.toggle('open'); // Slide the box down or up
 
-    if (!slidingBox.classList.contains('open')) {
-        // Speed up opacity transition when closing
-        document.querySelectorAll('.sliding-box a').forEach((link) => {
-            link.style.transition = 'opacity 0.2s ease-in-out, transform 0.5s ease-in-out'; // Faster opacity
-            link.style.opacity = '0'; // Hide links immediately
+            if (!slidingBox.classList.contains('open')) {
+                // Speed up opacity transition when closing
+                document.querySelectorAll('.sliding-box a').forEach((link) => {
+                    link.style.transition = 'opacity 0.2s ease-in-out, transform 0.5s ease-in-out'; // Faster opacity
+                    link.style.opacity = '0'; // Hide links immediately
+                });
+            } else {
+                // Restore normal opacity transition when opening
+                setTimeout(() => {
+                    document.querySelectorAll('.sliding-box a').forEach((link) => {
+                        link.style.transition = 'opacity 0.5s ease-in-out 0.75s, transform 0.5s ease-in-out'; // Normal delay
+                        link.style.opacity = '1'; // Ensure links are visible
+                    });
+                }, 100); // Slight delay to allow the box to fully open
+            }
         });
-    } else {
-        // Restore normal opacity transition when opening
-        setTimeout(() => {
-            document.querySelectorAll('.sliding-box a').forEach((link) => {
-                link.style.transition = 'opacity 0.5s ease-in-out 0.75s, transform 0.5s ease-in-out'; // Normal delay
-                link.style.opacity = '1'; // Ensure links are visible
-            });
-        }, 100); // Slight delay to allow the box to fully open
-    }
-});
-
 
         // Typewriter Effect
         const paragraphs = [
@@ -303,7 +312,4 @@
         window.onload = typeEffect;
     </script>
 </body>
-<footer class="footer">
-    <p>Coping With Capitalism © 2025. All Rights Reserved. </p>
-</footer>
 </html>

@@ -11,6 +11,17 @@ img {
 
 }
 
+.footer {
+  background-color: #1250C4; /* Matches the blue at the bottom */
+  color: #FFFFFF;            /* White text */
+  text-align: center;
+  padding: 1em 0;
+  font-family: 'GT Walsheim', sans-serif;
+  position: relative;        /* Ensures it stays at the bottom of content */
+  z-index: 1;
+}
+
+
 
 @font-face {
   font-family: 'GT Walsheim';

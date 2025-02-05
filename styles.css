@@ -267,7 +267,7 @@ a {
 
 .item-img img {
   will-change: transform;
-  transform: scale(1.085);
+  transform: scale(1.07);
   clip-path: polygon(-10% -10%, 110% -10%, 110% 0%, -10% 0%);
 }
 

@@ -55,11 +55,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
   window.addEventListener("scroll", updateScrollPercentage);
 
-  // ✅ Refresh ScrollTrigger after DOM is fully loaded
-  ScrollTrigger.refresh();
-});
-
-// ✅ Refresh on window resize
-window.addEventListener("resize", () => {
-  ScrollTrigger.refresh();
-});
+ 

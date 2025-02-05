@@ -269,6 +269,7 @@ a {
     will-change: transform;
     transform: scale(1.035) translateZ(0);;
     clip-path: polygon(-5% -5%, 105% -5%, 105% 0%, -5% 0%);
+    background-color: inherit; /* Matches the parent background */
   }
 
   /* Maintain positioning for each item */

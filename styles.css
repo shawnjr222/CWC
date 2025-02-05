@@ -269,6 +269,7 @@ a {
   will-change: transform;
   transform: scale(1.035);
   clip-path: polygon(-10% -10%, 110% -10%, 110% 0%, -10% 0%);
+   -webkit-clip-path: polygon(-10% -10%, 110% -10%, 110% 110%, -10% 110%);
 }
 
 

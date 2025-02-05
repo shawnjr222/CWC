@@ -16,9 +16,9 @@ gsap.utils.toArray(".item").forEach((item, index) => {
   
   gsap.fromTo(
     img,
-    { clipPath: "polygon(-3% -3%, 103% -3%, 103% 0%, -3% 0%)" },
+    { clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)" },
     {
-      clipPath: "polygon(-3% -3%, 103% -3%, 103% 0%, -3% 0%)",
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
       ease: "power1.out",
       duration: 2,
       scrollTrigger: {

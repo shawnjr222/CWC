@@ -240,7 +240,7 @@ a {
   }
 
   .item {
-    width: 90%; /* Same width */
+    width: 95%; /* Same width */
     margin-bottom: 0vh; /* Base margin */
   }
 
@@ -267,7 +267,7 @@ a {
 
 .item-img img {
   will-change: transform;
-  transform: scale(1.08);
+  transform: scale(1.09);
   clip-path: polygon(-10% -10%, 110% -10%, 110% 0%, -10% 0%);
 }
 

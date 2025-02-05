@@ -13,11 +13,12 @@ const bgColorElement = document.querySelector(".bg-color");
 gsap.utils.toArray(".item").forEach((item, index) => {
   let img = item.querySelector(".item-img img");
 
+  
   gsap.fromTo(
     img,
-    { clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)" },
+    { clipPath: "polygon(-3% -3%, 103% -3%, 103% 0%, -3% 0%)" },
     {
-      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+      clipPath: "polygon(-3% -3%, 103% -3%, 103% 0%, -3% 0%)",
       ease: "power1.out",
       duration: 2,
       scrollTrigger: {

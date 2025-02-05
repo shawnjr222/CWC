@@ -1,0 +1,288 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+}
+
+
+@font-face {
+  font-family: 'GT Walsheim';
+  src: url('./assets/fonts/GT-Walsheim-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+p {
+  font-family: 'GT Walsheim', sans-serif; /* Fallback to sans-serif */
+  font-weight: normal;
+  font-style: normal;
+}
+
+a {
+  font-family: 'GT Walsheim', sans-serif; /* Fallback to sans-serif */
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+
+/* Base link styles */
+.hover-underline {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+  display: inline-block;
+  padding-bottom: 2px;
+  transition: color 0.3s ease;
+  overflow: hidden; /* Prevents overflow during the animation */
+}
+
+/* Underline Effect */
+.hover-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px; /* Thickness of the underline */
+  width: 100%; /* Full width */
+  background-color: currentColor;
+  transform: scaleX(0); /* Initially invisible */
+  transform-origin: left; /* Grows from the left on hover */
+  transition: transform 0.4s ease-in-out, transform-origin 0s; /* Smooth animation */
+}
+
+/* Hover State */
+.hover-underline:hover::after {
+  transform: scaleX(1); /* Expand to full width */
+  transform-origin: left; /* Expands from left to right */
+}
+
+/* Mouse Leave State (Reverses to the Right) */
+.hover-underline:not(:hover)::after {
+  transform: scaleX(0); /* Shrinks to zero */
+  transform-origin: right; /* Shrinks towards the right */
+}
+
+
+
+
+
+.stat {
+  position: fixed;
+  padding: 2em;
+  left: 0;
+  color: #000;
+  font-family: "GT Walsheim";
+  text-decoration: none;
+  z-index: 9999;
+}
+
+/* First element */
+.stat:nth-child(1) {
+  top: 0;
+}
+
+/* Second element */
+.stat:nth-child(2) {
+  top: 6vh; /* Adjust based on desired spacing */
+}
+
+
+.counter {
+  position: fixed;
+  padding: 2em;
+  top: 0;
+  left: 0;
+  color: #000;
+  font-family: "GT Walsheim";
+  text-decoration: none;
+}
+
+.link {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bg-color {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff;
+  background: linear-gradient(
+    0deg,
+   #ffffff,
+   #1250C4
+  );
+  z-index: -1;
+}
+
+.items {
+  width: 100%;
+  height: 25%;
+  padding: 18em 2em;
+  font-family: "GT Walsheim";
+}
+
+.item {
+  width: 45%;
+  margin-bottom: 0vh;
+}
+
+.item:nth-child(1) {
+  margin-bottom: 60vh; /* More space after the first item */
+}
+
+.item:nth-child(2) {
+  margin-bottom: 60vh; /* Less space after the second item */
+}
+
+.item:nth-child(3) {
+  margin-bottom: 60vh; /* Extra-large space after the third item */
+}
+
+
+.item:nth-child(4) {
+  margin-bottom: 60vh; /* More space after the first item */
+}
+
+.item:nth-child(5) {
+  margin-bottom: 60vh; /* Less space after the second item */
+}
+
+.item:nth-child(6) {
+  margin-bottom: -10vh; /* Extra-large space after the third item */
+}
+
+
+
+
+
+
+
+.item-info {
+  padding: 0.5em 0;
+}
+
+.item-img {
+  overflow: hidden;
+}
+
+.item-img img {
+  will-change: transform;
+  transform: scale(1.035);
+  clip-path: polygon(-1% -1%, 101% -1%, 101% 0%, -1% 0%);
+}
+
+
+.item:nth-child(1) .item-img {
+  background: #A1EDE0;
+}
+
+.item:nth-child(2) .item-img {
+  background: #FEBB05;
+}
+
+.item:nth-child(3) .item-img {
+  background: #111111;
+}
+
+.item:nth-child(4) .item-img {
+  background: #2B4068;
+}
+
+.item:nth-child(5) .item-img {
+  background: #682C40;
+}
+
+.item:nth-child(6) .item-img {
+  background: #1250C4;
+}
+
+
+.item:nth-child(1),
+.item:nth-child(5){
+  position: relative;
+  left: 5%;
+}
+
+.item:nth-child(3){
+  position: relative;
+  left: 20%;
+}
+
+.item:nth-child(2),
+.item:nth-child(4),
+.item:nth-child(6) {
+  position: relative;
+  left: 50%;
+}
+
+
+
+
+
+
+@media (max-width: 450px) {
+  .items {
+    width: 100%;
+    height: 100%;
+    padding: 17em 4em; /* Same padding as default */
+    font-family: "GT Walsheim";
+  }
+
+  .item {
+    width: 90%; /* Same width */
+    margin-bottom: 0vh; /* Base margin */
+  }
+
+  /* Maintain the current margin-bottom values */
+  .item:nth-child(1),
+  .item:nth-child(2),
+  .item:nth-child(3),
+  .item:nth-child(4),
+  .item:nth-child(5) {
+    margin-bottom: 30vh; 
+  }
+
+  .item:nth-child(6) {
+    margin-bottom: -10vh; 
+  }
+
+  .item-info {
+    padding: 0.5em 0; /* Same padding */
+  }
+
+  .item-img img {
+    will-change: transform;
+    transform: scale(1.035);
+    clip-path: polygon(-1% -1%, 101% -1%, 101% 0%, -1% 0%);
+  }
+
+  /* Maintain positioning for each item */
+  .item:nth-child(1),
+  .item:nth-child(5) {
+    position: relative;
+    left: 0%;
+  }
+
+  .item:nth-child(3) {
+    position: relative;
+    left: 0%;
+  }
+
+  .item:nth-child(2),
+  .item:nth-child(4),
+  .item:nth-child(6) {
+    position: relative;
+    left: 0%;
+  }
+}

@@ -1,17 +1,27 @@
-
 @media (max-width: 450px) {
+  .about-content {
+    height: 90vh;               /* Occupies 90% of the viewport height */
+    display: flex;              /* Enable flexbox */
+    flex-direction: column;     /* Stack content vertically */
+    justify-content: center;    /* Center content vertically */
+    align-items: center;        /* Center content horizontally */
+    padding: 1em;               /* Add padding for breathing room */
+    box-sizing: border-box;     /* Include padding in height calculations */
+  }
+
   .about-content p {
-    font-size: 1rem;        /* Smaller font size for mobile */
-    line-height: 1.4;       /* Adjust line height for better readability */
-    max-width: 90%;         /* Limit width to prevent edge-to-edge text */
-    margin: 0 auto;         /* Center the text horizontally */
+    font-size: 1rem;            /* Smaller font size for mobile */
+    line-height: 1.4;           /* Improve readability */
+    max-width: 90%;             /* Control text width */
+    text-align: center;         /* Center-align text for better mobile flow */
+    margin: 0 auto;             /* Ensure horizontal centering */
   }
 
   .contact-link {
-    font-size: 1rem;        /* Match the smaller size of the About text */
+    font-size: 1rem;            /* Match the About text size */
+    margin-top: 1em;            /* Add space above the link */
   }
 }
-
 
 
 

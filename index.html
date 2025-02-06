@@ -10,12 +10,21 @@
 <body>
   <div class="bg-color"></div>
 
+
+
+
   <div class="stat">
     <a href="https://shawn-jr.kit.com/c2470e4deb" class="hover-underline" target="_blank">Subscribe</a>
   </div>
+
+  <div class="stat">
+    <a href="#" class="hover-underline" id="about-link">About</a>
+  </div>
+
   <div class="stat">
     <a href="https://ko-fi.com/copingwithcapitalism" class="hover-underline" target="_blank">Support</a>
   </div>
+ 
 
   <div class="items">
     <div class="item">
@@ -84,12 +93,105 @@ document.addEventListener("DOMContentLoaded", function () {
   yearElement.textContent = currentYear;
 });
 
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const aboutLink = document.getElementById("about-link");
+  const aboutOverlay = document.querySelector(".about-overlay");
+  const aboutContent = document.querySelector(".about-content");
+  const closeAbout = document.querySelector(".close-about");
+
+  const aboutTimeline = gsap.timeline({ paused: true });
+
+  // Block reveal animation
+  aboutTimeline.to(".about-overlay .block", {
+    duration: 0.8,
+    clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
+    stagger: 0.1,
+    ease: "power3.inOut"
+  });
+
+  // About content fade-in
+  aboutTimeline.to(aboutContent, {
+    duration: 0.5,
+    opacity: 1,
+    pointerEvents: "auto"
+  }, "-=0.4"); // Slight overlap with block animation
+
+// Open About section
+aboutLink.addEventListener("click", function (e) {
+  e.preventDefault();
+  aboutOverlay.style.pointerEvents = "auto"; // Enable interaction
+  document.documentElement.style.overflow = "hidden"; // Disable scroll on <html>
+  document.body.style.overflow = "hidden";            // Disable scroll on <body>
+  aboutTimeline.play();
+});
+
+// Close About section
+closeAbout.addEventListener("click", function () {
+  aboutTimeline.reverse().then(() => {
+    aboutOverlay.style.pointerEvents = "none"; // Disable interaction after closing
+    document.documentElement.style.overflow = ""; // Re-enable scroll on <html>
+    document.body.style.overflow = "";            // Re-enable scroll on <body>
+  });
+});
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  </script>
 
   
   <footer class="footer">
   <p>© <span id="current-year"></span> Coping With Capitalism. All rights reserved.</p>
 </footer>
+
+
+
+
+<!-- About Overlay Structure -->
+<div class="about-overlay">
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  
+<!-- About Content -->
+<div class="about-content">
+  <button class="close-about">✕</button>
+  <p id="about-text">
+    In a system that commodifies labor for profit, exploitation is inevitable. Mutual care is an essential balancing act to heal the harm caused by systemic exploitation.<br><br>
+    Coping With Capitalism is a community that provides clear & accessible paths to personal and collective care. By embracing and promoting a culture of mutual care, we will co-create a more inclusive & supportive world for all.<br><br>
+    
+    <a href="mailto:hello@shawnjr.online" class="contact-link">Let's get in touch</a>
+  </p>
+  
+</div>
+
+</div>
+
+
+
+
+
 
 </body>
 </html>

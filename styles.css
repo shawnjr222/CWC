@@ -1,49 +1,49 @@
 @media (max-width: 450px) {
   .about-content {
-    height: 90vh;                    /* Full viewport height */
-    width: 100%;                     /* Full width */
-    display: flex;                   /* Flexbox layout */
-    flex-direction: column;          /* Stack items vertically */
-    justify-content: center;         /* Center vertically */
-    align-items: center;             /* Center horizontally */
-    padding: 1em;                    /* Add padding to prevent content from touching edges */
-    box-sizing: border-box;          /* Include padding in dimensions */
-    text-align: center;              /* Center-align text */
-    position: relative;              /* Ensure the close button positions correctly */
+    height: 90vh;                      /* Full viewport height */
+    width: 100%;                       /* Full width */
+    display: flex;                     /* Flexbox layout */
+    flex-direction: column;            /* Stack items vertically */
+    justify-content: center;           /* Center vertically */
+    align-items: center;               /* Center horizontally */
+    padding: 1em;                      /* Add padding for breathing room */
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;                /* Needed for absolute positioning of the close button */
   }
 
   .about-content p {
-    font-size: 0.9rem;               /* Smaller font size for better mobile scaling */
-    line-height: 1.5;                /* Improve readability */
-    max-width: 90%;                  /* Prevent text from stretching too wide */
-    word-wrap: break-word;           /* Prevent long words from breaking the layout */
-    margin: 0 auto;                  /* Center horizontally */
+    font-size: 0.9rem;                 /* Consistent, smaller font size */
+    line-height: 1.5;                  /* Better readability */
+    max-width: 90%;                    /* Limit width for better mobile fit */
+    word-wrap: break-word;
+    margin: 0 auto 1em auto;           /* Add space below the paragraph */
   }
 
   .contact-link {
-    font-size: 0.9rem;               /* Match the paragraph text size */
+    font-size: 0.9rem;                 /* Match paragraph font size */
     line-height: 1.5;
-    margin-top: 0.5em;               /* Add slight space above the link */
+    margin-top: 0.5em;                 /* Slight space above the link */
     word-wrap: break-word;
-    text-decoration: none;           /* Ensure no extra underline unless hovered */
+    text-decoration: none;             /* No extra underline unless hovered */
   }
 
   a {
     font-family: 'GT Walsheim', sans-serif;
     font-weight: normal;
     font-style: normal;
-    font-size: 0.9rem;               /* Match all link text sizes with paragraph */
+    font-size: 0.9rem;                 /* Ensure all links match paragraph size */
     line-height: 1.5;
   }
 
   .close-about {
     position: absolute;
-    top: 0.5em;                      /* Add space from the top edge */
-    right: 0.5em;                    /* Add space from the right edge */
+    top: 1em;                          /* Add more space from the top */
+    right: 1em;                        /* Add more space from the right */
     background: transparent;
     border: none;
     color: #fff;
-    font-size: 1.2rem;               /* Slightly larger for better tap targets on mobile */
+    font-size: 1.5rem;                 /* Slightly larger for easy tapping */
     cursor: pointer;
     transition: transform 0.3s ease;
   }
@@ -52,7 +52,6 @@
     transform: scale(1.5);
   }
 }
-
 
 
 

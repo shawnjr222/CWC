@@ -20,10 +20,39 @@
   }
 
   .contact-link {
-    font-size: 1rem;                 /* Match About text size */
-    margin-top: 1em;                 /* Space between text and link */
+   font-size: 1rem;                 /* Smaller font size for mobile */
+    line-height: 1.5;                /* Improve readability */
+    margin-top: 0em;                 /* Space between text and link */
     word-wrap: break-word;           /* Handle long words gracefully */
   }
+
+  
+a {
+  font-family: 'GT Walsheim', sans-serif; /* Fallback to sans-serif */
+  font-weight: normal;
+  font-style: normal;
+   font-size: 1rem;                 /* Smaller font size for mobile */
+    line-height: 1.5;                /* Improve readability */
+}
+
+  
+.close-about {
+  position: absolute;
+  top: 0em;
+  right: 0em;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.close-about:hover {
+  transform: scale(1.5);
+}
+
+
 }
 
 

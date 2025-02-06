@@ -31,7 +31,7 @@
   font-family: "GT Walsheim", sans-serif;
   font-size: 1.5rem;
   max-width: 600px;
-  padding: 2em;
+  padding: 6.75em 2em 2em 2em;
   text-align: center;
   opacity: 0; /* Hidden initially */
   pointer-events: none;

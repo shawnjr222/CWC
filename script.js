@@ -18,7 +18,7 @@ gsap.utils.toArray(".item").forEach((item, index) => {
     { clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)" },
     {
       clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-      ease: "power1.out",
+      ease: "power3.inOut",
       duration: 2,
       scrollTrigger: {
         trigger: item,
@@ -52,4 +52,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
   window.addEventListener("scroll", updateScrollPercentage);
 });
-

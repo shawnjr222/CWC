@@ -1,3 +1,139 @@
+.contact-link {
+  display: inline-block;
+  margin-top: 1em;
+  font-family: "GT Walsheim", sans-serif;
+  font-size: 1.5rem; /* Same size as the About text */
+  color: #ffffff;
+  text-decoration: none;
+  position: relative;
+  font-weight: normal;
+  overflow: hidden; /* Prevent overflow during animation */
+  transition: color 0.3s ease; /* Smooth transition if color changes are needed later */
+}
+
+/* Underline Effect */
+.contact-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background-color: currentColor;
+  transform: scaleX(0);         /* Initially invisible */
+  transform-origin: left;       /* Grows from the left on hover */
+  transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1); /* Matches your easing */
+}
+
+/* Hover State */
+.contact-link:hover::after {
+  transform: scaleX(1);         /* Expand to full width */
+  transform-origin: left;       /* Grows from left to right */
+}
+
+/* Mouse Leave State (Reverses to the Right) */
+.contact-link:not(:hover)::after {
+  transform: scaleX(0);         /* Shrinks to zero */
+  transform-origin: right;      /* Shrinks towards the right */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* About Overlay Styles */
+.about-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;  /* Prevent scroll inside the overlay */
+  /* Optional: adds a slight dark overlay effect */
+}
+
+
+
+.block {
+  flex: 1;
+  height: 100%;
+  background: #1250C4;
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); /* Hidden initially */
+  margin-right: -2px; /* To avoid gaps between blocks */
+}
+
+.about-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-family: "GT Walsheim", sans-serif;
+  font-size: 1.5rem;
+  max-width: 600px;
+  padding: 2em;
+  text-align: center;
+  opacity: 0; /* Hidden initially */
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.about-content p {
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  text-align: left;
+}
+
+
+.close-about {
+  position: absolute;
+  top: 0em;
+  right: 0em;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.close-about:hover {
+  transform: scale(1.5);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 * {
   margin: 0;
   padding: 0;
@@ -68,7 +204,7 @@ a {
   background-color: currentColor;
   transform: scaleX(0); /* Initially invisible */
   transform-origin: left; /* Grows from the left on hover */
-  transition: transform 0.4s ease-in-out, transform-origin 0s; /* Smooth animation */
+  transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1), transform-origin 0s;
 }
 
 /* Hover State */
@@ -107,6 +243,10 @@ a {
   top: 6vh; /* Adjust based on desired spacing */
 }
 
+.stat:nth-child(3) {
+  top: 12vh; /* Adjust the spacing as needed */
+}
+
 
 .counter {
   position: fixed;
@@ -136,17 +276,29 @@ a {
   z-index: -1;
 }
 
+
+
 .items {
   width: 100%;
   height: 25%;
   padding: 18em 2em;
   font-family: "GT Walsheim";
+  
+  /* Scroll Snap Properties */
+  overflow-y: scroll;               /* Enable vertical scrolling */
+  scroll-snap-type: y mandatory;    /* Vertical snap */
+  scroll-behavior: smooth;          /* Smooth scrolling */
 }
 
 .item {
   width: 45%;
   margin-bottom: 0vh;
+  
+  scroll-snap-align: center;        /* Snap items to center */
+  scroll-snap-stop: always;         /* Force snapping to occur even with fast scrolls */
 }
+
+
 
 .item:nth-child(1) {
   margin-bottom: 60vh; /* More space after the first item */

@@ -1,94 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shawn Jr</title>
-  <link rel="stylesheet" href="css/styles.css">
-
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <title>Coping With Capitalism</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div class="bg-color"></div>
 
-  <section class="hero">
-    <div class="container">
-      <div class="hero-row">
-        <div class="header">
-          <h1>Shawn</h1>
-          <h1>Jr</h1>
-        </div>
+
+
+
+  <div class="stat">
+    <a href="https://shawn-jr.kit.com/c2470e4deb" class="hover-underline" target="_blank">Subscribe</a>
+  </div>
+
+  <div class="stat">
+    <a href="#" class="hover-underline" id="about-link">About</a>
+  </div>
+
+  <div class="stat">
+    <a href="https://ko-fi.com/copingwithcapitalism" class="hover-underline" target="_blank">Support</a>
+  </div>
+ 
+
+  <div class="items">
+    <div class="item">
+      <div class="item-img">
+        <img src="./assets/1.png" alt="Item 1" />
       </div>
-      <div class="hero-row">
-        <p class="fade-in-text">I utilize design thinking, empathy and technology to co-create a better world.</p>
-        <div class="header">
-          <h1>Design &</h1>
-          <h1>Advocacy</h1>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      <div class="footer-row">
-
-      <!-- ✅ About Section -->
-<div class="footer-col">
-  <p>About</p>
-  <p>7yrs of Product Design Experience<br><br>B.S Industrial Design from Georgia Tech<br><br>200hr Yoga Teacher Training from FolkSF</p>
-</div>
-
-<!-- ✅ Community Section with Email Link Styling -->
-<div class="footer-col">
-  <p>Community</p>
-  <a href="https://www.copingwithcapitalism.com" target="_blank" rel="noopener noreferrer" class="email-link">Coping With Capitalism</a> <!-- Added email-link class -->
-</div>
-
-<!-- ✅ Contact Section with Email Link Styling -->
-<div class="footer-col">
-  <p>Contact</p>
-  <a href="mailto:hello@shawnjr.online" class="email-link">Let's Get in Touch</a> <!-- Added email-link class -->
-</div>
-
-
-
-      </div>
-
-      <!-- Footer Bottom Row -->
-      <div class="footer-row">
-        <p id="sf-time">San Francisco, CA 00:00</p>
-        <p id="current-year">© 2025 Shawn Jr All rights reserved.</p>
+      <div class="item-info">
+        <a href="https://www.youtube.com/watch?v=7AEyqsBuvRQ" class="hover-underline" target="_blank">08.17.2024 / MediumDay talk →</a>
       </div>
     </div>
-  </footer>
+
+    <div class="item">
+      <div class="item-img">
+        <img src="./assets/2.png" alt="Item 2" />
+      </div>
+      <div class="item-info">
+        <a href="https://www.youtube.com/watch?v=0CJalj1_jTU" class="hover-underline" target="_blank">03.19.2024 / Publication editors panel discussion →</a>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-img">
+        <img src="./assets/3.gif" alt="Item 3" />
+      </div>
+      <div class="item-info">
+        <a href="https://thisishowwecope.com" class="hover-underline" target="_blank">03.01.2024 / This is how we cope card game →</a>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-img">
+        <img src="./assets/4.png" alt="Item 4" />
+      </div>
+      <div class="item-info">
+        <a href="https://shawnjr.medium.com/list/cwc-interview-series-ad4f8055a587" class="hover-underline" target="_blank">11.20.2023 / Interview series →</a>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-img">
+        <img src="./assets/5.png" alt="Item 5" />
+      </div>
+      <div class="item-info">
+        <p>04.28.2023 / Design thinking workshop for incarcerated youth</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-img">
+        <img src="./assets/6.png" alt="Item 6" />
+      </div>
+      <div class="item-info">
+        <a href="https://medium.com/coping-with-capitalism" class="hover-underline" target="_blank">03.28.2023 / Medium publication →</a>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/ScrollTrigger.min.js"></script>
-  <script src="https://unpkg.com/lenis@1.1.5/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="./script.js"></script>
 
-  <script>
-    function updateTimeAndYear() {
-      const timeOptions = { 
-        timeZone: 'America/Los_Angeles', 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit', 
-        hour12: true 
-      };
-      const formatter = new Intl.DateTimeFormat([], timeOptions);
-      const currentTime = formatter.format(new Date());
+ <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const yearElement = document.getElementById("current-year");
+  const currentYear = new Date().getFullYear();
+  yearElement.textContent = currentYear;
+});
 
-      const currentYear = new Date().getFullYear();
 
-      document.getElementById('sf-time').textContent = `San Francisco, CA ${currentTime}`;
-      document.getElementById('current-year').textContent = `© ${currentYear} Shawn Jr All rights reserved.`;
-    }
 
-    setInterval(updateTimeAndYear, 1000);
-    window.onload = updateTimeAndYear;
-  </script>
 
-  <script src="./js/script.js"></script>
+document.addEventListener("DOMContentLoaded", function () {
+  const aboutLink = document.getElementById("about-link");
+  const aboutOverlay = document.querySelector(".about-overlay");
+  const aboutContent = document.querySelector(".about-content");
+  const closeAbout = document.querySelector(".close-about");
+
+  const aboutTimeline = gsap.timeline({ paused: true });
+
+  // Block reveal animation
+  aboutTimeline.to(".about-overlay .block", {
+    duration: 0.8,
+    clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
+    stagger: 0.1,
+    ease: "power3.inOut"
+  });
+
+  // About content fade-in
+  aboutTimeline.to(aboutContent, {
+    duration: 0.5,
+    opacity: 1,
+    pointerEvents: "auto"
+  }, "-=0.4"); // Slight overlap with block animation
+
+// Open About section
+aboutLink.addEventListener("click", function (e) {
+  e.preventDefault();
+  aboutOverlay.style.pointerEvents = "auto"; // Enable interaction
+  document.documentElement.style.overflow = "hidden"; // Disable scroll on <html>
+  document.body.style.overflow = "hidden";            // Disable scroll on <body>
+  aboutTimeline.play();
+});
+
+// Close About section
+closeAbout.addEventListener("click", function () {
+  aboutTimeline.reverse().then(() => {
+    aboutOverlay.style.pointerEvents = "none"; // Disable interaction after closing
+    document.documentElement.style.overflow = ""; // Re-enable scroll on <html>
+    document.body.style.overflow = "";            // Re-enable scroll on <body>
+  });
+});
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ </script>
+
+  
+  <footer class="footer">
+  <p>© <span id="current-year"></span> Coping With Capitalism. All rights reserved.</p>
+</footer>
+
+
+
+
+<!-- About Overlay Structure -->
+<div class="about-overlay">
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  <div class="block"></div>
+  
+<!-- About Content -->
+<div class="about-content">
+  <button class="close-about">✕</button>
+  <p id="about-text">
+    In a system that commodifies labor for profit, exploitation is inevitable. Mutual care is how we begin to heal the collective and individual harm caused by systemic oppression.<br><br>
+    Coping With Capitalism is a community that provides clear & accessible paths to self and collective care. By embracing and promoting a culture of mutual care, we will co-create a more inclusive & supportive world for all.<br><br>
+    
+    <a href="mailto:hello@shawnjr.online" class="contact-link">Let's get in touch</a>
+  </p>
+  
+</div>
+
+</div>
+
+
+
+
+
+
 </body>
 </html>

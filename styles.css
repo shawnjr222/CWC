@@ -68,7 +68,7 @@
   width: 100%;
   height: 100%;
   display: flex;
-  z-index: 9999;
+  z-index: 9997;       
   pointer-events: none;
   overflow: hidden;  /* Prevent scroll inside the overlay */
   /* Optional: adds a slight dark overlay effect */
@@ -82,6 +82,7 @@
   background: #1250C4;
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); /* Hidden initially */
   margin-right: -2px; /* To avoid gaps between blocks */
+  z-index: 9998;    
 }
 
 .about-content {
@@ -97,7 +98,7 @@
   text-align: center;
   opacity: 0; /* Hidden initially */
   pointer-events: none;
-  z-index: 10000;
+  z-index: 9999; 
 }
 
 .about-content p {
@@ -497,6 +498,7 @@ a {
     max-width: 90% !important;
     word-wrap: break-word !important;
     margin: 0 auto 1em auto !important;
+    z-index: 9999;     
   }
 
   .contact-link {

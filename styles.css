@@ -1,27 +1,31 @@
 @media (max-width: 450px) {
   .about-content {
-    height: 90vh;               /* Occupies 90% of the viewport height */
-    display: flex;              /* Enable flexbox */
-    flex-direction: column;     /* Stack content vertically */
-    justify-content: center;    /* Center content vertically */
-    align-items: center;        /* Center content horizontally */
-    padding: 1em;               /* Add padding for breathing room */
-    box-sizing: border-box;     /* Include padding in height calculations */
+    height: 90vh;                    /* Full viewport height minus a little breathing room */
+    width: 100%;                     /* Full width of the viewport */
+    display: flex;                   /* Enable flexbox */
+    flex-direction: column;          /* Stack items vertically */
+    justify-content: center;         /* Center vertically */
+    align-items: center;             /* Center horizontally */
+    padding: 0;                      /* Remove all padding */
+    box-sizing: border-box;          /* Ensure border/padding don't affect dimensions */
+    text-align: center;              /* Center-align text */
   }
 
   .about-content p {
-    font-size: 1rem;            /* Smaller font size for mobile */
-    line-height: 1.4;           /* Improve readability */
-    max-width: 90%;             /* Control text width */
-    text-align: center;         /* Center-align text for better mobile flow */
-    margin: 0 auto;             /* Ensure horizontal centering */
+    font-size: 1rem;                 /* Smaller font size for mobile */
+    line-height: 1.5;                /* Improve readability */
+    max-width: 90%;                  /* Prevent edge-to-edge text */
+    word-wrap: break-word;           /* Prevent long words from breaking the layout */
+    margin: 0 auto;                  /* Center horizontally */
   }
 
   .contact-link {
-    font-size: 1rem;            /* Match the About text size */
-    margin-top: 1em;            /* Add space above the link */
+    font-size: 1rem;                 /* Match About text size */
+    margin-top: 1em;                 /* Space between text and link */
+    word-wrap: break-word;           /* Handle long words gracefully */
   }
 }
+
 
 
 

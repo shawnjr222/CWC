@@ -2,8 +2,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 function setInitialBackground() {
   const bgColorElement = document.querySelector(".bg-color");
-  bgColorElement.style.background = bgColors[0]; // Set the first background color instantly
+  bgColorElement.style.background = bgColors[0]; // Instantly apply the first background color
+  bgColorElement.style.transition = "none"; // Prevent any fade/move animation on load
 }
+
 
 const bgColors = [
   "#A1EDE0",
@@ -47,6 +49,13 @@ function updateBackground(color) {
 
 document.addEventListener("DOMContentLoaded", function () {
   setInitialBackground(); // Instantly apply background on load
+
+  // After 500ms, allow GSAP to animate (prevents weird gradient shift)
+  setTimeout(() => {
+    bgColorElement.style.transition = ""; // Allow animations after load
+  }, 1000);
+
+  
   const counterElement = document.querySelector(".counter p");
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
 

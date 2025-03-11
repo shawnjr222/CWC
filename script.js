@@ -2,8 +2,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 function setInitialBackground() {
   const bgColorElement = document.querySelector(".bg-color");
-  bgColorElement.style.background = bgColors[0]; // Instantly apply the first background color
-  bgColorElement.style.transition = "none"; // Prevent any fade/move animation on load
+  const initialColor = bgColors[0]; // First color in the array
+
+  // Ensure the gradient direction is correct from the start
+  bgColorElement.style.background = `linear-gradient(0deg, ${initialColor} 0%, rgba(255, 255, 255, 0) 100%)`;
+
+  // Prevent any unwanted animation on load
+  bgColorElement.style.transition = "none";
 }
 
 

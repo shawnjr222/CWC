@@ -1,5 +1,10 @@
 gsap.registerPlugin(ScrollTrigger);
 
+function setInitialBackground() {
+  const bgColorElement = document.querySelector(".bg-color");
+  bgColorElement.style.background = bgColors[0]; // Set the first background color instantly
+}
+
 const bgColors = [
   "#A1EDE0",
   "#FEBB05",
@@ -41,6 +46,7 @@ function updateBackground(color) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  setInitialBackground(); // Instantly apply background on load
   const counterElement = document.querySelector(".counter p");
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
 

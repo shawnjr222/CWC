@@ -49,12 +49,6 @@ function updateBackground(color) {
 
 document.addEventListener("DOMContentLoaded", function () {
   setInitialBackground(); // Instantly apply background on load
-
-  // After 500ms, allow GSAP to animate (prevents weird gradient shift)
-  setTimeout(() => {
-    bgColorElement.style.transition = ""; // Allow animations after load
-  }, 1000);
-
   
   const counterElement = document.querySelector(".counter p");
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;

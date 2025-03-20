@@ -13,6 +13,7 @@ function setInitialBackground() {
 
 
 const bgColors = [
+  "#C25F4F",
   "#A1EDE0",
   "#FEBB05",
   "#111111",

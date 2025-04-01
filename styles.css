@@ -82,6 +82,7 @@
   font-weight: normal;
   overflow: hidden; /* Prevent overflow during animation */
   transition: color 0.3s ease; /* Smooth transition if color changes are needed later */
+  z-index: 9999;
 }
 
 /* Underline Effect */
@@ -453,7 +454,7 @@ a {
 
 
     .about-content {
-      top: 90%;
+      top: 75%;
       transform: translate(-50%, -110%);
       font-size: 0.85rem;
       line-height: 1.4;

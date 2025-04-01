@@ -490,6 +490,13 @@ a {
       transition: transform 0.3s ease;
     }
 
+    .stat {
+      padding-left: 2em;
+      padding-top: 2em;
+      padding-bottom: 1em;
+    }
+    
+
 
   }
   

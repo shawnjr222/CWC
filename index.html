@@ -10,6 +10,7 @@
 <body>
   <div class="bg-color"></div>
 
+
   <div class="stat">
     <a href="#" class="hover-underline" id="about-link">Info</a>
   </div>
@@ -23,7 +24,6 @@
     <a href="https://ko-fi.com/copingwithcapitalism" class="hover-underline" target="_blank">Support</a>
   </div>
  
- 
 
   <div class="items">
     <div class="item">
@@ -31,7 +31,7 @@
         <img src="./assets/TQTB.png" alt="Item 1" />
       </div>
       <div class="item-info">
-        <a href="https://ko-fi.com/s/d4c96492d7" class="hover-underline" target="_blank">TBD.2025 / Guest editor for TQTB Journal 003: Advocates + Allies →</a>
+        <a href="https://ko-fi.com/s/d4c96492d7" class="hover-underline" target="_blank">TBD.2025 / Guest Editor for TQTB Journal 003: Advocates + Allies →</a>
       </div>
     </div>
 
@@ -68,7 +68,7 @@
         <img src="./assets/4.png" alt="Item 5" />
       </div>
       <div class="item-info">
-        <a href="https://shawnjr.medium.com/list/cwc-interview-series-ad4f8055a587" class="hover-underline" target="_blank">11.20.2023 / CWC interview series →</a>
+        <a href="https://shawnjr.medium.com/list/cwc-interview-series-ad4f8055a587" class="hover-underline" target="_blank">11.20.2023 / Interview series →</a>
       </div>
     </div>
 
@@ -185,13 +185,28 @@ closeAbout.addEventListener("click", function () {
   
 <!-- About Content -->
 <div class="about-content">
+
   <button class="close-about">✕</button>
   <p id="about-text">
     In a system that commodifies labor to generate profit, exploitation of that labor is inevitable. Mutual care is how we begin to heal the collective and individual harm caused by the systemic oppression found within capitalism.<br><br>
     Coping with capitalism is a publication that provides clear & accessible paths to self and collective care. By embracing and promoting a culture of mutual care, we will co-create a more inclusive & supportive world for all.
     <br><a href="https://medium.com/coping-with-capitalism/coping-with-capitalism-1981ece16e47?sk=e78484b5bd48d29a40d93ff06b36eca7" class="contact-link">Learn more</a>
   </p>
-  
+
+  </div>
+
+  <!-- Add a wrapper around mobile buttons so we can animate them -->
+<div class="about-buttons-mobile-wrapper">
+  <div class="about-buttons-mobile">
+    <a href="https://medium.com/coping-with-capitalism/coping-with-capitalism-1981ece16e47?sk=e78484b5bd48d29a40d93ff06b36eca7" 
+       class="learn-more-mobile" 
+       target="_blank">
+       Learn More
+    </a>
+    <button class="close-about-mobile">Close</button>
+  </div>
+</div>
+
 </div>
 
 </div>

@@ -387,9 +387,100 @@ a {
 
 
 
+.about-buttons-mobile {
+  display: none; /* Hide by default */
+}
+
+.about-buttons-mobile-wrapper {
+  pointer-events: none;
+  opacity: 0;
+  z-index: 10001;
+}
 
 
 @media (max-width: 450px) {
+
+  
+
+  .about-content > .close-about,
+  .about-content > .contact-link {
+    display: none;
+  }
+  
+  .about-content .contact-link {
+    display: none;
+  }
+  
+  .about-buttons-mobile {
+    position: fixed; /* Pin to viewport */
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10000;
+    border-top: 1px solid #fff;
+    height: 60px;
+  }
+  
+  .about-buttons-mobile button,
+  .about-buttons-mobile a {
+    flex: 1;
+    height: 100%;
+    font-size: 1rem;
+    font-family: 'GT Walsheim', sans-serif;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* ✅ Needed for pseudo-element divider */
+  }
+  
+  /* ✅ Shared button styles */
+  .about-buttons-mobile .learn-more-mobile,
+  .about-buttons-mobile .close-about-mobile {
+    background: #fff;
+    color: #1250C4;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    transition: background 0.3s ease;
+  }
+  
+  /* ✅ Hover state */
+  .about-buttons-mobile .learn-more-mobile:hover,
+  .about-buttons-mobile .close-about-mobile:hover {
+    background: #1250C4; /* Slightly darker on hover */
+    color: #fff;
+  }
+  
+  /* ✅ ADD THIS: Divider between buttons */
+  .about-buttons-mobile a::after {
+    content: "";
+    display: block;
+    width: 1px; /* thickness of divider */
+    height: 100%;
+    background-color: #1250C4; /* color of divider */
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  
+  
+  
+
+
+
+
+
+
+
+
   .items {
     width: 100%;
     height: 100%;

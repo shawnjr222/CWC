@@ -1,16 +1,13 @@
 gsap.registerPlugin(ScrollTrigger);
 
+// Background color setup
 function setInitialBackground() {
   const bgColorElement = document.querySelector(".bg-color");
-  const initialColor = bgColors[0]; // First color in the array
+  const initialColor = bgColors[0];
 
-  // Ensure the gradient direction is correct from the start
   bgColorElement.style.background = `linear-gradient(0deg, ${initialColor} 0%, rgba(255, 255, 255, 0) 100%)`;
-
-  // Prevent any unwanted animation on load
   bgColorElement.style.transition = "none";
 }
-
 
 const bgColors = [
   "#C25F4F",
@@ -54,8 +51,8 @@ function updateBackground(color) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  setInitialBackground(); // Instantly apply background on load
-  
+  setInitialBackground();
+
   const counterElement = document.querySelector(".counter p");
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
 
@@ -66,4 +63,64 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   window.addEventListener("scroll", updateScrollPercentage);
+
+  // 🆕 About Overlay and Mobile Buttons Setup
+  const aboutLink = document.getElementById("about-link");
+  const aboutOverlay = document.querySelector(".about-overlay");
+  const aboutContent = document.querySelector(".about-content");
+  const closeAbout = document.querySelector(".close-about");
+  const aboutButtonsMobileWrapper = document.querySelector(".about-buttons-mobile-wrapper");
+  const closeAboutMobile = document.querySelector(".close-about-mobile");
+
+  const aboutTimeline = gsap.timeline({ paused: true });
+
+  // Blocks animation
+  aboutTimeline.to(".about-overlay .block", {
+    duration: 0.8,
+    clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
+    stagger: 0.1,
+    ease: "power3.inOut"
+  });
+
+  // About text content fade in
+  aboutTimeline.to(aboutContent, {
+    duration: 0.5,
+    opacity: 1,
+    pointerEvents: "auto"
+  }, "-=0.4"); // Overlap timing
+
+  // 🔥 Fade in mobile buttons together with text
+  aboutTimeline.to(aboutButtonsMobileWrapper, {
+    duration: 0.5,
+    opacity: 1,
+    pointerEvents: "auto"
+  }, "-=0.4"); // Sync with aboutContent
+
+  // Open About
+  aboutLink.addEventListener("click", function (e) {
+    e.preventDefault();
+    aboutOverlay.style.pointerEvents = "auto";
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    aboutTimeline.play();
+  });
+
+  // Close About (Desktop ✕)
+  closeAbout.addEventListener("click", function () {
+    aboutTimeline.reverse().then(() => {
+      aboutOverlay.style.pointerEvents = "none";
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    });
+  });
+
+  // Close About (Mobile Close Button)
+  closeAboutMobile.addEventListener("click", function () {
+    aboutTimeline.reverse().then(() => {
+      aboutOverlay.style.pointerEvents = "none";
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    });
+  });
+
 });

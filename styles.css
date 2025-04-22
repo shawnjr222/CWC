@@ -549,7 +549,7 @@ a {
       font-size: 0.85rem;
       line-height: 1.4;
       max-width: 100%;            /* Allow text to span more of the screen */
-      margin: 0 auto 0;
+      margin: -30px auto 0;  /* Negative top margin */
       padding: 0em;            /* Add light padding for breathing room */
       text-align: left;
       word-wrap: break-word;

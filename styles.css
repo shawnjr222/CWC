@@ -424,3 +424,19 @@ html.lenis, html.lenis body { height: auto; }
 /* Name link in the About modal */
 .about-name { font-weight: 500; border-bottom: 1px solid var(--ink); }
 .about-name:hover { color: var(--blue); border-color: var(--blue); }
+
+/* Phones: the whole block from the title to the closing line is centered in the screen,
+   with padding that follows the phone's safe areas. */
+@media (max-width: 640px) {
+  .hero {
+    justify-content: center;
+    height: auto;
+    min-height: 100svh;
+    padding-top: calc(76px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+  }
+  .hero-title { margin-bottom: 0; }
+  .map-wrap { margin-top: 12px; }
+}

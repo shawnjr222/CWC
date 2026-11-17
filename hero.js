@@ -164,6 +164,29 @@
     setReadout(selected);
   }
 
+  // On phones, hold space for the tallest text across every pill and state, so the centered block stays put.
+  function reserve() {
+    const caption = document.querySelector(".caption");
+    caption.style.minHeight = "";
+    standEl.style.minHeight = "";
+    if (!window.matchMedia("(max-width: 640px)").matches) return;
+    const keep = { ro: readout.innerHTML, src: srcEl.textContent, stand: standEl.textContent };
+    let maxC = 0, maxS = 0;
+    for (const m of METRICS) {
+      srcEl.textContent = m.src;
+      standEl.textContent = m.stand;
+      maxS = Math.max(maxS, standEl.offsetHeight);
+      const lines = [m.nat(data.us)];
+      const withVal = Object.entries(data.states).filter(([, s]) => s[m.key] != null);
+      withVal.sort((a, b) => m.line(b[1][m.key]).length - m.line(a[1][m.key]).length);
+      withVal.slice(0, 3).forEach(([n, s]) => lines.push(`<b>${n}.</b> ${m.line(s[m.key])}<small>U.S.: ${fmtNat(m)}</small>`));
+      for (const l of lines) { readout.innerHTML = l; maxC = Math.max(maxC, caption.offsetHeight); }
+    }
+    readout.innerHTML = keep.ro; srcEl.textContent = keep.src; standEl.textContent = keep.stand;
+    caption.style.minHeight = maxC + "px";
+    standEl.style.minHeight = maxS + "px";
+  }
+
   function buildChips() {
     const one = METRICS.map((m) => `<button type="button" class="chip" data-id="${m.id}" aria-pressed="${m === metric}">${m.label}</button>`).join("");
     // Repeat the set until the track is wider than the window plus one set, so the loop never shows a gap.
@@ -207,7 +230,9 @@
     srcEl.textContent = metric.src;
     standEl.textContent = metric.stand;
     draw();
+    reserve();
     if (window.gsap) gsap.from("#hero-viz path", { opacity: 0, duration: 0.8, stagger: 0.012, ease: "power2.out" });
-    new ResizeObserver(() => { clearTimeout(resizeT); resizeT = setTimeout(draw, 150); }).observe(vizEl);
+    new ResizeObserver(() => { clearTimeout(resizeT); resizeT = setTimeout(() => { draw(); reserve(); }, 150); }).observe(vizEl);
+    window.addEventListener("orientationchange", () => setTimeout(reserve, 300));
   });
 })();

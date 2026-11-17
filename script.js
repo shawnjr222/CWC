@@ -98,3 +98,20 @@ const closeDlg = () => dlg.close();
 document.getElementById("about-close").addEventListener("click", closeDlg);
 dlg.addEventListener("click", (e) => { if (e.target === dlg) closeDlg(); });
 dlg.addEventListener("close", () => { document.body.style.overflow = ""; window.lenis && lenis.start(); });
+
+/* Logo / name: a short pause, then a long, eased glide back to the top (uses Lenis when it's running) */
+const brand = document.querySelector(".brand");
+if (brand) {
+  const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  brand.addEventListener("click", (e) => {
+    e.preventDefault();
+    const dist = window.scrollY;
+    if (dist < 4) return;
+    // farther down takes a little longer, between 1.6s and 2.8s
+    const duration = Math.min(2.8, Math.max(1.6, 1.2 + dist / 3500));
+    setTimeout(() => {
+      if (window.lenis) window.lenis.scrollTo(0, { duration, easing: easeInOut, lock: false });
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 160);
+  });
+}

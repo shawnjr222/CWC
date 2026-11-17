@@ -38,3 +38,43 @@
   .moment .sig { width: 96px; }
 }
 @media (prefers-reduced-motion: reduce) { .moment .listen-now i { animation: none; } }
+
+/* Visualisations inside each moment */
+.moment.is-stat .card-v { width: min(46%, 560px); }
+.viz { margin-top: 18px; }
+.viz svg { width: 100%; height: auto; display: block; overflow: visible; }
+.viz-dots { display: grid; grid-template-columns: repeat(10, 1fr); gap: clamp(4px, .8vw, 9px); width: min(100%, 300px); }
+.viz-dots i { aspect-ratio: 1; border-radius: 50%; background: #d9d7d1; }
+.viz-poverty { display: grid; grid-template-columns: repeat(24, 1fr); gap: 3px; }
+.viz-poverty i { aspect-ratio: 1; border-radius: 50%; background: #d9d7d1; }
+.viz-bars .bars { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; height: 210px; position: relative; }
+.viz-bars .bars::after { content: ""; position: absolute; left: 0; right: 0; bottom: 18px; height: 1px; background: #cfcdc7; }
+.viz-bars .b { position: relative; flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 18px; }
+.viz-bars .b i { display: block; width: 100%; height: 0; border-radius: 10px 10px 0 0; }
+.viz-bars .t { font-weight: 500; font-size: 15px; letter-spacing: -.02em; margin-bottom: 6px; }
+.viz-bars .b em { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); font-style: normal; color: var(--dim); white-space: nowrap; font-size: 10px; }
+.viz-day .r { margin-bottom: 14px; }
+.viz-day .l { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.viz-day .l b { font-size: clamp(18px, 2vw, 24px); font-weight: 500; letter-spacing: -.03em; }
+.viz-day .tr { height: 24px; background: #e4e2dc; border-radius: 999px; overflow: hidden; }
+.viz-day .f { height: 100%; width: 0; background: var(--blue); border-radius: 999px; }
+.viz-day .f.min { background: #111; }
+
+/* Concept switcher bar, fixed to the bottom while the story is on screen */
+.story-bar { position: fixed; left: 50%; bottom: 16px; transform: translate(-50%, 24px); opacity: 0; pointer-events: none; z-index: 60; display: flex; gap: 4px; padding: 4px; width: max-content; max-width: calc(100% - 24px); overflow-x: auto; border-radius: 999px; background: rgba(255,255,255,.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); scrollbar-width: none; transition: opacity .35s, transform .35s var(--ease); }
+.story-bar.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.story-bar::-webkit-scrollbar { display: none; }
+.story-bar a { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 8px; border-radius: 999px; font: 500 13px/1 "Inter Tight", sans-serif; white-space: nowrap; color: var(--ink); text-decoration: none; transition: background .2s, color .2s; }
+.story-bar a i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: rgba(17,17,17,.08); font: 500 11px/1 "JetBrains Mono", monospace; font-style: normal; }
+.story-bar a:hover { background: rgba(18,80,196,.1); color: var(--blue); }
+.story-bar a[aria-current="page"] { background: var(--blue); color: #fff; }
+.story-bar a[aria-current="page"] i { background: rgba(255,255,255,.22); }
+
+@media (max-width: 760px) {
+  .moment.is-stat .card-v { width: 100%; }
+  .viz-bars .bars { height: 180px; }
+  .story-bar a span { display: none; }
+  .story-bar a { padding: 0 8px; }
+  .story-bar a[aria-current="page"] span { display: inline; }
+  .story-bar a[aria-current="page"] { padding: 0 14px 0 8px; }
+}

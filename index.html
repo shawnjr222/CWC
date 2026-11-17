@@ -1,220 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="/assets/favicon.png" type="image/png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coping With Capitalism</title>
+  <meta name="description" content="Coping With Capitalism was a publication on self and collective care, active 2023–2025. It is currently on hiatus." />
+  <link rel="icon" href="/assets/favicon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="bg-color"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="top">
+    <a class="brand" href="#top" aria-label="Coping With Capitalism, back to top">
+      <img src="assets/favicon.png" alt="" width="20" height="20" />
+      <span>Coping With Capitalism</span>
+    </a>
+    <button class="idx about-btn" type="button" id="about-open" aria-haspopup="dialog">About</button>
+  </header>
 
 
-  <div class="stat">
-    <a href="#" class="hover-underline" id="about-link">Info</a>
-  </div>
-
-  <div class="stat">
-    <a href="https://shawnjr.online" class="hover-underline" target="_blank"></a>
-  </div>
-
-
-  <div class="stat">
-    <a href="https://ko-fi.com/copingwithcapitalism" class="hover-underline" target="_blank">Support</a>
-  </div>
- 
-
-  <div class="items">
-    <div class="item">
-      <div class="item-img">
-        <img src="./assets/TQTB.png" alt="Item 1" />
-      </div>
-      <div class="item-info">
-        <a href="https://ko-fi.com/s/d4c96492d7" class="hover-underline" target="_blank">TBD.2025 / Guest Editor for TQTB Journal 003: Advocates + Allies →</a>
-      </div>
-    </div>
-
-
-    <div class="item">
-      <div class="item-img">
-        <img src="./assets/1.png" alt="Item 2" />
-      </div>
-      <div class="item-info">
-        <a href="https://www.youtube.com/watch?v=7AEyqsBuvRQ" class="hover-underline" target="_blank">08.17.2024 / MediumDay talk →</a>
+  <dialog class="about" id="about" aria-labelledby="about-title">
+    <div class="about-panel">
+      <button class="about-close" type="button" id="about-close" aria-label="Close about"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg></button>
+      <p class="mono label">About</p>
+      <h2 id="about-title">Why Coping With Capitalism</h2>
+      <p class="about-lead">In a system that commodifies labor to generate profit, exploitation of that labor is inevitable. Mutual care is how we begin to heal the collective and individual harm caused by systemic oppression.</p>
+      <div class="about-cols">
+        <div>
+          <p class="mono label">Who</p>
+          <p>Managed and curated by <a class="about-name" href="https://shawnjr.online" target="_blank" rel="noopener">Shawn Jr</a></p>
+        </div>
+        <div>
+          <p class="mono label">Read</p>
+          <ul class="about-links">
+            <li><a href="https://medium.com/coping-with-capitalism" target="_blank" rel="noopener">Coping With Capitalism on Medium <span aria-hidden="true">↗</span></a></li>
+          </ul>
+        </div>
       </div>
     </div>
+  </dialog>
 
-    <div class="item">
-      <div class="item-img">
-        <img src="./assets/2.png" alt="Item 3" />
-      </div>
-      <div class="item-info">
-        <a href="https://www.youtube.com/watch?v=0CJalj1_jTU" class="hover-underline" target="_blank">03.19.2024 / Publication editors panel discussion →</a>
-      </div>
-    </div>
+  <main id="top">
+    <!-- 01 HERO -->
+    <section class="hero" data-section="01">
+      <h1 class="hero-title"><span class="line"><span class="inner">Life under capitalism, state by state.</span></span></h1>
 
-    <div class="item">
-      <div class="item-img">
-        <img src="./assets/3.gif" alt="Item 4" />
+      <div class="map-wrap">
+        <div class="hero-viz" id="hero-viz" role="img" aria-label="Map of the United States shaded by the selected measure"></div>
+        <div class="caption">
+          <p class="readout" id="readout" aria-live="polite"></p>
+          <p class="mono src" id="src"></p>
+        </div>
+        <div class="ticker-row">
+          <div class="ticker" id="ticker">
+            <div class="ticker-track" id="chips" role="group" aria-label="Choose a measure"></div>
+          </div>
+          <button class="ticker-toggle" id="ticker-toggle" type="button" aria-pressed="false" aria-label="Pause the moving pills"><span class="ico" aria-hidden="true"></span></button>
+        </div>
+        <p class="stand" id="stand"></p>
       </div>
-      <div class="item-info">
-        <a href="https://thisishowwecope.com" class="hover-underline" target="_blank">03.01.2024 / This is how we cope card game →</a>
-      </div>
-    </div>
+    </section>
 
-    <div class="item">
-      <div class="item-img">
-        <img src="./assets/4.png" alt="Item 5" />
+    <!-- 02 WHY -->
+    <section class="why" data-section="02">
+      <div class="why-pin">
+        <p class="mono label">The why</p>
+        <p class="why-text" id="why-text">
+          Exploitation is a daily reality under capitalism, a system that prioritizes profit over people and leaves lasting harm on bodies, minds, and communities. Mutual care is how we begin to heal. Coping With Capitalism exists to offer clear and accessible paths to self and collective care.
+        </p>
       </div>
-      <div class="item-info">
-        <a href="https://shawnjr.medium.com/list/cwc-interview-series-ad4f8055a587" class="hover-underline" target="_blank">11.20.2023 / Interview series →</a>
-      </div>
-    </div>
+    </section>
 
-    <div class="item">
-      <div class="item-img">
-        <img src="./assets/5.png" alt="Item 6" />
-      </div>
-      <div class="item-info">
-        <p>04.28.2023 / Design thinking workshop with incarcerated youth</p>
-      </div>
-    </div>
+    <!-- 03 HIATUS -->
+    <section class="pause" data-section="03">
+      <div class="pause-inner">
+        <p class="mono label">Status</p>
+        <h2 class="pause-title"><span class="line"><span class="inner">On hiatus.</span></span></h2>
+        <p class="pause-copy">From 2023 to 2025, a community came together here to share stories, host talks and workshops, and play a card game about mutual care. Now, Shawn Jr is considering where to take this initiative next. Past projects are below.</p>
 
-    <div class="item">
-      <div class="item-img">
-        <img src="./assets/6.png" alt="Item 7" />
+        <ol class="steps">
+          <li><span class="mono">2023</span><b>Launched</b><i></i></li>
+          <li><span class="mono">2023 – 2025</span><b>Nine initiatives</b><i></i></li>
+          <li><span class="mono">2025</span><b>Paused</b><i></i></li>
+          <li class="now"><span class="mono">Now</span><b>Deciding what&rsquo;s next</b><i></i></li>
+        </ol>
       </div>
-      <div class="item-info">
-        <a href="https://medium.com/coping-with-capitalism" class="hover-underline" target="_blank">03.28.2023 / Medium publication →</a>
-      </div>
-    </div>
-  </div>
+    </section>
 
+    <!-- 04 WORK -->
+    <section class="work" data-section="04">
+      <div class="work-pin">
+        <div class="work-head">
+          <p class="mono label">Past projects</p>
+          <p class="mono progress"><b id="w-now">01</b> / 09</p>
+        </div>
+
+        <div class="track" id="track">
+          <a class="card" href="https://medium.com/coping-with-capitalism" target="_blank" rel="noopener">
+            <div class="media"><img src="assets/web/p-pub.jpg" alt="Coping With Capitalism logo" /></div>
+            <div class="meta"><span class="mono">01 · 03.28.2023</span></div>
+            <h3>Medium publication <span class="arrow" aria-hidden="true">↗</span></h3>
+          </a>
+
+          <div class="card card--static">
+            <div class="media"><img src="assets/web/p-workshop.jpg" alt="Design thinking workshop" /></div>
+            <div class="meta"><span class="mono">02 · 04.28.2023</span></div>
+            <h3>Design thinking workshop with incarcerated youth</h3>
+          </div>
+
+          <a class="card" href="https://shawnjr.medium.com/list/cwc-interview-series-ad4f8055a587" target="_blank" rel="noopener">
+            <div class="media"><img src="assets/web/p-interview.jpg" alt="Interview series" /></div>
+            <div class="meta"><span class="mono">03 · 11.20.2023</span></div>
+            <h3>Coping with Capitalism interview series <span class="arrow" aria-hidden="true">↗</span></h3>
+          </a>
+
+          <a class="card" href="https://thisishowwecope.com" target="_blank" rel="noopener">
+            <div class="media"><img src="assets/web/p-game.jpg" alt="This is how we cope card game" /></div>
+            <div class="meta"><span class="mono">04 · 03.01.2024</span></div>
+            <h3>This is how we cope, card game <span class="arrow" aria-hidden="true">↗</span></h3>
+          </a>
+
+          <a class="card" href="https://www.youtube.com/watch?v=0CJalj1_jTU" target="_blank" rel="noopener">
+            <div class="media"><img src="assets/web/p-panel.jpg" alt="Editors panel" /></div>
+            <div class="meta"><span class="mono">05 · 03.19.2024</span></div>
+            <h3>Publication editors panel discussion with Medium <span class="arrow" aria-hidden="true">↗</span></h3>
+          </a>
+
+          <div class="card card--static">
+            <div class="media"><img src="assets/web/p-md24.jpg" alt="Medium Day 2024" /></div>
+            <div class="meta"><span class="mono">06 · 08.17.2024</span></div>
+            <h3>Medium Day 2024</h3>
+          </div>
+
+          <a class="card" href="https://ko-fi.com/s/d4c96492d7" target="_blank" rel="noopener">
+            <div class="media"><img src="assets/web/p-paper.jpg" alt="Journal spreads" /></div>
+            <div class="meta"><span class="mono">07 · Summer 2025</span></div>
+            <h3>Guest editor for Paper Zero <span class="arrow" aria-hidden="true">↗</span></h3>
+          </a>
+
+          <div class="card card--static">
+            <div class="media"><img src="assets/web/p-md25.jpg" alt="Medium Day 2025" /></div>
+            <div class="meta"><span class="mono">08 · 09.19.2025</span></div>
+            <h3>Medium Day 2025</h3>
+          </div>
+
+          <div class="card card--static">
+            <div class="media"><img src="assets/web/p-art.jpg" alt="Blurred pink and orange flowers" /></div>
+            <div class="meta"><span class="mono">09 · 10.01.2025</span></div>
+            <h3>Coping With Art</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot mono">
+    <span>© <span id="year"></span> Coping With Capitalism</span>
+    <a class="foot-link" href="https://medium.com/coping-with-capitalism" target="_blank" rel="noopener">View publication ↗</a>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="./script.js"></script>
-
- <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const yearElement = document.getElementById("current-year");
-  const currentYear = new Date().getFullYear();
-  yearElement.textContent = currentYear;
-});
-
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
-  const aboutLink = document.getElementById("about-link");
-  const aboutOverlay = document.querySelector(".about-overlay");
-  const aboutContent = document.querySelector(".about-content");
-  const closeAbout = document.querySelector(".close-about");
-
-  const aboutTimeline = gsap.timeline({ paused: true });
-
-  // Block reveal animation
-  aboutTimeline.to(".about-overlay .block", {
-    duration: 0.8,
-    clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
-    stagger: 0.1,
-    ease: "power3.inOut"
-  });
-
-  // About content fade-in
-  aboutTimeline.to(aboutContent, {
-    duration: 0.5,
-    opacity: 1,
-    pointerEvents: "auto"
-  }, "-=0.4"); // Slight overlap with block animation
-
-// Open About section
-aboutLink.addEventListener("click", function (e) {
-  e.preventDefault();
-  aboutOverlay.style.pointerEvents = "auto"; // Enable interaction
-  document.documentElement.style.overflow = "hidden"; // Disable scroll on <html>
-  document.body.style.overflow = "hidden";            // Disable scroll on <body>
-  aboutTimeline.play();
-});
-
-// Close About section
-closeAbout.addEventListener("click", function () {
-  aboutTimeline.reverse().then(() => {
-    aboutOverlay.style.pointerEvents = "none"; // Disable interaction after closing
-    document.documentElement.style.overflow = ""; // Re-enable scroll on <html>
-    document.body.style.overflow = "";            // Re-enable scroll on <body>
-  });
-});
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- </script>
-
-  
-  <footer class="footer">
-  <p>© <span id="current-year"></span> Coping With Capitalism all rights reserved</p>
-</footer>
-
-
-
-
-<!-- About Overlay Structure -->
-<div class="about-overlay">
-  <div class="block"></div>
-  <div class="block"></div>
-  <div class="block"></div>
-  <div class="block"></div>
-  <div class="block"></div>
-  <div class="block"></div>
-  <div class="block"></div>
-  <div class="block"></div>
-  
-<!-- About Content -->
-<div class="about-content">
-
-  <button class="close-about">✕</button>
-  <p id="about-text">
-    In a system that commodifies labor to generate profit, exploitation of that labor is inevitable. Mutual care is how we begin to heal the collective and individual harm caused by the systemic oppression found within capitalism.<br><br>
-    Coping with capitalism is a publication that provides clear & accessible paths to self and collective care. By embracing and promoting a culture of mutual care, we will co-create a more inclusive & supportive world for all.
-    <br><a href="https://medium.com/coping-with-capitalism/coping-with-capitalism-1981ece16e47?sk=e78484b5bd48d29a40d93ff06b36eca7" class="contact-link">Learn more</a>
-  </p>
-
-  </div>
-
-  <!-- Add a wrapper around mobile buttons so we can animate them -->
-<div class="about-buttons-mobile-wrapper">
-  <div class="about-buttons-mobile">
-    <a href="https://medium.com/coping-with-capitalism/coping-with-capitalism-1981ece16e47?sk=e78484b5bd48d29a40d93ff06b36eca7" 
-       class="learn-more-mobile" 
-       target="_blank">
-       Learn more
-    </a>
-    <button class="close-about-mobile">Close</button>
-  </div>
-</div>
-
-</div>
-
-</div>
-
-
-
-
-
-
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="hero.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

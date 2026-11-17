@@ -1,126 +1,100 @@
-gsap.registerPlugin(ScrollTrigger);
+document.getElementById("year").textContent = new Date().getFullYear();
 
-// Background color setup
-function setInitialBackground() {
-  const bgColorElement = document.querySelector(".bg-color");
-  const initialColor = bgColors[0];
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  bgColorElement.style.background = `linear-gradient(0deg, ${initialColor} 0%, rgba(255, 255, 255, 0) 100%)`;
-  bgColorElement.style.transition = "none";
-}
+if (window.gsap && window.ScrollTrigger && !reduce) {
+  gsap.registerPlugin(ScrollTrigger);
 
-const bgColors = [
-  "#C25F4F",
-  "#A1EDE0",
-  "#FEBB05",
-  "#111111",
-  "#2B4068",
-  "#682C40",
-  "#1250C4",
-];
-const bgColorElement = document.querySelector(".bg-color");
+  /* Smooth scroll (Lenis) driven by GSAP's ticker */
+  const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+  window.lenis = lenis;
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add((t) => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
 
-gsap.utils.toArray(".item").forEach((item, index) => {
-  let img = item.querySelector(".item-img img");
+  /* HERO intro */
+  const intro = gsap.timeline({ defaults: { ease: "power4.out" } });
+  intro
+    .from(".hero-title .inner", { yPercent: 110, duration: 1.2, stagger: 0.12 })
+    .from(".map-wrap", { opacity: 0, y: 16, duration: 0.9, ease: "power3.out" }, "-=0.8");
 
-  gsap.fromTo(
-    img,
-    { clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)" },
-    {
-      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-      ease: "power3.inOut",
-      duration: 2,
+
+  /* WHY: scrubbed word reveal */
+  const why = document.getElementById("why-text");
+  const words = why.textContent.trim().split(/\s+/);
+  why.setAttribute("aria-label", words.join(" "));
+  why.innerHTML = words.map((w) => `<span class="w" aria-hidden="true">${w} </span>`).join("");
+  gsap.to(".why-text .w", {
+    opacity: 1,
+    ease: "none",
+    stagger: 0.5,
+    scrollTrigger: {
+      trigger: ".why",
+      start: window.innerWidth < 900 ? "top 80%" : "top 25%",
+      end: window.innerWidth < 900 ? "bottom 55%" : "bottom 85%",
+      scrub: true,
+    },
+  });
+
+  /* HIATUS */
+  gsap.from(".pause-title .inner", {
+    yPercent: 110, duration: 1.1, stagger: 0.12, ease: "power4.out",
+    scrollTrigger: { trigger: ".pause", start: "top 65%" },
+  });
+  gsap.from(".pause .label, .pause-copy", {
+    opacity: 0, y: 14, duration: 0.9, stagger: 0.12,
+    scrollTrigger: { trigger: ".pause", start: "top 65%" },
+  });
+  gsap.from(".steps li i", {
+    scaleX: 0, duration: 0.9, stagger: 0.25, ease: "power3.inOut",
+    scrollTrigger: { trigger: ".steps", start: "top 85%" },
+  });
+  gsap.from(".steps li > :not(i)", {
+    opacity: 0, y: 10, duration: 0.7, stagger: 0.12,
+    scrollTrigger: { trigger: ".steps", start: "top 85%" },
+  });
+
+  /* WORK: pinned horizontal scroll on large screens, native swipe below 900px */
+  const track = document.getElementById("track");
+  const cards = [...track.querySelectorAll(".card")];
+  const wNow = document.getElementById("w-now");
+  const setNow = (i) => (wNow.textContent = String(Math.min(cards.length, Math.max(1, i))).padStart(2, "0"));
+  const mm = gsap.matchMedia();
+
+  mm.add("(min-width: 900px)", () => {
+    const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
+    gsap.to(track, {
+      x: () => -dist(),
+      ease: "none",
       scrollTrigger: {
-        trigger: item,
-        start: "center bottom",
-        end: "bottom top",
-        toggleActions: "play none none none",
-        onEnter: () => updateBackground(bgColors[index]),
-        onEnterBack: () => updateBackground(bgColors[index]),
+        trigger: ".work",
+        start: "top top",
+        end: () => "+=" + dist(),
+        pin: ".work-pin",
+        scrub: 0.8,
+        invalidateOnRefresh: true,
+        anticipatePin: 1,
+        onUpdate: (self) => setNow(Math.round(self.progress * (cards.length - 1)) + 1),
       },
-    }
-  );
-});
+    });
+  });
 
-function updateBackground(color) {
-  gsap.to(bgColorElement, {
-    background: `linear-gradient(0deg, ${color} 0%, rgba(255, 255, 255, 0) 100%)`,
-    duration: 2,
-    ease: "power1.out",
+  mm.add("(max-width: 899px)", () => {
+    const onScroll = () => {
+      const step = cards[1].offsetLeft - cards[0].offsetLeft || 1;
+      setNow(Math.round(track.scrollLeft / step) + 1);
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => track.removeEventListener("scroll", onScroll);
   });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  setInitialBackground();
-
-  const counterElement = document.querySelector(".counter p");
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-
-  function updateScrollPercentage() {
-    const scrollPosition = window.scrollY;
-    const scrolledPercentage = Math.round((scrollPosition / docHeight) * 100);
-    counterElement.textContent = `${scrolledPercentage}`;
-  }
-
-  window.addEventListener("scroll", updateScrollPercentage);
-
-  // 🆕 About Overlay and Mobile Buttons Setup
-  const aboutLink = document.getElementById("about-link");
-  const aboutOverlay = document.querySelector(".about-overlay");
-  const aboutContent = document.querySelector(".about-content");
-  const closeAbout = document.querySelector(".close-about");
-  const aboutButtonsMobileWrapper = document.querySelector(".about-buttons-mobile-wrapper");
-  const closeAboutMobile = document.querySelector(".close-about-mobile");
-
-  const aboutTimeline = gsap.timeline({ paused: true });
-
-  // Blocks animation
-  aboutTimeline.to(".about-overlay .block", {
-    duration: 0.8,
-    clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
-    stagger: 0.1,
-    ease: "power3.inOut"
-  });
-
-  // About text content fade in
-  aboutTimeline.to(aboutContent, {
-    duration: 0.5,
-    opacity: 1,
-    pointerEvents: "auto"
-  }, "-=0.4"); // Overlap timing
-
-  // 🔥 Fade in mobile buttons together with text
-  aboutTimeline.to(aboutButtonsMobileWrapper, {
-    duration: 0.5,
-    opacity: 1,
-    pointerEvents: "auto"
-  }, "-=0.4"); // Sync with aboutContent
-
-  // Open About
-  aboutLink.addEventListener("click", function (e) {
-    e.preventDefault();
-    aboutOverlay.style.pointerEvents = "auto";
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
-    aboutTimeline.play();
-  });
-
-  // Close About (Desktop ✕)
-  closeAbout.addEventListener("click", function () {
-    aboutTimeline.reverse().then(() => {
-      aboutOverlay.style.pointerEvents = "none";
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-    });
-  });
-
-  // Close About (Mobile Close Button)
-  closeAboutMobile.addEventListener("click", function () {
-    aboutTimeline.reverse().then(() => {
-      aboutOverlay.style.pointerEvents = "none";
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-    });
-  });
-
-});
+/* About modal */
+const dlg = document.getElementById("about");
+const openBtn = document.getElementById("about-open");
+openBtn.addEventListener("click", () => { dlg.showModal(); document.body.style.overflow = "hidden"; window.lenis && lenis.stop(); });
+const closeDlg = () => dlg.close();
+document.getElementById("about-close").addEventListener("click", closeDlg);
+dlg.addEventListener("click", (e) => { if (e.target === dlg) closeDlg(); });
+dlg.addEventListener("close", () => { document.body.style.overflow = ""; window.lenis && lenis.start(); });

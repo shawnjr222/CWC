@@ -440,3 +440,6 @@ html.lenis, html.lenis body { height: auto; }
   .hero-title { margin-bottom: 0; }
   .map-wrap { margin-top: 12px; }
 }
+
+/* With the title gone, space the label from the lead paragraph */
+.about-panel > .label { margin-bottom: 16px; }

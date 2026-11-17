@@ -25,3 +25,14 @@ a{color:inherit;text-decoration:none}
 .outro a{display:inline-block;margin-top:28px;border-bottom:1px solid var(--ink);font-weight:500}
 @media (max-width:640px){.steps{right:10px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* Switcher between the six ideas */
+.switch{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;display:flex;gap:4px;padding:4px;width:max-content;max-width:calc(100% - 24px);overflow-x:auto;border-radius:999px;background:rgba(255,255,255,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);scrollbar-width:none}
+.switch::-webkit-scrollbar{display:none}
+.switch a{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 8px;border-radius:999px;font:500 13px/1 "Inter Tight",sans-serif;white-space:nowrap;transition:background .2s,color .2s}
+.switch a i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:rgba(17,17,17,.08);font:500 11px/1 "JetBrains Mono",monospace;font-style:normal}
+.switch a:hover{background:rgba(18,80,196,.1);color:var(--blue)}
+.switch a[aria-current="page"]{background:var(--blue);color:#fff}
+.switch a[aria-current="page"] i{background:rgba(255,255,255,.22)}
+.stage{padding-bottom:76px}
+@media (max-width:760px){.switch a span{display:none}.switch a{padding:0 8px}.switch a[aria-current="page"] span{display:inline}.switch a[aria-current="page"]{padding:0 14px 0 8px}}

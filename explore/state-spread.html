@@ -1,0 +1,13 @@
+<!DOCTYPE html><html lang="en"><head><title>State by state</title><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="../assets/favicon.png" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="explore.css" />
+<style>.chart{width:min(980px,94vw);flex:1;min-height:0;margin-bottom:8px}.chart svg{width:100%;height:100%;display:block;overflow:visible}.cap{min-height:150px}</style></head><body>
+<div class="grain" aria-hidden="true"></div><header class="top"><a class="pill" href="./"><img src="../assets/favicon.png" alt="" />Scroll ideas</a><a class="pill" href="../">Site</a></header>
+<section class="stage" id="stage">
+  <div class="chart" id="chart" role="img" aria-label="Income range from the bottom fifth to the top fifth, for each state"></div>
+  <div class="cap" id="cap"><p class="mono kicker" id="kicker"></p><p class="big" id="big"></p><p class="line" id="line"></p><p class="mono src" id="src"></p></div><div class="steps" id="steps" aria-hidden="true"></div>
+</section>
+<section class="outro"><div><p>Where you live shapes what you're up against.</p><a href="./">More ways to tell it ↗</a></div></section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script><script src="explore.js"></script><script src="state-spread.js"></script></body></html>

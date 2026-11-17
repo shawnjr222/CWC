@@ -443,3 +443,37 @@ html.lenis, html.lenis body { height: auto; }
 
 /* With the title gone, space the label from the lead paragraph */
 .about-panel > .label { margin-bottom: 16px; }
+
+/* Arrow: same icon and hover as the yoga class items on shawnjr.online.
+   On hover the arrow slides out to the top right while a fresh one glides in from the bottom left. */
+.arrow-slide { position: relative; display: inline-block; width: 0.72em; height: 0.72em; min-width: 12px; min-height: 12px; margin-left: 0.35em; vertical-align: -0.02em; overflow: hidden; flex-shrink: 0; }
+.arrow-slide svg { display: block; width: 100%; height: 100%; }
+.arrow-out, .arrow-in { position: absolute; inset: 0; will-change: transform; }
+.arrow-in { transform: translate(-100%, 100%); }
+.foot-link .arrow-slide { width: 1.1em; height: 1.1em; min-width: 0; min-height: 0; vertical-align: -0.2em; margin-left: 0.3em; }
+.about-links .arrow-slide { width: 0.9em; height: 0.9em; vertical-align: -0.12em; }
+.card h3 .arrow-slide { width: 0.62em; height: 0.62em; min-width: 14px; min-height: 14px; vertical-align: 0; margin-left: 0.3em; }
+
+@media (hover: hover) {
+  .card:hover .arrow-out, .about-links a:hover .arrow-out, .foot-link:hover .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
+  .card:hover .arrow-in, .about-links a:hover .arrow-in, .foot-link:hover .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
+}
+/* Touch screens have no hover, so play it on tap and keyboard focus instead */
+@media (hover: none) {
+  .card:active .arrow-out, .about-links a:active .arrow-out, .foot-link:active .arrow-out, a:focus-visible .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
+  .card:active .arrow-in, .about-links a:active .arrow-in, .foot-link:active .arrow-in, a:focus-visible .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card:hover .arrow-out, .card:hover .arrow-in, .about-links a:hover .arrow-out, .about-links a:hover .arrow-in, .foot-link:hover .arrow-out, .foot-link:hover .arrow-in { transition: none; }
+}
+
+/* Every link has the arrow: the name link in the About modal too */
+.about-name .arrow-slide { width: 0.8em; height: 0.8em; vertical-align: -0.08em; }
+@media (hover: hover) {
+  .about-name:hover .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
+  .about-name:hover .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
+}
+@media (hover: none) {
+  .about-name:active .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
+  .about-name:active .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
+}

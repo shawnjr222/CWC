@@ -378,10 +378,10 @@
       if (L !== lastL) { lastL = L; threadPath.style.strokeDashoffset = geo.len - L; }
       // the sun: once the line arrives, the outline draws, then it fills. The scroll sets a target; the drawing eases toward it.
       sT = clamp((tipY - geo.yEnd) / Math.max(geo.yDone - geo.yEnd, innerHeight * 0.3)); // the outline starts when the thread has arrived and finishes just as the sun and the text under it are centred
-      const s = sP;
-      if (s > 0 && s < 0.14) { const pt = sn.pointAt(s); tip.setAttribute("transform", `translate(${geo.sunX + pt.x * geo.k},${geo.sunTop + pt.y * geo.k})`); tip.style.opacity = 1 - s / 0.14; tipVis = 1; } // the dot dips into the logo and fades; the outline keeps drawing
-      else if (s === 0 && L > 0.5 && L < geo.len - 1) { // the dot is born at the end of the line: it fades and grows in over the first stretch of thread, then rides the tip
-        const pt = geo.posAt(L), e = Math.min(1, L / 140), k = 0.25 + 0.75 * (1 - Math.pow(1 - e, 3));
+      const s = sP, arrived = L >= geo.len - 1; // the dot belongs to the real end of the thread; it only dips into the sun once the thread has actually arrived there
+      if (arrived && s > 0 && s < 0.14) { const pt = sn.pointAt(s); tip.setAttribute("transform", `translate(${geo.sunX + pt.x * geo.k},${geo.sunTop + pt.y * geo.k})`); tip.style.opacity = 1 - s / 0.14; tipVis = 1; } // it dips into the logo and fades; the outline keeps drawing
+      else if (L > 0.5 && (!arrived || s === 0)) { // born at the end of the line: it fades and grows in over the first stretch of thread, then rides the tip
+        const pt = threadPath.getPointAtLength(L), e = Math.min(1, L / 140), k = 0.25 + 0.75 * (1 - Math.pow(1 - e, 3)); // the exact point on the line, so the dot is never off its end
         tip.setAttribute("transform", `translate(${pt.x},${pt.y}) scale(${k.toFixed(3)})`); tip.style.opacity = (1 - Math.pow(1 - e, 2)).toFixed(3); tipVis = 1;
       }
       else if (tipVis !== 0) { tip.style.opacity = 0; tipVis = 0; }

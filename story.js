@@ -181,11 +181,20 @@
     ScrollTrigger.sort(); ScrollTrigger.refresh();
     if (scrollTo) { const top = root.getBoundingClientRect().top + scrollY; window.lenis ? window.lenis.scrollTo(top, { duration: 1.2 }) : window.scrollTo({ top, behavior: "smooth" }); }
   }
-  const bar = document.createElement("nav"); bar.className = "story-bar"; bar.setAttribute("aria-label", "Scroll stories");
-  bar.innerHTML = STORIES.map((c, n) => `<a href="?c=${n + 1}" data-i="${n}"><i>${n + 1}</i><span>${c.name}</span></a>`).join("");
+  const arrow = (d) => `<button type="button" class="sb-nav" data-d="${d}" aria-label="${d < 0 ? "Previous" : "Next"} story"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true"><path d="${d < 0 ? "M10 3L5 8l5 5" : "M6 3l5 5-5 5"}" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`;
+  const bar = document.createElement("nav"); bar.className = "story-bar show"; bar.setAttribute("aria-label", "Scroll stories");
+  bar.innerHTML = arrow(-1) + STORIES.map((c, n) => `<a href="?c=${n + 1}" data-i="${n}"><i>${n + 1}</i><span>${c.name}</span></a>`).join("") + arrow(1);
   document.body.appendChild(bar);
-  bar.addEventListener("click", (e) => { const a = e.target.closest("a"); if (!a) return; e.preventDefault(); build(+a.dataset.i, true); });
-  ScrollTrigger.create({ trigger: root, start: "top 85%", end: "bottom 15%", onToggle: (s) => bar.classList.toggle("show", s.isActive) });
+  const go = (i) => build((i + STORIES.length) % STORIES.length, true);
+  bar.addEventListener("click", (e) => {
+    const n = e.target.closest(".sb-nav"); if (n) return go(cur + +n.dataset.d);
+    const a = e.target.closest("a"); if (!a) return; e.preventDefault(); go(+a.dataset.i);
+  });
+  // keyboard: [ and ] or the left and right arrows step through the stories
+  window.addEventListener("keydown", (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || document.querySelector("dialog[open]")) return;
+    if (e.key === "]" || e.key === "ArrowRight") go(cur + 1); else if (e.key === "[" || e.key === "ArrowLeft") go(cur - 1);
+  });
   build(cur, false);
   document.fonts && document.fonts.ready.then(() => { ScrollTrigger.sort(); ScrollTrigger.refresh(); });
 })();

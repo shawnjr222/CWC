@@ -5,7 +5,7 @@
   const root = document.getElementById("story");
   if (!root || !window.gsap || !window.ScrollTrigger || !window.d3 || !window.topojson) return;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const [data, atlas, SUN] = await Promise.all([d3.json("assets/data/states.json"), d3.json("assets/data/states-10m.json"), d3.json("assets/data/sun.json")]);
+  const [data, atlas, SUN, TOP] = await Promise.all([d3.json("assets/data/states.json"), d3.json("assets/data/states-10m.json"), d3.json("assets/data/sun.json"), d3.json("assets/data/medium-top10.json").catch(() => null)]);
 
   /* ---------- shared ---------- */
   const C = { BLUE: "#1250c4", MID: "#6f8fd6", LIGHT: "#c3d0ee", PALE: "#e3e6f1", INK: "#111", GREY: "#d9d7d1", BONE: "#f1f0ec", DIM: "#a3a29d" };
@@ -19,10 +19,10 @@
   /* Each voice links to its story when we have the exact address. Add `url` (and `site: "medium"`) to any entry to link it directly;
      the ones without a `url` send readers to the publication on Medium. */
   const V = {
-    gomez: { who: "James Gómez", say: "Why I'm Anti-Capitalist" },
+    gomez: { who: "J.D. Hart", say: "Why I'm Anti-Capitalist", url: "https://medium.com/coping-with-capitalism/why-im-anti-capitalist-cc3d31e538f7", site: "medium" },
     sen: { who: "Sanchari Sen", say: "101 Sins of Capitalism" },
     hamilton: { who: "Kaylin Hamilton", say: "From Famine Walls to Welfare Conditions, Why Do We Always Punish The Poor?", url: "https://kaylinhamilton.substack.com/p/from-famine-walls-to-welfare-conditions", site: "substack" },
-    hotta: { who: "Annika Hotta", say: "Independence Looks Different For Everyone, Especially If You're Disabled" },
+    hotta: { who: "Annika Hotta", say: "Independence Looks Different For Everyone, Especially If You're Disabled", url: "https://medium.com/coping-with-capitalism/independence-looks-different-for-everyone-especially-if-youre-disabled-40f5b483cbec", site: "medium" },
     ogamdi: { who: "Dr. Emmanuel Ogamdi", say: "Playing Russian Roulette With Mental Health Patients", url: "https://medium.com/coping-with-capitalism/playing-russian-roulette-with-mental-health-patients-4cefcde17cb2", site: "medium" },
     judge: { who: "Tiffany Judge", say: "Americans Are Burying Themselves Alive With Cheap Stuff" },
   };
@@ -108,7 +108,7 @@
   window.addEventListener("pagehide", stopSay);
 
   /* ---------- the toolkit handed to every story ---------- */
-  const CWC = window.CWC = { root, reduce, data, atlas, SUN, C, S, US, fmt, V, MEAS, worst, scaleFor, POOR, MINW, TOPH, ICONS, icon, prep, setDraw, sun, scribble, ARROW, vlink, el, clamp, say, stopSay, listenButton, NS };
+  const CWC = window.CWC = { root, reduce, data, atlas, SUN, TOP, PUB, C, S, US, fmt, V, MEAS, worst, scaleFor, POOR, MINW, TOPH, ICONS, icon, prep, setDraw, sun, scribble, ARROW, vlink, el, clamp, say, stopSay, listenButton, NS };
 
   /* ---------- Story 1: The Thread (where we started) ---------- */
   function mountThread(host) {
@@ -180,11 +180,12 @@
   let cur = clamp((parseInt(new URLSearchParams(location.search).get("c"), 10) || 1) - 1, 0, STORIES.length - 1), ctx = null, cleanup = null;
   function build(i, scrollTo) {
     if (ctx) ctx.revert(); if (cleanup) cleanup(); stopSay(); root.innerHTML = ""; root.className = "story"; root.removeAttribute("style");
-    cur = i; const u = new URL(location.href); u.searchParams.set("c", i + 1); history.replaceState(null, "", u);
+    cur = i; const hero = document.querySelector(".hero"); if (hero) hero.style.display = i === 0 ? "" : "none"; document.body.classList.toggle("story-solo", i !== 0);
+    const u = new URL(location.href); u.searchParams.set("c", i + 1); history.replaceState(null, "", u);
     ctx = gsap.context(() => { cleanup = STORIES[i].mount(root) || null; }, root);
     document.querySelectorAll(".story-bar a").forEach((a, n) => (n === i ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current")));
     ScrollTrigger.sort(); ScrollTrigger.refresh();
-    if (scrollTo) { const top = root.getBoundingClientRect().top + scrollY; window.lenis ? window.lenis.scrollTo(top, { duration: 1.2 }) : window.scrollTo({ top, behavior: "smooth" }); }
+
   }
   const arrow = (d) => `<button type="button" class="sb-nav" data-d="${d}" aria-label="${d < 0 ? "Previous" : "Next"} story"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true"><path d="${d < 0 ? "M10 3L5 8l5 5" : "M6 3l5 5-5 5"}" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`;
   const bar = document.createElement("nav"); bar.className = "story-bar show"; bar.setAttribute("aria-label", "Scroll stories");
@@ -193,13 +194,13 @@
   let wiping = false;
   function go(i) {
     i = (i + STORIES.length) % STORIES.length; if (i === cur || wiping) return;
-    if (reduce) return build(i, true);
+    if (reduce) { build(i, false); return window.scrollTo(0, 0); }
     wiping = true;
     const cv = document.createElement("div"); cv.className = "curtain"; document.body.appendChild(cv);
     gsap.set(cv, { clipPath: "circle(0% at 50% 100%)" });
     gsap.timeline({ onComplete: () => { cv.remove(); wiping = false; } })
       .to(cv, { clipPath: "circle(150% at 50% 100%)", duration: 0.7, ease: "power3.inOut" })
-      .add(() => { build(i, false); const top = root.getBoundingClientRect().top + scrollY; window.lenis ? window.lenis.scrollTo(top, { immediate: true }) : window.scrollTo(0, top); ScrollTrigger.update(); })
+      .add(() => { build(i, false); window.lenis ? window.lenis.scrollTo(0, { immediate: true }) : window.scrollTo(0, 0); ScrollTrigger.update(); })
       .to(cv, { clipPath: "circle(0% at 50% 0%)", duration: 0.8, ease: "power3.inOut" }, "+=0.15");
   }
   bar.addEventListener("click", (e) => {

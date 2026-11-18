@@ -66,45 +66,33 @@
     tl.to({}, { duration: 0.6 }, 8.3);
   }
 
-  /* ============ STORY 3: Horizontal journey. Walk one long line through six rooms. ============ */
+  /* ============ STORY 3: The stack. The ten most-applauded stories, as cards that pile up as you scroll. ============ */
   function story3(host) {
-    const { icon, prep, setDraw, sun, C, S, V, el, clamp, vlink } = K(), F = facts();
-    const stage = div("c-stage c3"); host.appendChild(stage);
-    const track = div("c3-track"); stage.appendChild(track);
-    const rooms = [
-      { ic: "cap", k: "Student debt", big: F.student.val, line: `highest in ${F.student.name}`, v: V.sen },
-      { ic: "heart", k: "No health insurance", big: F.uninsured.val, line: `highest in ${F.uninsured.name}`, v: V.ogamdi },
-      { ic: "house", k: "Housing insecurity", big: F.housing.val, line: `highest in ${F.housing.name}`, v: V.hamilton },
-      { ic: "plate", k: "Food insecurity", big: F.food.val, line: `highest in ${F.food.name}`, v: V.judge },
-      { ic: "coin", k: "The wage floor", big: F.wage.val, line: "an hour, since 2009", v: V.gomez },
-      { ic: "people", k: "Poverty", big: F.poor.val, line: "people. One in eight.", v: V.hotta },
-    ];
-    const N = rooms.length + 2; // intro + rooms + sun
-    const panels = [];
-    const intro = div("c3-panel c3-intro", `<div class="c3-art"></div><div class="c3-txt"><p class="mono c-kick">It starts with a person</p><h3>Six rooms. One line.</h3><p class="c-line">Keep scrolling and the line will lead you through.</p></div>`); track.appendChild(intro);
-    const introIc = icon("people", 2); intro.querySelector(".c3-art").appendChild(introIc.svg); introIc.lens = prep(introIc.paths);
-    rooms.forEach((r, i) => {
-      const p = div("c3-panel", `<span class="c3-mark" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span><div class="c3-art"></div><div class="c3-txt"><p class="mono c-kick">${r.k}</p><p class="c-big">${r.big}</p><p class="c-line">${r.line}</p><p class="c3-voice"><span class="mono">${r.v.who}</span>${r.v.say}</p>${vlink(r.v)}</div>`);
-      const ic = icon(r.ic, 2); p.querySelector(".c3-art").appendChild(ic.svg); ic.lens = prep(ic.paths); p.ic = ic; track.appendChild(p); panels.push(p);
+    const { sun, C, TOP, PUB, ARROW, reduce, clamp } = K();
+    const wrap = div("c3"); host.appendChild(wrap);
+    const top = (TOP && TOP.top) || [];
+    const nf = (n) => d3.format(",")(n);
+    const intro = div("c3-intro", `<div class="c3-intro-in"><p class="mono c-kick">Coping With Capitalism · on Medium</p><h3 class="c3-read" aria-label="Read.">${"Read.".split("").map((ch) => `<span class="ch"><i>${ch}</i></span>`).join("")}</h3><p class="c-line">${TOP ? `${nf(TOP.totals.stories)} stories from ${nf(TOP.totals.writers)} writers, each one a path to self and collective care. These ten were applauded the most.` : "Stories from writers around the world, each one a path to self and collective care."}</p><p class="mono c-src">Scroll</p></div>`);
+    wrap.appendChild(intro);
+    const stack = div("c3-stack"); wrap.appendChild(stack);
+    const palette = [["#fff", C.INK], [C.PALE, C.INK], ["#fff", C.INK], [C.BLUE, "#fff"], ["#fff", C.INK]];
+    const cards = top.map((s, i) => {
+      const [bg, fg] = palette[i % palette.length];
+      const d = div("c3-card", `<div class="c3-card-in" style="background:${bg};color:${fg}"><span class="c3-rank" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span><div class="c3-body"><p class="mono c3-meta" style="opacity:.65">${s.date} · ${nf(s.claps)} claps</p><h4>${s.title}</h4><p class="c3-by">by ${s.author}</p><a class="vlink c3-link" style="color:${fg}" href="${s.url}" target="_blank" rel="noopener">Read on Medium${K().ARROW}</a></div></div>`);
+      d.style.setProperty("--i", i); stack.appendChild(d); return d;
     });
-    const end = div("c3-panel c3-end", `<div class="c3-art"></div><div class="c3-txt"><p class="mono c-kick">Coping With Capitalism</p><p class="c-line">Behind every number is a person.</p></div>`); const sn = sun("min(52vh, 60vw)"); end.querySelector(".c3-art").appendChild(sn.svg); track.appendChild(end); sn.init();
-    // the long line
-    const line = el("svg", { class: "c3-line", "aria-hidden": "true" });
-    const lp = el("path", { fill: "none", stroke: C.BLUE, "stroke-width": 2, "stroke-linecap": "round" }); line.appendChild(lp); track.appendChild(line);
-    let lL = 1, lastP = 0;
-    const build3 = () => { const w = track.scrollWidth, h = stage.clientHeight || innerHeight, small = innerWidth < 760; line.setAttribute("width", w); line.setAttribute("height", h); line.setAttribute("viewBox", `0 0 ${w} ${h}`); lL = wave(lp, w, h, small ? 0.88 : 0.5, small ? 0.07 : 0.2, N * 1.0); lp.style.strokeDashoffset = lL * (1 - clamp(lastP * 1.04)); };
-    build3(); ScrollTrigger.addEventListener("refreshInit", build3);
-    const marks = [...track.querySelectorAll(".c3-mark")];
-    gsap.to({ v: 0 }, { v: 1, duration: 1.6, delay: 0.3, ease: "power2.inOut", onUpdate: function () { setDraw(introIc.paths, introIc.lens, this.targets()[0].v); } });
-    const dist = () => Math.max(1, track.scrollWidth - innerWidth);
-    gsap.to(track, { x: () => -dist(), ease: "none", scrollTrigger: { trigger: stage, start: "top top", end: () => "+=" + dist() * 1.15, pin: true, scrub: 0.8, anticipatePin: 1, invalidateOnRefresh: true,
-      onUpdate: (s) => {
-        const p = s.progress, pos = p * (N - 1); // 0..N-1 panel index at screen center
-        lastP = p; lp.style.strokeDashoffset = lL * (1 - clamp(p * 1.04));
-        panels.forEach((pn, i) => { const idx = i + 1; setDraw(pn.ic.paths, pn.ic.lens, clamp((pos - (idx - 0.75)) / 0.8)); marks[i].style.transform = `translateX(${(pos - idx) * -14}vw)`; });
-        sn.set(clamp((pos - (N - 1 - 0.8)) / 0.8));
-      } } });
-    return () => ScrollTrigger.removeEventListener("refreshInit", build3);
+    const endBox = div("sun-end"); const sn = sun("min(46vw, 300px)"); endBox.append(sn.svg); endBox.insertAdjacentHTML("beforeend", `<p class="mono">Coping With Capitalism</p><a class="vlink" href="${PUB}" target="_blank" rel="noopener">Read the whole publication${K().ARROW}</a>`); wrap.appendChild(endBox); sn.init();
+    // title letters rise
+    const chs = [...intro.querySelectorAll(".ch i")]; gsap.set(chs, { yPercent: 115 });
+    gsap.to(chs, { yPercent: 0, duration: 1.0, stagger: 0.07, ease: "power4.out", delay: 0.2 });
+    gsap.from(intro.querySelectorAll(".c-line, .c-kick, .c-src"), { opacity: 0, y: 16, duration: 0.9, stagger: 0.12, delay: 0.9, ease: "power3.out" });
+    // each card settles back as the next one rides over it
+    cards.forEach((d, i) => {
+      const inn = d.querySelector(".c3-card-in");
+      const next = cards[i + 1]; if (!next || reduce) return;
+      gsap.to(inn, { scale: 0.92, opacity: 0.5, ease: "none", scrollTrigger: { trigger: next, start: "top 85%", end: "top 18%", scrub: true } });
+    });
+    if (!reduce) ScrollTrigger.create({ trigger: endBox, start: "top 85%", end: "center 45%", scrub: 0.6, onUpdate: (s) => sn.set(s.progress) }); else sn.set(1);
   }
 
   /* ============ STORY 4: Kinetic type. Circle wipes between full-screen colour panels, with words that rise into place. ============ */
@@ -142,37 +130,45 @@
     tl.to({}, { duration: 0.6 });
   }
 
-  /* ============ STORY 5: Voices wall. Giant headlines slide across the page; the line ties them to the sun. ============ */
+  /* ============ STORY 5: What it made. The nine things this publication did, each revealed by a mask that lifts the picture into place. ============ */
   function story5(host) {
-    const { V, sun, scribble, C, el, say, stopSay, listenButton, reduce, vlink } = K(), F = facts();
-    const wrap = div("c5"); host.appendChild(wrap);
-    const keys = ["gomez", "sen", "hamilton", "hotta", "ogamdi", "judge"];
-    const inter = { 1: { k: "The wage floor", b: F.wage.val, l: "an hour, since 2009." }, 3: { k: "Poverty", b: "40.8 million", l: "people. One in eight." }, 5: { k: "The gap", b: F.gap.val, l: "top 5% against the bottom fifth." } };
-    const vline = el("svg", { class: "c5-vline", "aria-hidden": "true", preserveAspectRatio: "none" }); const vp = el("path", { fill: "none", stroke: C.BLUE, "stroke-width": 2, "vector-effect": "non-scaling-stroke", "stroke-linecap": "round" }); vline.appendChild(vp); wrap.appendChild(vline);
-    const head = div("c5-head", `<p class="mono c-kick">Listen</p><h3>Six voices. Read them loud.</h3>`); wrap.appendChild(head); const snd = listenButton(wrap);
-    const rows = [];
-    keys.forEach((k, i) => {
-      const v = V[k]; const text = `${v.say} — `.repeat(4);
-      const r = div(`c5-row${i % 2 ? " alt" : ""}`, `<div class="c5-who"><svg class="sig" viewBox="0 0 100 100" aria-hidden="true"><path d="${scribble(i + 11)}"/></svg><span class="mono">${v.who}</span>${vlink(v, "vlink c5-link")}</div><div class="c5-clip"><div class="c5-run" aria-label="${v.say}">${text}</div></div>`);
-      wrap.appendChild(r); const sg = r.querySelector(".sig path"); const L = sg.getTotalLength(); sg.style.strokeDasharray = L; sg.style.strokeDashoffset = L;
-      rows.push({ r, run: r.querySelector(".c5-run"), sg, L, v, i });
-      if (inter[i]) wrap.appendChild(div("c5-inter", `<p class="mono c-kick">${inter[i].k}</p><p class="c-big">${inter[i].b}</p><p class="c-line">${inter[i].l}</p>`));
+    const { sun, C, PUB, ARROW, TOP } = K();
+    const stage = div("c-stage c5m"); host.appendChild(stage);
+    const IMG = "assets/web/";
+    const items = [
+      { d: "03.28.2023", t: "The Medium publication", p: "Where it began: a place for clear and accessible paths to self and collective care.", img: "p-pub.jpg", link: ["Read the publication", PUB] },
+      { d: "04.28.2023", t: "A workshop with incarcerated youth", p: "Design thinking, taught to young people inside the system.", img: "p-workshop.jpg" },
+      { d: "11.20.2023", t: "The interview series", p: "Conversations about work, money and care.", img: "p-interview.jpg", link: ["Read the interviews", "https://shawnjr.medium.com/list/cwc-interview-series-ad4f8055a587"] },
+      { d: "03.01.2024", t: "This is how we cope", p: "A card game for talking about what we carry.", img: "p-game.jpg", link: ["Play the game", "https://thisishowwecope.com"] },
+      { d: "03.19.2024", t: "An editors panel with Medium", p: "Publication editors, in conversation.", img: "p-panel.jpg" },
+      { d: "08.17.2024", t: "Medium Day 2024", p: "A talk on strategies for self and collective care.", img: "p-md24.jpg" },
+      { d: "Summer 2025", t: "Guest editor for Paper Zero", p: "Putting a journal together with other writers.", img: "p-paper.jpg", link: ["Read the journal", "https://ko-fi.com/s/d4c96492d7"] },
+      { d: "09.19.2025", t: "Medium Day 2025", p: "Back on stage to talk about mutual care.", img: "p-md25.jpg" },
+      { d: "10.01.2025", t: "Coping With Art", p: "Care, through art.", img: "p-art.jpg" },
+    ];
+    const N = items.length;
+    stage.innerHTML = `<div class="c5m-intro"><p class="mono c-kick">What it is for</p><p class="c5m-mission">Coping With Capitalism exists to offer clear and accessible paths to self and collective care.</p><p class="mono c-src">${TOP ? `${d3.format(",")(TOP.totals.stories)} stories · ${d3.format(",")(TOP.totals.writers)} writers · 2023 to 2025` : "2023 to 2025"}</p></div>
+      <div class="c5m-frame"></div><div class="c5m-texts"></div><div class="c5m-count mono">01 / 09</div><div class="c5m-end"></div>`;
+    const intro = stage.querySelector(".c5m-intro"), frame = stage.querySelector(".c5m-frame"), texts = stage.querySelector(".c5m-texts"), count = stage.querySelector(".c5m-count"), end = stage.querySelector(".c5m-end");
+    const imgs = items.map((it) => { const f = div("c5m-img", `<img src="${IMG}${it.img}" alt="${it.t}" />`); frame.appendChild(f); return f; });
+    const txts = items.map((it, i) => { const t = div("c5m-txt", `<p class="mono c-kick">${String(i + 1).padStart(2, "0")} · ${it.d}</p><h4>${it.t}</h4><p class="c-line">${it.p}</p>${it.link ? `<a class="vlink" href="${it.link[1]}" target="_blank" rel="noopener">${it.link[0]}${ARROW}</a>` : ""}`); texts.appendChild(t); return t; });
+    const sn = sun("min(40vh, 52vw)"); end.appendChild(sn.svg); end.insertAdjacentHTML("beforeend", `<p class="mono">Coping With Capitalism</p><p class="c-line">On hiatus. Still here.</p>`); sn.init();
+    gsap.set(imgs, { clipPath: "inset(100% 0% 0% 0% round 22px)" }); gsap.set(imgs.map((x) => x.firstChild), { scale: 1.35 }); gsap.set(txts, { opacity: 0, y: 30 }); gsap.set(end, { opacity: 0 }); gsap.set([frame, count], { opacity: 0 });
+    const tl = pinTL(stage, 12);
+    // the mission line leaves, the frame arrives
+    tl.to(intro, { opacity: 0, y: -30, duration: 0.7, ease: "power2.in" }, 0.9).to([frame, count], { opacity: 1, duration: 0.5 }, 1.2);
+    items.forEach((it, i) => {
+      const t = 1.4 + i * 1.15;
+      tl.call(() => (count.textContent = `${String(i + 1).padStart(2, "0")} / 09`), null, t)
+        .to(imgs[i], { clipPath: "inset(0% 0% 0% 0% round 22px)", duration: 0.9, ease: "power3.inOut" }, t)
+        .to(imgs[i].firstChild, { scale: 1, duration: 1.4, ease: "power2.out" }, t)
+        .to(txts[i], { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, t + 0.3);
+      if (i < N - 1) { tl.to(txts[i], { opacity: 0, y: -24, duration: 0.4, ease: "power2.in" }, t + 0.85).to(imgs[i], { yPercent: -8, opacity: 0.0, duration: 0.5, ease: "power1.in" }, t + 1.05); }
     });
-    const sunBox = div("sun-end"); const sn = sun("min(46vw, 320px)"); sunBox.append(sn.svg); sunBox.insertAdjacentHTML("beforeend", '<p class="mono">Coping With Capitalism</p>'); wrap.appendChild(sunBox); sn.init();
-    rows.forEach((o) => {
-      const dir = o.i % 2 ? 1 : -1;
-      gsap.fromTo(o.run, { xPercent: dir > 0 ? -45 : 0 }, { xPercent: dir > 0 ? 0 : -45, ease: "none", scrollTrigger: { trigger: o.r, start: "top bottom", end: "bottom top", scrub: 0.6 } });
-      ScrollTrigger.create({ trigger: o.r, start: "top 75%", once: true, onEnter: () => gsap.to(o.sg, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }) });
-      o.r.querySelector(".vlink").addEventListener("mouseenter", (e) => e.stopPropagation());
-      o.r.addEventListener("mouseenter", () => say(`${o.v.say}. By ${o.v.who}.`, o.i, () => o.r.classList.add("speaking"), () => o.r.classList.remove("speaking")));
-      o.r.addEventListener("mouseleave", () => { stopSay(); o.r.classList.remove("speaking"); });
-    });
-    // lean the rows with the scroll speed
-    if (!reduce) ScrollTrigger.create({ trigger: wrap, start: "top bottom", end: "bottom top", onUpdate: (s) => { const sk = gsap.utils.clamp(-7, 7, s.getVelocity() / -260); gsap.to(rows.map((o) => o.run), { skewX: sk, duration: 0.3, overwrite: true, ease: "power3.out" }); gsap.to(rows.map((o) => o.run), { skewX: 0, duration: 0.7, delay: 0.1, overwrite: false, ease: "power3.out" }); } });
-    if (!reduce) ScrollTrigger.create({ trigger: sunBox, start: "top 85%", end: "center 45%", scrub: 0.6, onUpdate: (s) => sn.set(s.progress) }); else sn.set(1);
-    function sizeLine() { const w = wrap.clientWidth, h = wrap.scrollHeight; vline.setAttribute("viewBox", `0 0 ${w} ${h}`); const top = head.offsetTop + head.offsetHeight, bot = sunBox.offsetTop + 60; const pts = []; for (let y = top, n = 0; y <= bot; y += 140, n++) pts.push([w * (n % 2 ? 0.46 : 0.54), y]); pts.push([w * 0.5, bot]); vp.setAttribute("d", d3.line().curve(d3.curveCatmullRom.alpha(0.6))(pts)); const L = vp.getTotalLength(); vp.style.strokeDasharray = L; vp.style.strokeDashoffset = reduce ? 0 : L; vp.__tw && vp.__tw.kill(); if (!reduce) vp.__tw = gsap.to(vp, { strokeDashoffset: 0, ease: "none", scrollTrigger: { trigger: wrap, start: "top 55%", end: "bottom 70%", scrub: 0.5, invalidateOnRefresh: true } }); }
-    sizeLine(); const ro = new ResizeObserver(() => { clearTimeout(ro.__t); ro.__t = setTimeout(() => { sizeLine(); ScrollTrigger.refresh(); }, 200); }); ro.observe(wrap);
-    return () => { ro.disconnect(); vp.__tw && vp.__tw.kill(); };
+    const tEnd = 1.4 + N * 1.15;
+    tl.to(txts[N - 1], { opacity: 0, y: -24, duration: 0.4 }, tEnd - 0.2).to([frame, count], { opacity: 0, duration: 0.5 }, tEnd - 0.1).to(end, { opacity: 1, duration: 0.5 }, tEnd + 0.2);
+    prox((v) => sn.set(v), tl, tEnd + 0.2, 1.4, "power1.inOut");
+    tl.to({}, { duration: 0.6 }, tEnd + 1.6);
   }
 
   /* ============ STORY 6: Start with one. Pull back to a hundred households, then fall into a single person, who becomes the sun. ============ */
@@ -209,9 +205,9 @@
 
   window.CWC_STORIES = [
     { name: "Line drawings", mount: story2 },
-    { name: "Horizontal journey", mount: story3 },
+    { name: "The stack", mount: story3 },
     { name: "Kinetic type", mount: story4 },
-    { name: "Voices wall", mount: story5 },
+    { name: "What it made", mount: story5 },
     { name: "Zoom descent", mount: story6 },
   ];
 })();

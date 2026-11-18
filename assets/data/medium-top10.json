@@ -1,5 +1,5 @@
 {
- "source": "medium.com/coping-with-capitalism, all-stories archive, 2023 to 2025, read 2026-11-18",
+ "source": "medium.com/coping-with-capitalism, all-stories archive, 2023 to 2025, read 2026-11-18 Followers read from the publication page (2.3K).",
  "metric": "claps (as shown on each story page)",
  "note": "Archive lists stories from Nov 2023 onward.",
  "totals": {
@@ -10,7 +10,9 @@
    "2023": 16,
    "2024": 260,
    "2025": 191
-  }
+  },
+  "followers": 2.3,
+  "followersText": "2.3K"
  },
  "top": [
   {
@@ -92,6 +94,14 @@
    "date": "Feb 29, 2024",
    "claps": 2015,
    "url": "https://medium.com/coping-with-capitalism/capitalist-mysticism-when-spirituality-becomes-commodified-125b732206d1"
+  }
+ ],
+ "more": [
+  {
+   "title": "Abolish Internships, Abolish Inequity",
+   "author": "Annika Hotta",
+   "date": "Jul 5, 2024",
+   "url": "https://medium.com/coping-with-capitalism/abolish-internships-abolish-inequity-ec32106398f2"
   }
  ]
 }

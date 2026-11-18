@@ -402,6 +402,14 @@ html.lenis, html.lenis body { height: auto; }
 
 /* Footer: keep the two items apart when they don't fit on one line */
 .foot { flex-wrap: wrap; gap: 8px 24px; }
+/* phones: "© 2026 ..." on the left and "View publication" on the right, on one line; tightened just enough to fit */
+@media (max-width: 480px) {
+  .foot { flex-wrap: nowrap; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 10px; letter-spacing: 0.03em; white-space: nowrap; }
+}
+/* too narrow for one line: stack them and centre them */
+@media (max-width: 339px) {
+  .foot { flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; }
+}
 
 /* Desktop: same even rhythm as smaller screens instead of full-screen empty sections */
 @media (min-width: 900px) {

@@ -63,21 +63,60 @@
   /* ---------- one continuous line per story, drawn from its title: simple shapes, a little hand-drawn (100 x 100) ---------- */
   const ART = [
     [/laid off/i, "M64 46 L70 20 L44 16 L38 44 M16 50 L50 38 L84 50 L50 62 L16 50 L16 84 L50 96 L84 84 L84 50 M50 62 L50 96"],
-    [/bread/i, "M10 62 C8 40 26 26 50 26 C74 26 92 40 90 62 C89 70 85 74 80 74 L80 84 C80 87 78 89 75 89 L25 89 C22 89 20 87 20 84 L20 74 C15 74 11 70 10 62 M28 46 C34 42 38 50 38 58 M46 42 C52 38 56 46 56 54 M64 46 C70 42 74 50 74 56"],
+    [/bread/i, "M10 62 C8 40 26 26 50 26 C74 26 92 40 90 62 C89 70 85 74 80 74 L80 84 C80 87 78 89 75 89 L25 89 C22 89 20 87 20 84 L20 74 C15 74 11 70 10 62 M22 54 C28 40 38 40 42 56 C46 42 54 36 58 54 C62 40 72 34 76 52 C79 44 84 46 86 54 M28 68 C33 58 42 58 46 68 C50 58 58 56 62 66 C66 58 72 58 78 68"],
     [/housing costs/i, "M18 88 L18 50 L50 20 L64 33 L64 24 L73 24 L73 41 L82 50 L82 88 L18 88 L40 88 L40 66 L58 66 L58 88"],
     [/you.?re poor/i, "M55 46 C50 42 43 44 44 49 C45 53 55 51 56 56 C57 61 49 61 44 58 M50 64 L50 40 M39 52 a11 11 0 1 0 22 0 a11 11 0 1 0 -22 0 M8 74 L92 70 L94 30 L6 34 L8 74", [0, 1]],
     [/self-help/i, "M58 50 L42 50 M42 46 L58 46 L58 40 C62 36 64 32 64 28 C64 20 58 14 50 14 C42 14 36 20 36 28 C36 32 38 36 42 40 L42 46 M50 64 L50 96 C60 90 74 88 88 92 L88 58 C74 54 60 56 50 64 C40 56 26 54 12 58 L12 92 C26 88 40 90 50 96"],
     [/neo-feudal/i, "M16 80 L12 32 L34 54 L50 22 L66 54 L88 32 L84 80 L16 80 L15 66 L85 66"],
     [/no work/i, "M18 86 L24 92 L58 58 L46 46 L60 30 L90 60 L74 76 L64 66 L58 58 L52 52 L18 86"],
-    [/internship/i, "M12 36 L38 36 L38 24 L62 24 L62 36 L88 36 L88 84 L12 84 L12 36 L12 58 L88 58 L88 36 L12 84"],
+    [/internship/i, "M12 36 L38 36 L38 24 L62 24 L62 36 L88 36 L88 84 L12 84 L12 36 M12 58 L88 58 M46 58 L46 68 L54 68 L54 58"],
   ];
   const ART_FALLBACK = "M50 18 C72 18 84 34 82 54 C80 74 62 84 46 82 C28 80 16 64 20 46 C24 28 38 20 50 18";
   let measureSvg = null; const sketchCache = new Map();
   /* sample the strokes (every "M" is a lift of the pen, bridged by a straight stroke) and let the pen wander a little: returns [x, y] points in the 100 box */
-  function sketch(title, flip) {
-    const key = title + (flip ? "|f" : ""); if (sketchCache.has(key)) return sketchCache.get(key);
+  /* Order and direction of a drawing's strokes. The pen should come in at the top-left (the side facing the thread), jump as little as possible
+     between strokes (every jump is a visible line across the picture), and finish at the bottom-left, so the thread leaves outward
+     instead of cutting back through what it just drew. Closed shapes may start anywhere, in either direction. */
+  function orderStrokes(strokes, A, B, UP = 0.8) { // UP: how much an upward jump costs; the pen must never rise above the middle of the screen as the page scrolls
+    const dist = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1]), rev = (a) => a.slice().reverse();
+    // a closed outline can be split into two arcs that both run from the entry corner to the exit corner: the pen can then come in at one,
+    // leave at the other, and draw the details in between without ever crossing the picture to get in or out
+    strokes = strokes.flatMap((pts) => {
+      if (dist(pts[0], pts[pts.length - 1]) >= 1.6) { // an open stroke: cut it where it passes the entry corner, so both halves start there
+        let ia = 0; pts.forEach((p, i) => { if (dist(p, A) < dist(pts[ia], A)) ia = i; });
+        return ia < 6 || ia > pts.length - 7 ? [pts] : [pts.slice(ia), pts.slice(0, ia + 1).reverse()];
+      }
+      const body = pts.slice(0, -1), n = body.length; let ia = 0, ib = 0;
+      body.forEach((p, i) => { if (dist(p, A) < dist(body[ia], A)) ia = i; if (dist(p, B) < dist(body[ib], B)) ib = i; });
+      const gapN = Math.min((ia - ib + n) % n, (ib - ia + n) % n); if (gapN < 6) return [pts];
+      const arc = (from, to, step) => { const out = []; let i = from; for (let k = 0; k <= n; k++) { out.push(body[i]); if (i === to) break; i = (i + step + n) % n; } return out; };
+      return [arc(ia, ib, 1), arc(ia, ib, -1)];
+    });
+    const variants = strokes.map((pts) => {
+      if (dist(pts[0], pts[pts.length - 1]) >= 1.6) return [pts, rev(pts)];
+      const body = pts.slice(0, -1), n = body.length, out = [];
+      for (let r = 0; r < 12; r++) { const k = Math.floor((r * n) / 12), rot = body.slice(k).concat(body.slice(0, k)); rot.push(rot[0]); out.push(rot, rev(rot)); }
+      return out;
+    });
+    const n = strokes.length; let best = null;
+    const search = (used, cur, cost, picks) => { // depth-first over stroke orders, dropping any order already worse than the best found
+      if (best && cost >= best.cost) return;
+      if (picks.length === n) { best = { cost, picks }; return; }
+      const first = picks.length === 0, last = picks.length === n - 1;
+      for (let si = 0; si < n; si++) {
+        if (used & (1 << si)) continue;
+        let bv = null, bc = Infinity;
+        for (const v of variants[si]) { const c = dist(cur, v[0]) * (first ? 1 : 0.7) + (first ? 0 : UP * Math.max(0, cur[1] - v[0][1])) + (last ? dist(v[v.length - 1], B) : 0); if (c < bc) { bc = c; bv = v; } } // enter near the top of the thread's side, leave near the bottom of it, and keep the visible jumps between strokes short
+        search(used | (1 << si), bv[bv.length - 1], cost + bc, picks.concat([bv]));
+      }
+    };
+    search(0, A, 0, []);
+    return best.picks;
+  }
+  function sketch(title, flip, ordered = true) {
+    const key = title + (flip ? "|f" : "") + (ordered ? "" : "|raw"); if (sketchCache.has(key)) return sketchCache.get(key);
     if (!measureSvg) { measureSvg = el("svg", { "aria-hidden": "true" }); measureSvg.style.cssText = "position:absolute;width:0;height:0;visibility:hidden;pointer-events:none"; document.body.appendChild(measureSvg); }
-    const hit = ART.find(([re]) => re.test(title)), d = hit ? hit[1] : ART_FALLBACK, keep = (hit && hit[2]) || [], raw = [];
+    const hit = ART.find(([re]) => re.test(title)), d = hit ? hit[1] : ART_FALLBACK, keep = (hit && hit[2]) || [], strokes = [];
     d.split("M").filter(Boolean).forEach((part, pi) => {
       const p = el("path", { d: "M" + part }); measureSvg.appendChild(p); const L = p.getTotalLength(), n = Math.max(12, Math.round(L / 1.3)), pts = [];
       for (let i = 0; i <= n; i++) { const q = p.getPointAtLength((i / n) * L); pts.push([q.x, q.y]); }
@@ -86,10 +125,39 @@
         const xs = pts.map((q) => q[0]), c = Math.min(...xs) + Math.max(...xs);
         pts.forEach((q) => { q[0] = keep.includes(pi) ? 100 - (c - q[0]) : 100 - q[0]; });
       }
-      raw.push(...pts);
+      strokes.push(pts);
     });
-    const dense = [raw[0]]; for (let i = 1; i < raw.length; i++) { const A = raw[i - 1], B = raw[i], m = Math.max(1, Math.round(Math.hypot(B[0] - A[0], B[1] - A[1]) / 1.4)); for (let k = 1; k <= m; k++) dense.push([A[0] + ((B[0] - A[0]) * k) / m, A[1] + ((B[1] - A[1]) * k) / m]); }
+    const seq = ordered ? orderStrokes(strokes, [flip ? 104 : -4, 15], [flip ? 104 : -4, 85]) : strokes, raw = seq.flat();
+    let bridge = 0; for (let i = 1; i < seq.length; i++) bridge += Math.hypot(seq[i][0][0] - seq[i - 1][seq[i - 1].length - 1][0], seq[i][0][1] - seq[i - 1][seq[i - 1].length - 1][1]);
+    // a graph of everything drawn so far, so a jump from one stroke to the next can retrace existing lines (along the edges) instead of cutting straight across
+    const nodes = [], adj = [];
+    seq.forEach((pts) => pts.forEach((p, i) => { nodes.push(p); adj.push([]); if (i) { const a = nodes.length - 2, b = nodes.length - 1, w = Math.hypot(p[0] - nodes[a][0], p[1] - nodes[a][1]); adj[a].push([b, w]); adj[b].push([a, w]); } }));
+    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) { const w = Math.hypot(nodes[i][0] - nodes[j][0], nodes[i][1] - nodes[j][1]); if (w < 1.7 && !adj[i].some(([k]) => k === j)) { adj[i].push([j, w]); adj[j].push([i, w]); } }
+    const nearest = (p) => { let bi = 0, bd = Infinity; nodes.forEach((q, i) => { const d = Math.hypot(q[0] - p[0], q[1] - p[1]); if (d < bd) { bd = d; bi = i; } }); return bi; };
+    const route = (P, Q) => { // shortest way from P to Q along existing lines; a straight line if that would be a long detour
+      const straight = Math.hypot(P[0] - Q[0], P[1] - Q[1]), src = nearest(P), dst = nearest(Q), dist = new Array(nodes.length).fill(Infinity), prev = new Array(nodes.length).fill(-1), done = new Array(nodes.length).fill(false);
+      dist[src] = 0;
+      for (let step = 0; step < nodes.length; step++) {
+        let u = -1; for (let i = 0; i < nodes.length; i++) if (!done[i] && (u < 0 || dist[i] < dist[u])) u = i;
+        if (u < 0 || dist[u] === Infinity || u === dst) break; done[u] = true;
+        for (const [v, w] of adj[u]) if (dist[u] + w < dist[v]) { dist[v] = dist[u] + w; prev[v] = u; }
+      }
+      if (straight < 3 || dist[dst] === Infinity || dist[dst] > straight * 3 + 8) return null;
+      const path = []; for (let u = dst; u >= 0; u = prev[u]) path.push(nodes[u]); return path.reverse();
+    };
+    const dense = [], gaps = []; let prevEnd = null; // gaps: [first, last] dense index of each jump between strokes
+    seq.forEach((pts) => {
+      if (prevEnd) {
+        const A = prevEnd, B = pts[0], i0 = dense.length - 1, r = route(A, B);
+        if (r) r.slice(1).forEach((p) => dense.push(p));
+        else { const m = Math.max(1, Math.round(Math.hypot(B[0] - A[0], B[1] - A[1]) / 1.4)); for (let k = 1; k < m; k++) dense.push([A[0] + ((B[0] - A[0]) * k) / m, A[1] + ((B[1] - A[1]) * k) / m]); dense.push(B); }
+        gaps.push([i0, dense.length - 1]);
+      } else dense.push(pts[0]);
+      for (let i = 1; i < pts.length; i++) { const A = pts[i - 1], B = pts[i], m = Math.max(1, Math.round(Math.hypot(B[0] - A[0], B[1] - A[1]) / 1.4)); for (let k = 1; k <= m; k++) dense.push([A[0] + ((B[0] - A[0]) * k) / m, A[1] + ((B[1] - A[1]) * k) / m]); }
+      prevEnd = pts[pts.length - 1];
+    });
     const ph = (title.length * 1.7) % 6.28; let l = 0; const out = dense.map((q, i) => { if (i) l += Math.hypot(q[0] - dense[i - 1][0], q[1] - dense[i - 1][1]); const w = (v) => Math.sin(l * 0.1 + v) * 0.6 + Math.sin(l * 0.29 + v * 1.9) * 0.25; return [q[0] + w(ph) * 0.6, q[1] + w(ph + 2.1) * 0.6]; });
+    out.gaps = gaps; out.meta = { bridge: +bridge.toFixed(1), start: out[0], end: out[out.length - 1], strokes: seq.length, entry: +Math.hypot(out[0][0] - (flip ? 104 : -4), out[0][1] - 15).toFixed(1), exit: +Math.hypot(out[out.length - 1][0] - (flip ? 104 : -4), out[out.length - 1][1] - 85).toFixed(1) };
     sketchCache.set(key, out); return out;
   }
 
@@ -318,20 +386,21 @@
       const curve = d3.line().curve(d3.curveCatmullRom.alpha(0.6)), tmp = el("path"), vh = innerHeight;
       // the line is built from small pieces (curves, and each story's drawing); we keep a dense [length, x, y] table of it as we go,
       // so asking "where is the pen" never has to walk one enormous path
-      const segs = [], arts = [], T = []; let cur = small ? [[w / 2, 0], [w / 2, 70]] : [[cx, 0]], first = true, Lacc = 0;
+      const segs = [], arts = [], T = [], gapSegs = []; let cur = small ? [[w / 2, 0], [w / 2, 70]] : [[cx, 0]], first = true, Lacc = 0;
       const addCurve = (pts) => { const dd = curve(pts); segs.push(first ? dd : dd.replace(/^M/, "L")); first = false; tmp.setAttribute("d", dd); const Lc = tmp.getTotalLength(), m = Math.max(2, Math.ceil(Lc / 5)); for (let i = T.length ? 1 : 0; i <= m; i++) { const q = tmp.getPointAtLength((Lc * i) / m); T.push([Lacc + (Lc * i) / m, q.x, q.y]); } Lacc += Lc; };
       nodes.forEach((n, i) => {
         const art = moments[i].type === "voice" ? n.querySelector(".t-art") : null;
         if (art) { // leave the line, sketch the story's picture in one stroke, come back
           const r = art.getBoundingClientRect(), a = { x: r.left - bodyBox.left, y: r.top - bodyBox.top, w: r.width, h: r.height };
           const flip = !small && a.x + a.w / 2 < cx;
-          const px = sketch(moments[i].s.title, flip).map(([x, y]) => [a.x + x * a.w / 100, a.y + y * a.h / 100]);
+          const sk = sketch(moments[i].s.title, flip), px = sk.map(([x, y]) => [a.x + x * a.w / 100, a.y + y * a.h / 100]);
           const s0 = px[0], e0 = px[px.length - 1];
           const ay0 = Math.max(a.y - a.h * 1.25, cur[cur.length - 1][1] + 70), sx = small && !T.length ? w / 2 : cx; cur.push([sx, ay0]); addCurve(cur); // travel ends well above the picture
           const A0 = Lacc, i0 = T.length - 1;
           addCurve([[sx, ay0], [(sx + s0[0]) / 2, (ay0 + s0[1]) / 2 - 20], s0]);
           segs.push("L" + px.slice(1).map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L"));
-          for (let j = 1; j < px.length; j++) { Lacc += Math.hypot(px[j][0] - px[j - 1][0], px[j][1] - px[j - 1][1]); T.push([Lacc, px[j][0], px[j][1]]); }
+          const cum = [Lacc]; for (let j = 1; j < px.length; j++) { Lacc += Math.hypot(px[j][0] - px[j - 1][0], px[j][1] - px[j - 1][1]); cum.push(Lacc); T.push([Lacc, px[j][0], px[j][1]]); }
+          // the thread stays one unbroken line: the jumps between a drawing's strokes are drawn too (pass sk.gaps here to leave them blank instead)
           arts.push({ i0, i1: T.length - 1, from: a.y + a.h / 2 - vh * 0.5 });
           const exitY = Math.max(a.y + a.h * 1.1 + 50, e0[1] + 100);
           cur = [e0, [(cx + e0[0]) / 2, e0[1] + 44], [cx, exitY]];
@@ -346,7 +415,7 @@
         cur.push(startPt); addCurve(cur);
       }
       threadPath.setAttribute("d", segs.join(" ")); ghost.removeAttribute("d"); // the route ahead stays hidden until the pen draws it
-      const len = threadPath.getTotalLength(); threadPath.style.strokeDasharray = len; const sc = len / Lacc; T.forEach((q) => (q[0] *= sc));
+      const len = threadPath.getTotalLength(), sc = len / Lacc; T.forEach((q) => (q[0] *= sc)); gapSegs.forEach((g) => { g[0] *= sc; g[1] *= sc; }); lastL = -1;
       // scroll position -> length. Travel follows the path's own height; each drawing gets its own stretch of scroll, as much as it can
       // have without the pen ever rising above the middle of the screen (or sinking below the bottom edge).
       const M = T.length, Ys = new Array(M); let Y = 0, ai = 0;
@@ -365,19 +434,30 @@
       const lenAtY = (yy) => { let lo = 0, hi = M - 1; while (lo < hi) { const m = (lo + hi) >> 1; if (Ys[m] < yy) lo = m + 1; else hi = m; } if (lo === 0) return T[0][0]; const y0 = Ys[lo - 1], y1 = Ys[lo], f = y1 > y0 ? Math.min(1, Math.max(0, (yy - y0) / (y1 - y0))) : 1; return T[lo - 1][0] + (T[lo][0] - T[lo - 1][0]) * f; };
       const posAt = (L) => { let lo = 0, hi = M - 1; while (lo < hi) { const m = (lo + hi) >> 1; if (T[m][0] < L) lo = m + 1; else hi = m; } if (lo === 0) return { x: T[0][1], y: T[0][2] }; const A = T[lo - 1], B = T[lo], f = B[0] > A[0] ? (L - A[0]) / (B[0] - A[0]) : 1; return { x: A[1] + (B[1] - A[1]) * f, y: A[2] + (B[2] - A[2]) * f }; };
       const endBottom = end.lastElementChild.getBoundingClientRect().bottom - bodyBox.top, blockMid = (sunY + endBottom) / 2, yDone = blockMid + vh * 0.1; // scroll (as tipY) at which the sun and the text below it are centred on screen
-      geo = { len, lenAtY, posAt, yEnd: Ys[M - 1], yDone, startY: startPt[1], sunH: sr.height, sunTop: sunY, sunX, k };
+      geo = { len, gaps: gapSegs, lenAtY, posAt, yEnd: Ys[M - 1], yDone, startY: startPt[1], sunH: sr.height, sunTop: sunY, sunX, k };
       update();
     }
     let sT = 0, sC = 0, sP = 0; const easeSun = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
     const paintSun = () => { sP = easeSun(sC); sn.set(sP); const f = clamp((sP - 0.55) / 0.45); sn.svg.style.transform = `scale(${(0.93 + 0.07 * f * f * (3 - 2 * f)).toFixed(4)})`; };
     const sunTick = (time, dt) => { if (reduce || !geo) return; const d = sT - sC; if (Math.abs(d) < 0.0004) { if (sC !== sT) { sC = sT; paintSun(); update(); } return; } sC += d * (1 - Math.exp(-(dt || 16) / 150)); paintSun(); update(); };
     gsap.ticker.add(sunTick);
+    /* the drawn part of the thread as a dash pattern: solid up to L, except the pen lifts between a drawing's strokes, which stay blank */
+    const dashFor = (L) => {
+      const arr = []; let pos = 0;
+      for (const [ga, gb] of geo.gaps) {
+        if (L <= ga) break;
+        arr.push(Math.max(0.001, ga - pos));
+        if (L <= gb) { arr.push(geo.len * 2); return arr.join(" "); }
+        arr.push(gb - ga); pos = gb;
+      }
+      arr.push(Math.max(0.001, L - pos), geo.len * 2); return arr.join(" ");
+    };
     function update() {
       if (!geo) return;
       const tipY = scrollY - bodyTopY + innerHeight * 0.6;
-      if (reduce) { threadPath.style.strokeDashoffset = 0; sn.set(1); tip.style.opacity = 0; return; }
+      if (reduce) { threadPath.style.strokeDasharray = dashFor(geo.len); threadPath.style.strokeDashoffset = 0; sn.set(1); tip.style.opacity = 0; return; }
       const L = clamp(geo.lenAtY(tipY), 0, geo.len);
-      if (L !== lastL) { lastL = L; threadPath.style.strokeDashoffset = geo.len - L; }
+      if (L !== lastL) { lastL = L; threadPath.style.strokeDasharray = dashFor(L); threadPath.style.strokeDashoffset = 0; }
       // the sun: once the line arrives, the outline draws, then it fills. The scroll sets a target; the drawing eases toward it.
       sT = clamp((tipY - geo.yEnd) / Math.max(geo.yDone - geo.yEnd, innerHeight * 0.3)); // the outline starts when the thread has arrived and finishes just as the sun and the text under it are centred
       const s = sP, arrived = L >= geo.len - 1; // the dot belongs to the real end of the thread; it only dips into the sun once the thread has actually arrived there

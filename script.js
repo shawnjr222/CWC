@@ -6,7 +6,7 @@ if (window.gsap && window.ScrollTrigger && !reduce) {
   gsap.registerPlugin(ScrollTrigger);
 
   /* Smooth scroll (Lenis) driven by GSAP's ticker */
-  const lenis = new Lenis({ lerp: 0.075, smoothWheel: true });
+  const lenis = new Lenis({ lerp: 0.11, smoothWheel: true });
   window.lenis = lenis;
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));

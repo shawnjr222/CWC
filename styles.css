@@ -485,3 +485,6 @@ html.lenis, html.lenis body { height: auto; }
 ::selection { background: var(--blue); color: #fff; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
 html { scrollbar-color: #b9b7b1 transparent; scrollbar-width: thin; }
+
+/* hold the page until the story has mounted, so a reload never flashes the lower sections */
+html:not(.ready) .work, html:not(.ready) footer { visibility: hidden; opacity: 0; }

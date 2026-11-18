@@ -6,11 +6,17 @@
   <title>Coping With Capitalism</title>
   <meta name="description" content="Coping With Capitalism was a publication on self and collective care, active 2023–2025. It is currently on hiatus." />
   <link rel="icon" href="/assets/favicon.png" type="image/png" />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preload" href="assets/data/states.json" as="fetch" crossorigin />
+  <link rel="preload" href="assets/data/states-10m.json" as="fetch" crossorigin />
+  <link rel="preload" href="assets/data/sun.json" as="fetch" crossorigin />
+  <link rel="preload" href="assets/data/medium-top10.json" as="fetch" crossorigin />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261118t" />
-  <link rel="stylesheet" href="thread.css?v=20261118t" />
+  <link rel="stylesheet" href="styles.css?v=2026113e" />
+  <link rel="stylesheet" href="thread.css?v=2026113e" />
 </head>
 <body>
 
@@ -45,7 +51,12 @@
 
   <main id="top">
     <!-- THE THREAD: one line, many voices -->
-    <section class="story" id="story" aria-label="Stories of life under capitalism"></section>
+    <section class="story" id="story" aria-label="Stories of life under capitalism">
+      <div class="t-intro" data-static><div class="t-sticky">
+        <h1 class="t-lit"><span class="t-a"><span class="wm"><span class="w" style="--i:0">Behind</span></span> <span class="wm"><span class="w" style="--i:1">every</span></span> <span class="wm"><span class="w" style="--i:2">number</span></span> <span class="wm"><span class="w" style="--i:3">is</span></span> <em><span class="wm"><span class="w" style="--i:4">a</span></span> <span class="wm"><span class="w" style="--i:5">person.</span></span></em></span></h1>
+        <p class="t-cue" aria-hidden="true"><span>Scroll</span><i><b></b></i></p>
+      </div></div>
+    </section>
 
     <!-- 04 WORK -->
     <section class="work" data-section="04">
@@ -119,13 +130,13 @@
     <a class="foot-link" href="https://medium.com/coping-with-capitalism" target="_blank" rel="noopener">View publication <span class="arrow-slide" aria-hidden="true"><span class="arrow-out"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="arrow-in"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></a>
   </footer>
 
+  <script>try{history.scrollRestoration="manual"}catch(e){}if(!location.hash)scrollTo(0,0);setTimeout(function(){document.documentElement.classList.add("ready")},5000)</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-  <script src="script.js?v=20261118t"></script>
-  <script src="concepts.js?v=20261118t"></script>
-  <script src="story.js?v=20261118t"></script>
+  <script src="script.js?v=2026113e"></script>
+  <script src="story.js?v=2026113e"></script>
 </body>
 </html>

@@ -24,7 +24,7 @@
       let inner = "";
       if (p.kind === "say") inner = `<h2 class="k-say">${p.text}</h2><p class="k-cue" aria-hidden="true"><span>Scroll</span><svg viewBox="0 0 12 22" width="12" height="22" fill="none"><path d="M6 1v18M1 14l5 6 5-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></p>`;
       if (p.kind === "stat") inner = `<p class="k-num"><span data-num>${fmtNum(0, p.num)}</span></p><p class="k-line">${p.line}</p>`;
-      if (p.kind === "pub") inner = `<p class="k-trio"><span><b data-n="${tot.stories}">${fmt.num(tot.stories)}</b> stories</span><span><b data-n="${tot.writers}">${fmt.num(tot.writers)}</b> writers</span><span><b data-n="${fol}" data-dec="1" data-suf="K">${fol.toFixed(1)}K</b> followers</span></p><p class="k-line">Coping With Capitalism exists to offer clear and accessible paths to self and collective care.</p>`;
+      if (p.kind === "pub") inner = `<p class="k-trio"><span><b data-n="${tot.stories}">${fmt.num(tot.stories)}</b> stories</span><span><b data-n="${tot.writers}">${fmt.num(tot.writers)}</b> writers</span><span><b data-n="${fol}" data-dec="1" data-suf="K">${fol.toFixed(1)}K</b> followers</span></p>`;
       if (p.kind === "end") inner = `<div class="k-sunbox"></div><p class="k-line">${window.CWC.HIATUS_LINE}</p>${vlink(PUB, "Read the publication", "vlink k-cta")}`;
       d.innerHTML = `<div class="k-in">${inner}</div>`;
       const o = { d, p, words: [], par: [] };

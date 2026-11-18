@@ -172,12 +172,11 @@ a { color: inherit; text-decoration: none; }
 /* work */
 .work { position: relative; }
 .work-pin {
-  height: 100svh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
-  padding: 76px 0 24px;
+  padding: 96px 0 56px;
   gap: clamp(16px, 3vh, 32px);
 }
 .work-head {
@@ -189,11 +188,21 @@ a { color: inherit; text-decoration: none; }
 .track {
   display: flex;
   gap: clamp(16px, 2.4vw, 40px);
-  padding: 0 var(--gutter);
-  width: max-content;
-  will-change: transform;
+  padding: 0 var(--gutter) 8px;
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: var(--gutter);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
 }
-.card { display: block; flex: 0 0 auto; width: clamp(280px, 40vw, 680px); align-self: flex-start; }
+.track::-webkit-scrollbar { display: none; }
+.track.dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
+.track.dragging a { pointer-events: none; }
+.track img { -webkit-user-drag: none; user-select: none; }
+.card { display: block; flex: 0 0 auto; width: clamp(280px, 40vw, 680px); align-self: flex-start; scroll-snap-align: start; }
 .media { aspect-ratio: 16 / 9; border-radius: 20px; overflow: hidden; background: #e4e2dc; }
 .media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease); }
 .card:hover .media img { transform: scale(1.03); }
@@ -228,7 +237,6 @@ a { color: inherit; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) {
   .scroll-cue span { animation: none; }
   .why-text .w { opacity: 1; }
-  .work-pin { height: auto; padding: 100px 0; overflow-x: auto; }
 }
 
 /* Lenis */
@@ -389,7 +397,7 @@ html.lenis, html.lenis body { height: auto; }
   .stand { min-height: 0; }
 }
 
-/* Smaller screens: the project row is still driven by scrolling down (pinned, then it slides sideways), same as large screens */
+/* Smaller screens */
 @media (max-width: 899px) {
   :root { --sp: clamp(56px, 12vw, 96px); }
   .why { min-height: 0; }

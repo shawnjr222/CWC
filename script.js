@@ -12,31 +12,31 @@ if (window.gsap && window.ScrollTrigger && !reduce) {
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  /* WORK: pinned, then the project row slides sideways as you scroll down (at every screen size) */
+}
+
+/* WORK: the project row is a plain horizontal scroller. Swipe it, scroll sideways on a trackpad, shift + wheel, or drag it with the mouse. No scrolling down required. */
+{
   const track = document.getElementById("track");
   const cards = [...track.querySelectorAll(".card")];
   const wNow = document.getElementById("w-now");
   const setNow = (i) => (wNow.textContent = String(Math.min(cards.length, Math.max(1, i))).padStart(2, "0"));
-  const mm = gsap.matchMedia();
-
-  mm.add("(min-width: 0px)", () => {
-    const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
-    gsap.to(track, {
-      x: () => -dist(),
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".work",
-        start: "top top",
-        end: () => "+=" + dist(),
-        pin: ".work-pin",
-        scrub: 0.8,
-        invalidateOnRefresh: true,
-        anticipatePin: 1,
-        onUpdate: (self) => setNow(Math.round(self.progress * (cards.length - 1)) + 1),
-      },
-    });
-  });
-
+  const sync = () => {
+    const step = cards[1].offsetLeft - cards[0].offsetLeft || 1, max = track.scrollWidth - track.clientWidth;
+    setNow(track.scrollLeft >= max - 4 ? cards.length : Math.round(track.scrollLeft / step) + 1);
+  };
+  track.addEventListener("scroll", sync, { passive: true });
+  window.addEventListener("resize", sync);
+  sync();
+  // sideways wheel / trackpad gestures belong to the row (the smooth-scroll library would otherwise claim them); up and down still scrolls the page
+  track.addEventListener("wheel", (e) => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) e.stopPropagation(); }, { passive: true });
+  // mouse drag
+  let down = false, moved = false, sx = 0, sl = 0;
+  track.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse" || e.button !== 0) return; down = true; moved = false; sx = e.clientX; sl = track.scrollLeft; });
+  window.addEventListener("pointermove", (e) => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 4) { moved = true; track.classList.add("dragging"); } if (moved) track.scrollLeft = sl - dx; });
+  const endDrag = () => { if (!down) return; down = false; track.classList.remove("dragging"); };
+  window.addEventListener("pointerup", endDrag); window.addEventListener("pointercancel", endDrag);
+  track.addEventListener("click", (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+  track.addEventListener("dragstart", (e) => e.preventDefault());
 }
 
 /* About modal */

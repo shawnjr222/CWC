@@ -169,12 +169,12 @@
   // Each map leads with the worst case (outlined), and answers hover or touch with that state's own figure and rank.
   const MAPS = {
     mental: { key: "mental", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults report frequent mental distress", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023: adults with 14 or more poor mental health days a month." },
-    food: { key: "food", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults faced food insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023. Gray states have no data." },
-    housing: { key: "housing", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults faced housing insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023. Gray states have no data." },
+    food: { key: "food", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults faced food insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023." },
+    housing: { key: "housing", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults faced housing insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023." },
     poverty: { key: "poverty", url: "https://data.census.gov/table/ACSST1Y2025.S1701", unit: "of people live below the poverty line", fmt: (v) => v + "%", src: "U.S. Census Bureau, American Community Survey 2025 (1-year)." },
-    disability: { key: "disability", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults report a disability", fmt: (v) => v.toFixed(1) + "%", src: "CDC PLACES (BRFSS) 2023: adults reporting a hearing, vision, cognitive, mobility, self-care or independent-living disability. Gray states have no data." },
+    disability: { key: "disability", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults report a disability", fmt: (v) => v.toFixed(1) + "%", src: "CDC PLACES (BRFSS) 2023: adults reporting a hearing, vision, cognitive, mobility, self-care or independent-living disability." },
     ratio: { key: "ratio", url: "https://data.census.gov/table/ACSDT1Y2025.B19080", unit: "times more income for the top fifth of households than the bottom fifth", fmt: (v) => v.toFixed(1) + "×", src: "80th ÷ 20th percentile household income. U.S. Census Bureau, ACS 2025 (1-year). Income, not wealth." },
-    minwage: { key: "minwage", url: "https://www.dol.gov/agencies/whd/minimum-wage/state", low: true, unit: "minimum wage an hour", fmt: (v) => "$" + v.toFixed(2), src: "Higher of state or federal minimum wage, as of November 2026 (U.S. Department of Labor). Darker means lower." },
+    minwage: { key: "minwage", url: "https://www.dol.gov/agencies/whd/minimum-wage/state", low: true, unit: "minimum wage an hour", fmt: (v) => "$" + v.toFixed(2), src: "Higher of state or federal minimum wage, as of November 2026 (U.S. Department of Labor)." },
     student: { key: "student", url: "https://studentaid.gov/data-center/student/portfolio", unit: "average federal student loan per borrower", fmt: (v) => fmt.money(v), src: "Federal Student Aid data, about 2023: state averages as charted by Axios; U.S. average from Federal Student Aid, end of 2023." },
   };
   let GEO = null;
@@ -214,6 +214,70 @@
     paths.on("pointerenter", (e, d) => show(d.properties.name, false)).on("pointerdown", (e, d) => show(d.properties.name, false)).on("pointerleave", showDefault).on("click", (e) => { if (e.pointerType !== "touch") window.open(M.url, "_blank", "noopener"); });
     box.append(legend, readout);
     showDefault();
+
+    /* lift: the hovered state ripples up off the map and floats above it. It is cut into thin diagonal strips that rise one after another,
+       so a wave runs across the state from its lower-left corner; the rest of the map softens and the empty slot (with a shadow) stays behind */
+    paths.classed("st", true);
+    const lg = svg.append("g").attr("pointer-events", "none"), calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const uid = "pl" + Math.random().toString(36).slice(2, 7);
+    const N = [Math.SQRT1_2, -Math.SQRT1_2], Mv = [Math.SQRT1_2, Math.SQRT1_2], BIG = 4000, NB = 18, SPREAD = 0.85; // the wave travels along N (up and to the right)
+    const lifts = new Map(); let ticking = false, undimT = null; // one entry per state that is up or on its way down, so moving the mouse lets the old state settle while the new one rises
+    const eo = (x) => 1 - Math.pow(1 - x, 3);
+    function render(o) {
+      o.strips.forEach((g, i) => {
+        const u = Math.min(1, Math.max(0, o.tt * (1 + SPREAD) - (i / (NB - 1)) * SPREAD)), rise = o.lift * eo(u) + o.bump * Math.sin(Math.PI * u) * (1 - o.tt * 0.6);
+        g.attr("transform", `translate(${(-o.lift * 0.28 * eo(u)).toFixed(2)} ${(-rise).toFixed(2)})`);
+      });
+      const sc = 1 + 0.05 * eo(o.tt); o.float.attr("transform", `translate(${o.cx} ${o.cy}) scale(${sc.toFixed(4)}) translate(${-o.cx} ${-o.cy})`);
+      o.shadow.style("opacity", Math.min(1, o.tt * 1.4));
+    }
+    const easeFall = (x) => 0.5 - 0.5 * Math.cos(Math.PI * x); // a sine ease: it starts moving the instant you let go and settles softly
+    function land(name, o) { o.wrap.remove(); lifts.delete(name); } // the real state has been underneath all along, at the map's own opacity
+    const RISE = 720, FALL = 1700; // ms: a slow, floating descent
+    function tick(time, dt) {
+      const now = performance.now(), kA = 1 - Math.exp(-(dt || 16) / 140);
+      lifts.forEach((o, name) => {
+        let a;
+        if (o.target) {
+          if (!o.rise) o.rise = { t0: now, e0: eo(o.tt) }; o.fall = null; // lifting: one soft sine ease, from wherever it is
+          const p = Math.min(1, (now - o.rise.t0) / RISE), E = o.rise.e0 + (1 - o.rise.e0) * easeFall(p);
+          o.tt = 1 - Math.pow(1 - E, 1 / 3); o.raw = o.tt; o.a = o.a == null ? 1 : o.a + (1 - o.a) * kA; a = o.a; // picked up again mid-fall: it firms up smoothly
+        }
+        else {
+          o.rise = null; if (!o.fall) o.fall = { t0: now, e0: eo(o.tt) }; // let go: it starts coming down from wherever it had got to
+          const p = Math.min(1, (now - o.fall.t0) / FALL), e = easeFall(p);
+          o.tt = 1 - Math.pow(1 - o.fall.e0 * (1 - e), 1 / 3); o.raw = o.tt; // eased in the same curve the lift is drawn with, so the descent is visible from the first frame
+          a = o.a = 1 - e; // the floating copy dissolves into the real state beneath it exactly as it arrives: that state already sits at the map's opacity, so the colour never shifts
+          if (p >= 1) { land(name, o); return; }
+        }
+        o.wrap.style("opacity", a.toFixed(3)); render(o);
+      });
+      if (!lifts.size) { gsap.ticker.remove(tick); ticking = false; }
+    }
+    const run = () => { if (!ticking) { ticking = true; gsap.ticker.add(tick); } };
+    function lift(n) {
+      if (calm) return; clearTimeout(undimT);
+      lifts.forEach((o, name) => { if (name !== n) o.target = 0; }); // whatever was up settles back and takes on the opacity of the rest of the map
+      const had = lifts.get(n); if (had) { had.target = 1; svg.classed("peeling", true); run(); return; }
+      const node = paths.filter((dd2) => dd2.properties.name === n).node(); if (!node) return;
+      const bb = node.getBBox(), dd = node.getAttribute("d"), fill = node.getAttribute("fill"), c0 = [bb.x, bb.y + bb.height], S = (bb.width + bb.height) * Math.SQRT1_2;
+      const P = (sv, u) => [c0[0] + N[0] * sv + Mv[0] * u, c0[1] + N[1] * sv + Mv[1] * u], poly = (pts) => pts.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+      const wrap = lg.append("g").attr("class", "peel-wrap"), id = uid + lifts.size + Math.random().toString(36).slice(2, 5);
+      const shadow = wrap.append("g").attr("class", "peel-shadow"), fl = shadow.append("g"), defs = wrap.append("defs"), strips = [], w = S / NB, ov = Math.max(1.2, w * 0.5);
+      for (let i = 0; i < NB; i++) {
+        const x0 = i * w - (i ? ov : BIG), x1 = (i + 1) * w + (i < NB - 1 ? ov : BIG);
+        defs.append("clipPath").attr("id", `${id}${i}`).append("polygon").attr("points", poly([P(x0, -BIG), P(x1, -BIG), P(x1, BIG), P(x0, BIG)]));
+        const g = fl.append("g").attr("clip-path", `url(#${id}${i})`); g.append("path").attr("d", dd).attr("fill", fill).attr("stroke", "#f1f0ec").attr("stroke-width", 0.8).attr("stroke-linejoin", "round"); strips.push(g);
+      }
+      const o = { node, wrap, strips, float: fl, shadow, tt: 0, raw: 0, op: 1, target: 1, cx: bb.x + bb.width / 2, cy: bb.y + bb.height / 2, lift: Math.max(5, Math.min(11, S * 0.09)), bump: Math.max(2.5, Math.min(5, S * 0.045)) };
+      lifts.set(n, o); render(o); svg.classed("peeling", true); run();
+    }
+    function unlift(away) { // the pointer left a state: it comes down at once. The map brightens straight away if the pointer left the map; crossing a border between states does not flicker it
+      lifts.forEach((o) => { o.target = 0; }); run(); clearTimeout(undimT);
+      if (away) svg.classed("peeling", false); else undimT = setTimeout(() => svg.classed("peeling", false), 280);
+    }
+    paths.on("pointerenter.peel", (e, d) => { if (e.pointerType !== "touch" && !calm) { hl.selectAll("*").remove(); lift(d.properties.name); } }).on("pointerleave.peel", () => unlift(false));
+    svg.node().addEventListener("pointerleave", () => unlift(true));
 
     /* keyboard: the map is one Tab stop (it lands on the worst state); the arrow keys move to the neighbouring state in that direction;
        Enter opens the source. Each state reads out its value and rank. */
@@ -387,7 +451,7 @@
           const flip = !small && a.x + a.w / 2 < cx;
           const sk = sketch(moments[i].s.title, flip), px = sk.map(([x, y]) => [a.x + x * a.w / 100, a.y + y * a.h / 100]);
           const s0 = px[0], e0 = px[px.length - 1];
-          const ay0 = Math.max(a.y - a.h * 1.25, cur[cur.length - 1][1] + 70), sx = small && !T.length ? w / 2 : cx; cur.push([sx, ay0]); addCurve(cur); // travel ends well above the picture
+          const ay0 = Math.max(small ? a.y - 36 : a.y - a.h * 1.25, cur[cur.length - 1][1] + 70), sx = small && cur.length <= 2 ? w / 2 : cx; cur.push([sx, ay0]); addCurve(cur); // travel ends well above the picture
           const i0 = T.length - 1;
           addCurve([[sx, ay0], [(sx + s0[0]) / 2, (ay0 + s0[1]) / 2 - 20], s0]);
           segs.push("L" + px.slice(1).map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L"));
@@ -395,10 +459,10 @@
           // the thread stays one unbroken line: the jumps between a drawing's strokes are drawn too (pass sk.gaps here to leave them blank instead)
           arts.push({ i0, i1: T.length - 1, from: a.y + a.h / 2 - vh * 0.5 });
           const exitY = Math.max(a.y + a.h * 1.1 + 50, e0[1] + 100);
-          cur = [e0, [(cx + e0[0]) / 2, e0[1] + 44], [cx, exitY]];
+          cur = small ? [e0, [(cx + e0[0]) / 2, Math.min(e0[1] + 12, a.y + a.h + 6)], [cx, a.y + a.h + 14]] : [e0, [(cx + e0[0]) / 2, e0[1] + 44], [cx, exitY]]; // on a phone the line leaves the drawing sideways, above the title, and runs down the margin
         } else {
           const left = n.classList.contains("left"); const x = small ? 20 + (i % 2 ? 8 : -2) : w * 0.5 + (left ? 1 : -1) * w * 0.045, y = ys[i];
-          cur.push([small ? 20 + (i % 2 ? -6 : 6) : w * 0.5 + (left ? -1 : 1) * w * 0.012, y - 120], [x, y], [cx, y + 120]);
+          cur.push([small ? 20 + (i % 2 ? -6 : 6) : w * 0.5 + (left ? 1 : -1) * w * 0.02, y - 120], [x, y], [cx, y + 120]); // the thread always bows away from the words, so it never crosses them
         }
       });
       { // the last stretch drops straight into the top of the sun; never down past it and back up, which would make a hook
@@ -475,3 +539,8 @@
   top0(); document.documentElement.classList.add("ready");
   document.fonts && document.fonts.ready.then(() => { ScrollTrigger.sort(); ScrollTrigger.refresh(); });
 })();
+
+/* grain drift: nudge the paper texture a few pixels with scroll (skipped for reduced motion) */
+if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  let gy = 0; window.addEventListener("scroll", () => { gy = (window.scrollY * 0.04) % 64; document.documentElement.style.setProperty("--grain", -gy + "px"); }, { passive: true });
+}

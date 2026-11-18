@@ -299,29 +299,22 @@ html.lenis, html.lenis body { height: auto; }
 .about-links .arrow-slide { width: 0.9em; height: 0.9em; vertical-align: -0.12em; }
 .card h3 .arrow-slide { width: 0.62em; height: 0.62em; min-width: 14px; min-height: 14px; vertical-align: 0; margin-left: 0.3em; }
 
+/* The arrow plays on every link that has one (cards, story and publication links, map sources, the About links, the footer) */
 @media (hover: hover) {
-  .card:hover .arrow-out, .about-links a:hover .arrow-out, .foot-link:hover .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
-  .card:hover .arrow-in, .about-links a:hover .arrow-in, .foot-link:hover .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
+  a:hover .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
+  a:hover .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
 }
-/* Touch screens have no hover, so play it on tap and keyboard focus instead */
+/* Touch screens have no hover, so play it on tap; keyboard focus plays it everywhere */
+a:focus-visible .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
+a:focus-visible .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
 @media (hover: none) {
-  .card:active .arrow-out, .about-links a:active .arrow-out, .foot-link:active .arrow-out, a:focus-visible .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
-  .card:active .arrow-in, .about-links a:active .arrow-in, .foot-link:active .arrow-in, a:focus-visible .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
+  a:active .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
+  a:active .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .card:hover .arrow-out, .card:hover .arrow-in, .about-links a:hover .arrow-out, .about-links a:hover .arrow-in, .foot-link:hover .arrow-out, .foot-link:hover .arrow-in { transition: none; }
+  a:hover .arrow-out, a:hover .arrow-in, a:focus-visible .arrow-out, a:focus-visible .arrow-in { transition: none; }
 }
-
-/* Every link has the arrow: the name link in the About modal too */
 .about-name .arrow-slide { width: 0.8em; height: 0.8em; vertical-align: -0.08em; }
-@media (hover: hover) {
-  .about-name:hover .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
-  .about-name:hover .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
-}
-@media (hover: none) {
-  .about-name:active .arrow-out { transform: translate(100%, -100%); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1); }
-  .about-name:active .arrow-in { transform: translate(0, 0); transition: transform 460ms cubic-bezier(0.65, 0, 0.35, 1) 80ms; }
-}
 
 /* Make sure only one arrow ever shows: hard-clip the sliding pair (Safari can leak composited children past overflow) */
 .arrow-slide { clip-path: inset(0); contain: paint; isolation: isolate; -webkit-mask-image: -webkit-radial-gradient(white, black); }

@@ -199,3 +199,7 @@ body > header.top { animation: topIn .6s ease both; }
 .t-cue i { position: absolute; left: calc(50% - 1px); top: 28px; width: 2px; height: 36px; overflow: hidden; }
 .t-cue i::before { content: ""; position: absolute; inset: 0; border-radius: 1px; background: var(--blue); opacity: 0; transition: opacity .4s ease; -webkit-mask-image: linear-gradient(to bottom, #000 var(--keep, 0%), transparent 100%); mask-image: linear-gradient(to bottom, #000 var(--keep, 0%), transparent 100%); }
 .t-intro.scrolled .t-cue i::before { opacity: 1; transition: none; }
+
+/* "Read the publication": black, blue on hover (the underline and arrow follow the text colour) */
+.vlink.t-cta { color: var(--ink); transition: color .25s ease; }
+.vlink.t-cta:hover, .vlink.t-cta:focus-visible { color: var(--blue); }

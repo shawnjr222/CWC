@@ -14,6 +14,16 @@ if (window.gsap && window.ScrollTrigger && !reduce) {
 
 }
 
+/* WORK images: loaded only when they are about to be seen (a screen or so away, in either direction), never at first paint */
+{
+  const imgs = [...document.querySelectorAll("img[data-src]")];
+  const load = (img) => { img.srcset = img.dataset.srcset; img.src = img.dataset.src; img.removeAttribute("data-src"); img.removeAttribute("data-srcset"); };
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { load(e.target); io.unobserve(e.target); } }), { rootMargin: "1200px 1200px 1200px 1200px" });
+    imgs.forEach((img) => io.observe(img));
+  } else imgs.forEach(load);
+}
+
 /* WORK: the project row is a plain horizontal scroller. Swipe it, scroll sideways on a trackpad, shift + wheel, or drag it with the mouse. No scrolling down required. */
 {
   const track = document.getElementById("track");

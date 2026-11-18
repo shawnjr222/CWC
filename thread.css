@@ -3,24 +3,13 @@
 /* ===== shared ===== */
 .story { position: relative; }
 .sun { display: block; overflow: visible; height: auto; }
-.ico { width: 100%; height: 100%; overflow: visible; display: block; }
+
 .w { display: inline; }
 .vlink { display: inline-flex; align-items: center; gap: 6px; font: 500 15px/1.2 "Inter Tight", sans-serif; letter-spacing: -.01em; color: var(--blue); border-bottom: 1px solid currentColor; padding-bottom: 2px; text-decoration: none; transition: color .2s; }
 .vlink:hover { color: var(--ink); }
 .vlink .arrow-slide { margin-left: 0; }
-.curtain { position: fixed; inset: 0; z-index: 90; background: var(--blue); pointer-events: none; }
 
 /* ===== the switcher bar ===== */
-.story-bar { position: fixed; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); transform: translate(-50%, 24px); opacity: 0; pointer-events: none; z-index: 60; display: flex; gap: 4px; padding: 4px; width: max-content; max-width: calc(100% - 24px); border-radius: 999px; background: rgba(255,255,255,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: opacity .35s, transform .5s var(--ease); }
-.story-bar.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
-.story-bar a { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 16px 0 8px; border-radius: 999px; font: 500 13px/1 "Inter Tight", sans-serif; white-space: nowrap; color: var(--ink); text-decoration: none; transition: background .2s, color .2s; }
-.story-bar a i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: rgba(17,17,17,.08); font: 500 11px/1 "JetBrains Mono", monospace; font-style: normal; }
-.story-bar a:hover { background: rgba(18,80,196,.1); color: var(--blue); }
-.story-bar a[aria-current="page"] { background: var(--blue); color: #fff; }
-.story-bar a[aria-current="page"] i { background: rgba(255,255,255,.22); }
-.story-bar .sb-nav { flex: 0 0 auto; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(17,17,17,.06); color: var(--ink); cursor: pointer; transition: background .2s, color .2s; }
-.story-bar .sb-nav:hover { background: var(--blue); color: #fff; }
-@media (max-width: 760px) { .story-bar a span { display: none; } .story-bar a { padding: 0 8px; } .story-bar a[aria-current="page"] span { display: inline; } .story-bar a[aria-current="page"] { padding: 0 16px 0 8px; } }
 
 /* ===== 1 · The thread ===== */
 .thread { position: relative; }
@@ -50,17 +39,10 @@
 .t-say { font-size: clamp(26px, 3.3vw, 50px); font-weight: 500; line-height: 1.07; letter-spacing: -.035em; text-wrap: balance; }
 .t-media { margin-top: 24px; }
 .t-viz svg { display: block; width: 100%; height: auto; overflow: visible; }
-.t-dots { display: grid; grid-template-columns: repeat(10, 1fr); gap: clamp(5px, .8vw, 9px); width: min(100%, 300px); }
-.t-dots i { aspect-ratio: 1; border-radius: 50%; background: #d9d7d1; }
-.t-ico { width: clamp(120px, 14vw, 170px); aspect-ratio: 1; }
-.t-src { margin-top: 14px; font: 400 11px/1.5 "JetBrains Mono", ui-monospace, monospace; letter-spacing: .02em; color: var(--dim); }
-.t-now { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 13px; color: var(--blue); opacity: 0; transition: opacity .3s; }
-.t-now i { display: inline-flex; align-items: flex-end; gap: 2px; width: 14px; height: 12px; }
-.t-now i::before, .t-now i::after, .t-now i b { content: ""; width: 3px; height: 100%; border-radius: 2px; background: var(--blue); transform-origin: 50% 100%; animation: eq .9s ease-in-out infinite alternate; }
-.t-now i::after { animation-delay: .3s; }
-.t-now i b { animation-delay: .6s; }
+
+.t-src { margin-top: 14px; font: 400 12px/1.5 "JetBrains Mono", ui-monospace, monospace; letter-spacing: .02em; color: var(--dim); }
+
 @keyframes eq { from { transform: scaleY(.25); } to { transform: scaleY(1); } }
-.t-m.speaking .t-now { opacity: 1; }
 
 .t-end { position: relative; z-index: 2; display: grid; justify-items: center; gap: 18px; text-align: center; padding: clamp(60px, 12vh, 120px) 0 clamp(120px, 18vh, 180px); }
 .t-close { font-size: clamp(28px, 4.4vw, 64px); font-weight: 500; line-height: 1.05; letter-spacing: -.035em; max-width: 16em; text-wrap: balance; }
@@ -68,8 +50,6 @@
 .t-close-sub { color: var(--dim); font-size: clamp(16px, 1.5vw, 20px); }
 .t-cta { margin-top: 6px; font-size: 17px; }
 
-
-@media (prefers-reduced-motion: reduce) { .t-now i::before, .t-now i::after, .t-now i b { animation: none; } }
 @media (max-width: 820px) {
   .t-body { padding-inline: 18px 18px; }
   .t-m { min-height: 0; padding: 44px 0 44px 36px; }
@@ -79,39 +59,15 @@
 }
 
 /* ===== 2 · Kinetic type ===== */
-.k-stage { position: relative; height: 100svh; overflow: hidden; background: var(--bg); }
-.k-panel { position: absolute; inset: 0; display: grid; place-items: center; padding: 90px var(--gutter) 112px; text-align: center; will-change: clip-path; }
-.k-in { position: relative; z-index: 2; display: grid; justify-items: center; gap: clamp(12px, 2.4vh, 26px); max-width: 1100px; }
-.k-say { font-size: clamp(36px, 7vw, 100px); font-weight: 500; line-height: 1; letter-spacing: -.04em; text-wrap: balance; }
-.k-num { font-size: clamp(64px, 12.5vw, 176px); font-weight: 500; line-height: .95; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
-.k-line { font-size: clamp(20px, 2.4vw, 36px); font-weight: 500; line-height: 1.12; letter-spacing: -.025em; max-width: 22em; text-wrap: balance; }
-.k-trio { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(14px, 3vw, 56px); font-size: clamp(20px, 2.3vw, 34px); font-weight: 500; letter-spacing: -.03em; }
-.k-trio b { display: block; font-size: clamp(48px, 9vw, 128px); font-weight: 500; line-height: .95; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
-.k-ico { position: absolute; inset: 0; margin: auto; width: min(56vh, 72vw); height: min(56vh, 72vw); opacity: .32; z-index: 1; pointer-events: none; }
+
 .wm { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .14em; margin-bottom: -.14em; }
 .wm .w { display: inline-block; will-change: transform; }
-.k-cue { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; font-size: 14px; color: rgba(17,17,17,.62); }
-.k-sunbox { display: grid; place-items: center; }
-.k-cta { font-size: 18px; margin-top: 6px; }
-.k-panel .vlink { color: currentColor; }
-.k-panel .k-cta { color: var(--blue); }
-.k-panel .vlink:hover { opacity: .7; }
-.k-rail { position: absolute; left: 50%; bottom: 74px; width: min(420px, 62vw); height: 2px; transform: translateX(-50%); color: var(--ink); z-index: 60; }
-.k-rail::before { content: ""; position: absolute; inset: 0; background: currentColor; opacity: .22; }
-.k-fill { position: absolute; inset: 0; background: currentColor; transform-origin: left; transform: scaleX(0); }
-.k-rail b { position: absolute; top: -3px; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: currentColor; opacity: .3; transition: opacity .3s; }
-.k-rail b.on { opacity: 1; }
-.k-static { height: auto; overflow: visible; }
-.k-static .k-panel { position: relative; min-height: 100svh; clip-path: none; }
-.k-static .wm .w { transform: none; }
 
 /* when the landing map is hidden, the story starts at the very top */
-.story-solo .story { margin-top: 0; }
-@media (max-width: 640px) { .k-rail { bottom: 70px; } .k-panel { padding-bottom: 120px; } }
 
 /* ===== The thread, second pass: opening, interactive maps, the sun at the end ===== */
 .t-lit .t-a { display: block; margin-bottom: .35em; }
-.t-lit .t-b { display: block; font-size: .62em; line-height: 1.14; letter-spacing: -.03em; max-width: 24em; margin-inline: auto; }
+
 .t-lit .wm { padding-bottom: .14em; margin-bottom: -.14em; }
 .t-cue { display: grid; justify-items: center; gap: 10px; font-size: 14px; color: var(--dim); }
 @keyframes cue { 0% { transform: scaleY(0); opacity: 1; } 55% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: .32; } }
@@ -128,7 +84,7 @@
 .t-legend .t-nodata b { width: 10px; height: 10px; border-radius: 2px; background: #d9d7d1; }
 .t-sunwrap { display: grid; place-items: center; }
 .t-map path { transition: opacity .2s; }
-@media (max-width: 820px) { .t-m.fact .t-copy { width: 100%; } .t-lit .t-b { font-size: .7em; } }
+@media (max-width: 820px) { .t-m.fact .t-copy { width: 100%; }  }
 
 .t-line, .t-copy { will-change: transform; }
 .t-map path { transition: none; }
@@ -190,10 +146,9 @@ body > header.top { animation: topIn .6s ease both; }
 /* the scroll cue: at rest it pulses, as before. Once you scroll, the pulse fades into a solid line that stretches down and becomes the start of the thread. */
 .t-cue { position: relative; display: block; text-align: center; padding-bottom: 46px; }
 .t-cue i b { position: absolute; inset: 0; display: block; width: 2px; margin: 0 auto; border-radius: 1px; background: linear-gradient(var(--blue), rgba(18, 80, 196, .4)); transform-origin: top; transition: opacity .4s ease; animation: cue 1.8s ease-in-out .5s infinite backwards; }
-@keyframes cueLine { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+
 .t-intro.scrolled .t-cue i b { animation: none; opacity: 0; } /* no pulse while you scroll; the solid line takes over */
 @media (prefers-reduced-motion: reduce) { .t-cue i b { animation: none; } }
-
 
 .t-sunwrap .sun { will-change: transform; }
 
@@ -212,3 +167,6 @@ body > header.top { animation: topIn .6s ease both; }
 .t-src .arrow-slide { width: 1.1em; height: 1.1em; min-width: 0; min-height: 0; vertical-align: -0.2em; margin-left: .3em; }
 /* the dot labels use the same glass as the header pills: no outline, translucent white, blurred behind */
 .t-pop { background: rgba(255, 255, 255, 0.72); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: none; }
+
+/* keyboard focus on a state: the highlight outline and the readout already show it, so drop the browser's boxy default */
+.t-map path:focus, .t-map path:focus-visible { outline: none; }

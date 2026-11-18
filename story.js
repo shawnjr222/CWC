@@ -1,6 +1,5 @@
-/* Two scroll stories about life under capitalism. Both end with the blue sun logo: in "The thread" the line itself runs down into the sun,
-   traces its outline, and then the sun fills in.
-   Core: data, helpers, the sun, the line illustrations, the switcher. Story 1 (The thread) lives here; story 2 (Kinetic type) in concepts.js.
+/* "The thread": one blue line runs down the page past eight issues, each a statistic with an interactive map and a Medium story, and the line
+   sketches a drawing for every story. It ends in the sun logo: the line runs into it, traces its outline, and the sun fills in.
    References: Gladeye's Listen to America (one line, many voices) and Apple's product pages (sticky storytelling, scroll-lit text, count-ups, clean stops). */
 (async function () {
   const root = document.getElementById("story");
@@ -22,25 +21,10 @@
   const place = (n) => (n === "District of Columbia" ? "the District of Columbia" : n);
   const ord = (n) => { const s = ["th", "st", "nd", "rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); };
   const worst = (k, low) => Object.entries(S).filter(([, s]) => s[k] != null).sort((a, b) => (low ? a[1][k] - b[1][k] : b[1][k] - a[1][k]))[0];
-  const POOR = 40763043, MINW = 7.25, TOPH = US.top5avg / 2080;
   // the three numbers at the bottom are read from assets/data/publication-stats.json every time the site loads (falling back to the top-10 file)
   const pub = { stories: (STATS && STATS.stories) || (TOP && TOP.totals.stories) || 467, writers: (STATS && STATS.writers) || (TOP && TOP.totals.writers) || 123 };
   const followers = STATS && STATS.followers ? STATS.followers / 1000 : (TOP && TOP.totals.followers) || 2.3; // in thousands
 
-  /* ---------- the line illustrations (single blue strokes, drawn on scroll) ---------- */
-  const ICONS = {
-    cap: ["M20 85 L100 48 L180 85 L100 122 Z", "M52 102 V138 C52 158 148 158 148 138 V102", "M180 85 V135"],
-    coin: ["M100 100 m-60 0 a60 60 0 1 0 120 0 a60 60 0 1 0 -120 0", "M100 100 m-48 0 a48 48 0 1 0 96 0 a48 48 0 1 0 -96 0", "M118 78 C106 64 76 68 80 92 C84 112 118 100 118 124 C118 146 88 142 80 128", "M100 56 V144"],
-    clock: ["M100 100 m-64 0 a64 64 0 1 0 128 0 a64 64 0 1 0 -128 0", "M100 56 V100 L132 118", "M100 40 V48 M160 100 H152 M100 160 V152 M40 100 H48"],
-    people: ["M100 100 m-26 0 a26 26 0 1 0 52 0 a26 26 0 1 0 -52 0", "M52 170 C52 132 148 132 148 170", "M30 150 C30 130 44 122 58 120", "M170 150 C170 130 156 122 142 120"],
-  };
-  function icon(name, stroke = 2.4, color = C.BLUE) {
-    const svg = el("svg", { viewBox: "0 0 200 200", class: "ico", "aria-hidden": "true" });
-    const paths = ICONS[name].map((d) => { const p = el("path", { d, fill: "none", stroke: color, "stroke-width": stroke, "stroke-linecap": "round", "stroke-linejoin": "round" }); svg.appendChild(p); return p; });
-    return { svg, paths };
-  }
-  const prep = (paths) => paths.map((p) => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; return L; });
-  function setDraw(paths, lens, p) { const n = paths.length, seg = 1 / n; paths.forEach((path, i) => { path.style.strokeDashoffset = lens[i] * (1 - clamp((p - i * seg) / seg)); }); }
 
   /* ---------- the blue sun logo: the stroke draws it, then it fills ---------- */
   function sun(widthCss) {
@@ -161,14 +145,6 @@
     sketchCache.set(key, out); return out;
   }
 
-  /* ---------- an abstract signature line (never a likeness) ---------- */
-  const rng = (seed) => () => ((seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296);
-  function scribble(seed) {
-    const r = rng(seed * 9301 + 49297), pts = [];
-    const loops = 5 + Math.floor(r() * 4), A = 34 + r() * 8, B = 14 + r() * 10, n = 3 + Math.floor(r() * 4), ph = r() * 6.28, sk = 0.7 + r() * 0.5;
-    for (let i = 0; i <= 260; i++) { const t = (i / 260) * Math.PI * 2 * (loops / 2); pts.push([50 + A * Math.cos(t * 0.5) * 0.9 + B * Math.cos(t * n + ph), 50 + A * Math.sin(t * 0.5) * sk + B * Math.sin(t * n + ph) * 0.9]); }
-    return "M" + pts.map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L");
-  }
   const ARROW_SVG = '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const ARROW = `<span class="arrow-slide" aria-hidden="true"><span class="arrow-out">${ARROW_SVG}</span><span class="arrow-in">${ARROW_SVG}</span></span>`;
   const vlink = (href, label, cls = "vlink") => `<a class="${cls}" href="${href}" target="_blank" rel="noopener">${label}${ARROW}</a>`;
@@ -187,7 +163,7 @@
   }
 
   /* ---------- the toolkit handed to story 2 ---------- */
-  window.CWC = { sketch, root, reduce, data, atlas, SUN, TOP, PUB, HIATUS_LINE, C, S, US, fmt, worst, POOR, MINW, TOPH, followers, place, icon, prep, setDraw, sun, scribble, ARROW, vlink, el, div, clamp, esc, countTween, fmtNum, splitWords, NS };
+  window.CWC = { sketch }; // handy in the console: CWC.sketch("title", flip) returns a drawing's pen path
 
   /* ====================== interactive maps ====================== */
   // Each map leads with the worst case (outlined), and answers hover or touch with that state's own figure and rank.
@@ -206,7 +182,7 @@
     const M = MAPS[name], key = M.key;
     const box = div("t-viz t-map");
     const W = 560, H = 340;
-    const svg = d3.select(box).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("role", "img").attr("aria-label", `Map of the United States. ${M.unit}, by state. Hover or tap a state.`);
+    const svg = d3.select(box).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("role", "group").attr("aria-label", `Map of the United States: ${M.unit}, by state. Press Tab to enter the map, then the arrow keys to move between states and Enter to open the data source.`);
     if (!GEO) { const fs = topojson.feature(atlas, atlas.objects.states).features.filter((f) => S[f.properties.name]); const pg = d3.geoPath(d3.geoAlbersUsa().fitExtent([[2, 2], [W - 2, H - 2]], { type: "FeatureCollection", features: fs })); GEO = { feats: fs, d: new Map(fs.map((f) => [f.properties.name, pg(f)])) }; }
     const feats = GEO.feats, path = (f) => GEO.d.get(f.properties.name);
     const vals = Object.values(S).map((s) => s[key]).filter((v) => v != null); const [lo, hi] = d3.extent(vals);
@@ -238,6 +214,23 @@
     paths.on("pointerenter", (e, d) => show(d.properties.name, false)).on("pointerdown", (e, d) => show(d.properties.name, false)).on("pointerleave", showDefault).on("click", (e) => { if (e.pointerType !== "touch") window.open(M.url, "_blank", "noopener"); });
     box.append(legend, readout);
     showDefault();
+
+    /* keyboard: the map is one Tab stop (it lands on the worst state); the arrow keys move to the neighbouring state in that direction;
+       Enter opens the source. Each state reads out its value and rank. */
+    const stateNodes = paths.nodes(); let centers = null; // measured on first use: the map is not on the page yet while it is being built, and an unattached SVG has no size
+    const labelOf = (n) => { const s = S[n]; if (!s || s[key] == null) return `${n}: no data for this measure`; const r = rankOf(n); return `${n}: ${M.fmt(s[key])} ${M.unit}. ${r === 1 ? (tiedWith(n) > 1 ? "Tied for the " : "The ") : ord(r) + " "}${M.low ? "lowest" : "highest"} of ${ranked.length}. Press Enter to open the data source.`; };
+    const startIdx = Math.max(0, stateNodes.findIndex((p) => p.__data__.properties.name === wn));
+    paths.attr("role", "button").attr("tabindex", (d, i) => (i === startIdx ? 0 : -1)).attr("aria-label", (d) => labelOf(d.properties.name))
+      .on("focus", (e, d) => show(d.properties.name, false))
+      .on("blur", (e) => { if (!e.relatedTarget || !svg.node().contains(e.relatedTarget)) showDefault(); })
+      .on("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); window.open(M.url, "_blank", "noopener"); return; }
+        const v = { ArrowRight: [1, 0], ArrowLeft: [-1, 0], ArrowDown: [0, 1], ArrowUp: [0, -1] }[e.key]; if (!v) return; e.preventDefault();
+        if (!centers) centers = stateNodes.map((p) => { const b = p.getBBox(); return [b.x + b.width / 2, b.y + b.height / 2]; });
+        const i = stateNodes.indexOf(e.currentTarget), c = centers[i]; let best = -1, bs = Infinity;
+        centers.forEach((q, j) => { if (j === i) return; const dx = q[0] - c[0], dy = q[1] - c[1], along = dx * v[0] + dy * v[1]; if (along <= 0) return; const perp = Math.abs(dx * v[1] - dy * v[0]); if (perp > along * 1.3) return; const score = Math.hypot(dx, dy) + perp * 0.6; if (score < bs) { bs = score; best = j; } });
+        if (best >= 0) { stateNodes[i].setAttribute("tabindex", "-1"); stateNodes[best].setAttribute("tabindex", "0"); stateNodes[best].focus(); }
+      });
     return { el: box, worstName: wn, worstVal: ws[key], enter() {
       paths.transition().duration(reduce ? 0 : 1400).delay((d, i) => (reduce ? 0 : i * 14)).attr("fill", (d) => { const v = S[d.properties.name][key]; return v == null ? C.GREY : col(v); });
     } };
@@ -284,7 +277,6 @@
           .fromTo(cueLine, { height: 36 }, { height: reach, onUpdate() { cueLine.style.setProperty("--keep", Math.min(1, this.progress() / 0.5) * 100 + "%"); } }, 0); // solid, like the thread, by the time it is half grown
       }
     }
-    let introTl = null;
 
     /* --- the body: the line and the moments --- */
     const body = div("t-body"); wrap.appendChild(body);
@@ -396,7 +388,7 @@
           const sk = sketch(moments[i].s.title, flip), px = sk.map(([x, y]) => [a.x + x * a.w / 100, a.y + y * a.h / 100]);
           const s0 = px[0], e0 = px[px.length - 1];
           const ay0 = Math.max(a.y - a.h * 1.25, cur[cur.length - 1][1] + 70), sx = small && !T.length ? w / 2 : cx; cur.push([sx, ay0]); addCurve(cur); // travel ends well above the picture
-          const A0 = Lacc, i0 = T.length - 1;
+          const i0 = T.length - 1;
           addCurve([[sx, ay0], [(sx + s0[0]) / 2, (ay0 + s0[1]) / 2 - 20], s0]);
           segs.push("L" + px.slice(1).map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L"));
           const cum = [Lacc]; for (let j = 1; j < px.length; j++) { Lacc += Math.hypot(px[j][0] - px[j - 1][0], px[j][1] - px[j - 1][1]); cum.push(Lacc); T.push([Lacc, px[j][0], px[j][1]]); }

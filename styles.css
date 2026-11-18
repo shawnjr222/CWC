@@ -383,7 +383,7 @@ html.lenis, html.lenis body { height: auto; }
 
 /* About close: white X, blue on hover, always top right */
 .about-close, .about-close:focus { position: absolute !important; top: 16px; right: 16px; margin: 0 !important; width: 40px; height: 40px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%; background: #fff; color: var(--ink); cursor: pointer; transition: background 0.2s, color 0.2s; }
-.about-close:hover { background: var(--blue); color: #fff; }
+.about-close:hover { background: #fff; color: var(--blue); } /* only the X changes: black to blue */
 .about-panel { padding-top: clamp(28px, 4vw, 48px); }
 
 /* Phones and tablets: anchor the title and map at the top. The gap above the pills follows the selected text, so only what sits below it moves. */

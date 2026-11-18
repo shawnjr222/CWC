@@ -15,12 +15,15 @@
   const el = (tag, attrs = {}, html) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (html) n.innerHTML = html; return n; };
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
+  const PUB = "https://medium.com/coping-with-capitalism";
+  /* Each voice links to its story when we have the exact address. Add `url` (and `site: "medium"`) to any entry to link it directly;
+     the ones without a `url` send readers to the publication on Medium. */
   const V = {
     gomez: { who: "James Gómez", say: "Why I'm Anti-Capitalist" },
     sen: { who: "Sanchari Sen", say: "101 Sins of Capitalism" },
-    hamilton: { who: "Kaylin Hamilton", say: "From Famine Walls to Welfare Conditions, Why Do We Always Punish The Poor?" },
+    hamilton: { who: "Kaylin Hamilton", say: "From Famine Walls to Welfare Conditions, Why Do We Always Punish The Poor?", url: "https://kaylinhamilton.substack.com/p/from-famine-walls-to-welfare-conditions", site: "substack" },
     hotta: { who: "Annika Hotta", say: "Independence Looks Different For Everyone, Especially If You're Disabled" },
-    ogamdi: { who: "Dr. Emmanuel Ogamdi", say: "Playing Russian Roulette With Mental Health Patients" },
+    ogamdi: { who: "Dr. Emmanuel Ogamdi", say: "Playing Russian Roulette With Mental Health Patients", url: "https://medium.com/coping-with-capitalism/playing-russian-roulette-with-mental-health-patients-4cefcde17cb2", site: "medium" },
     judge: { who: "Tiffany Judge", say: "Americans Are Burying Themselves Alive With Cheap Stuff" },
   };
   const MEAS = {
@@ -83,6 +86,8 @@
   }
   const ARROW = '<span class="arrow-slide" aria-hidden="true"><span class="arrow-out"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="arrow-in"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>';
 
+  const vlink = (v, cls = "vlink") => { const href = v.url || PUB; const label = v.url ? (v.site === "medium" ? "Read on Medium" : "Read the story") : "More on Medium"; return `<a class="${cls}" href="${href}" target="_blank" rel="noopener">${label}${ARROW}</a>`; };
+
   /* ---------- listen: text to speech ---------- */
   const tts = window.speechSynthesis; let listenOn = false, voices = [];
   const loadVoices = () => (voices = (tts ? tts.getVoices() : []).filter((v) => /^en/i.test(v.lang)));
@@ -103,7 +108,7 @@
   window.addEventListener("pagehide", stopSay);
 
   /* ---------- the toolkit handed to every story ---------- */
-  const CWC = window.CWC = { root, reduce, data, atlas, SUN, C, S, US, fmt, V, MEAS, worst, scaleFor, POOR, MINW, TOPH, ICONS, icon, prep, setDraw, sun, scribble, ARROW, el, clamp, say, stopSay, listenButton, NS };
+  const CWC = window.CWC = { root, reduce, data, atlas, SUN, C, S, US, fmt, V, MEAS, worst, scaleFor, POOR, MINW, TOPH, ICONS, icon, prep, setDraw, sun, scribble, ARROW, vlink, el, clamp, say, stopSay, listenButton, NS };
 
   /* ---------- Story 1: The Thread (where we started) ---------- */
   function mountThread(host) {
@@ -135,7 +140,7 @@
     const els = moments.map((m, k) => {
       const side = m.type === "end" ? "center" : k % 2 === 0 ? "left" : "right";
       const d = document.createElement("div"); d.className = `moment ${side}${m.type === "viz" ? " is-stat" : ""}`; const card = document.createElement("div"); card.className = "card-v";
-      if (m.type === "voice") card.innerHTML = `<svg class="sig" viewBox="0 0 100 100" aria-hidden="true"><path d="${scribble(k + 3)}"/></svg><p class="mono who">${m.who}</p><p class="say">${m.say}</p><p class="mono listen-now"><i></i>Listening</p>`;
+      if (m.type === "voice") card.innerHTML = `<svg class="sig" viewBox="0 0 100 100" aria-hidden="true"><path d="${scribble(k + 3)}"/></svg><p class="mono who">${m.who}</p><p class="say">${m.say}</p>${vlink(m)}<p class="mono listen-now"><i></i>Listening</p>`;
       else if (m.type === "viz") { const z = m.viz(); card.innerHTML = `<p class="mono who">${m.who}</p><p class="num">${m.big}</p><p class="note">${m.line}${m.note ? `<br><span style="color:var(--dim)">${m.note}</span>` : ""}</p>`; card.appendChild(z.el); card.insertAdjacentHTML("beforeend", `<p class="mono src">${m.src}</p><p class="mono listen-now"><i></i>Listening</p>`); enters[k] = z.enter; }
       else card.innerHTML = `<p class="say">${m.say}</p><p class="note"><a class="foot-link" style="font-family:inherit;text-transform:none;letter-spacing:inherit;border-bottom:1px solid currentColor" href="${m.link[1]}" target="_blank" rel="noopener">${m.link[0]}${ARROW}</a></p>`;
       d.appendChild(card); wrap.appendChild(d); return d;
@@ -185,7 +190,18 @@
   const bar = document.createElement("nav"); bar.className = "story-bar show"; bar.setAttribute("aria-label", "Scroll stories");
   bar.innerHTML = arrow(-1) + STORIES.map((c, n) => `<a href="?c=${n + 1}" data-i="${n}"><i>${n + 1}</i><span>${c.name}</span></a>`).join("") + arrow(1);
   document.body.appendChild(bar);
-  const go = (i) => build((i + STORIES.length) % STORIES.length, true);
+  let wiping = false;
+  function go(i) {
+    i = (i + STORIES.length) % STORIES.length; if (i === cur || wiping) return;
+    if (reduce) return build(i, true);
+    wiping = true;
+    const cv = document.createElement("div"); cv.className = "curtain"; document.body.appendChild(cv);
+    gsap.set(cv, { clipPath: "circle(0% at 50% 100%)" });
+    gsap.timeline({ onComplete: () => { cv.remove(); wiping = false; } })
+      .to(cv, { clipPath: "circle(150% at 50% 100%)", duration: 0.7, ease: "power3.inOut" })
+      .add(() => { build(i, false); const top = root.getBoundingClientRect().top + scrollY; window.lenis ? window.lenis.scrollTo(top, { immediate: true }) : window.scrollTo(0, top); ScrollTrigger.update(); })
+      .to(cv, { clipPath: "circle(0% at 50% 0%)", duration: 0.8, ease: "power3.inOut" }, "+=0.15");
+  }
   bar.addEventListener("click", (e) => {
     const n = e.target.closest(".sb-nav"); if (n) return go(cur + +n.dataset.d);
     const a = e.target.closest("a"); if (!a) return; e.preventDefault(); go(+a.dataset.i);

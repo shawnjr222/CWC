@@ -3,9 +3,17 @@
 (function () {
   const K = () => window.CWC;
   const div = (cls, html) => { const d = document.createElement("div"); if (cls) d.className = cls; if (html != null) d.innerHTML = html; return d; };
-  const pinTL = (stage, vh, extra = {}) => gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: stage, start: "top top", end: () => "+=" + innerHeight * vh, pin: true, scrub: 0.7, anticipatePin: 1, invalidateOnRefresh: true, ...extra } });
+  const pinTL = (stage, vh, extra = {}) => gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: stage, start: "top top", end: () => "+=" + innerHeight * vh, pin: true, scrub: 1.1, anticipatePin: 1, invalidateOnRefresh: true, ...extra } });
   const cap = (kicker, big, line, src) => div("c-cap", `<p class="mono c-kick">${kicker}</p>${big ? `<p class="c-big">${big}</p>` : ""}<p class="c-line">${line}</p>${src ? `<p class="mono c-src">${src}</p>` : ""}`);
   const prox = (fn, tl, at, dur, ease = "none") => { const o = { v: 0 }; tl.to(o, { v: 1, duration: dur, ease, onUpdate: () => fn(o.v) }, at); return o; };
+
+  /* a wavy line drawn in real pixels (no scaling), so dash lengths are exact. Returns its length. */
+  function wave(path, w, h, base, amp, periods, phase = 0.6) {
+    const n = Math.max(8, Math.round(periods * 8)), pts = [];
+    for (let i = 0; i <= n; i++) pts.push([(i / n) * w, base * h + amp * h * Math.sin((i / n) * periods * Math.PI * 2 + phase)]);
+    path.setAttribute("d", d3.line().curve(d3.curveBasis)(pts));
+    const L = path.getTotalLength(); path.style.strokeDasharray = L; return L;
+  }
 
   /* the headline facts every story draws on */
   function facts() {
@@ -24,11 +32,12 @@
   function story2(host) {
     const { icon, prep, setDraw, sun, C } = K(), F = facts();
     const stage = div("c-stage c2"); host.appendChild(stage);
-    const count = div("c2-count mono", "01 / 06"), art = div("c2-art"), caps = div("c2-caps");
-    const rule = K().el("svg", { class: "c2-rule", viewBox: "0 0 1200 24", preserveAspectRatio: "none", "aria-hidden": "true" });
-    const rp = K().el("path", { d: "M0 12 C150 -2 300 26 450 12 S750 -2 900 12 S1100 24 1200 12", fill: "none", stroke: C.BLUE, "stroke-width": 2, "vector-effect": "non-scaling-stroke", "stroke-linecap": "round" }); rule.appendChild(rp);
+    const count = div("c2-count mono", "01 / 07"), art = div("c2-art"), caps = div("c2-caps");
+    const rule = K().el("svg", { class: "c2-rule", "aria-hidden": "true" });
+    const rp = K().el("path", { fill: "none", stroke: C.BLUE, "stroke-width": 2, "stroke-linecap": "round" }); rule.appendChild(rp);
     stage.append(count, art, caps, rule);
     const steps = [
+      { ic: "people", k: "It starts here", big: "", line: "Start with a person.", src: "" },
       { ic: "cap", k: `Student debt · highest in ${F.student.name}`, big: F.student.val, line: F.student.m.line, src: F.student.m.src },
       { ic: "heart", k: `No health insurance · highest in ${F.uninsured.name}`, big: F.uninsured.val, line: F.uninsured.m.line, src: F.uninsured.m.src },
       { ic: "house", k: `Housing insecurity · highest in ${F.housing.name}`, big: F.housing.val, line: F.housing.m.line, src: F.housing.m.src },
@@ -40,25 +49,26 @@
     const last = cap("Coping With Capitalism", "", "Behind every number is a person.", ""); caps.appendChild(last);
     const sn = sun("min(46vh, 70vw)"); sn.svg.classList.add("c2-sun"); art.appendChild(sn.svg); sn.init();
     gsap.set([...items.map((x) => x.c), last], { opacity: 0, y: 18 });
-    rp.setAttribute("pathLength", 1); rp.style.strokeDasharray = 1; rp.style.strokeDashoffset = 1;
-    const tl = pinTL(stage, 9);
-    tl.to(rp, { strokeDashoffset: 0, duration: 7.6 }, 0);
+    let rL = 1; const build2 = () => { const w = rule.clientWidth || innerWidth, h = 24; rule.setAttribute("viewBox", `0 0 ${w} ${h}`); rL = wave(rp, w, h, 0.5, 0.3, Math.max(2, w / 360)); rp.style.strokeDashoffset = rL; };
+    build2();
+    const tl = pinTL(stage, 10.5, { onRefresh: build2 });
+    prox((v) => (rp.style.strokeDashoffset = rL * (1 - v)), tl, 0, 8.6);
     items.forEach((it, i) => {
       const t = i;
-      tl.call(() => (count.textContent = `${String(i + 1).padStart(2, "0")} / 06`), null, t)
+      tl.call(() => (count.textContent = `${String(i + 1).padStart(2, "0")} / 07`), null, t)
         .to(it.c, { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }, t + 0.05);
       prox((v) => setDraw(it.paths, it.lens, v), tl, t, 0.5);
-      tl.to(it.c, { opacity: 0, y: -16, duration: 0.15 }, t + 0.84);
-      prox((v) => it.paths.forEach((p, k) => (p.style.strokeDashoffset = -it.lens[k] * v)), tl, t + 0.8, 0.2);
+      tl.to(it.c, { opacity: 0, y: -16, duration: 0.2, ease: "power2.in" }, t + 0.8);
+      prox((v) => it.paths.forEach((p, k) => (p.style.strokeDashoffset = -it.lens[k] * v)), tl, t + 0.72, 0.28, "power1.in");
     });
-    tl.call(() => (count.textContent = "06 / 06"), null, 6).to(last, { opacity: 1, y: 0, duration: 0.3 }, 6.3);
-    prox((v) => sn.set(v), tl, 6, 1.3, "power1.inOut");
-    tl.to({}, { duration: 0.5 }, 7.3);
+    tl.call(() => (count.textContent = "07 / 07"), null, 7).to(last, { opacity: 1, y: 0, duration: 0.3 }, 7.3);
+    prox((v) => sn.set(v), tl, 7, 1.3, "power1.inOut");
+    tl.to({}, { duration: 0.6 }, 8.3);
   }
 
   /* ============ STORY 3: Horizontal journey. Walk one long line through six rooms. ============ */
   function story3(host) {
-    const { icon, prep, setDraw, sun, C, S, V, el, clamp } = K(), F = facts();
+    const { icon, prep, setDraw, sun, C, S, V, el, clamp, vlink } = K(), F = facts();
     const stage = div("c-stage c3"); host.appendChild(stage);
     const track = div("c3-track"); stage.appendChild(track);
     const rooms = [
@@ -71,26 +81,30 @@
     ];
     const N = rooms.length + 2; // intro + rooms + sun
     const panels = [];
-    const intro = div("c3-panel c3-intro", `<div class="c3-txt"><p class="mono c-kick">Walk through it</p><h3>Six rooms. One line.</h3><p class="c-line">Keep scrolling and the line will lead you through.</p></div>`); track.appendChild(intro);
+    const intro = div("c3-panel c3-intro", `<div class="c3-art"></div><div class="c3-txt"><p class="mono c-kick">It starts with a person</p><h3>Six rooms. One line.</h3><p class="c-line">Keep scrolling and the line will lead you through.</p></div>`); track.appendChild(intro);
+    const introIc = icon("people", 2); intro.querySelector(".c3-art").appendChild(introIc.svg); introIc.lens = prep(introIc.paths);
     rooms.forEach((r, i) => {
-      const p = div("c3-panel", `<span class="c3-mark" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span><div class="c3-art"></div><div class="c3-txt"><p class="mono c-kick">${r.k}</p><p class="c-big">${r.big}</p><p class="c-line">${r.line}</p><p class="c3-voice"><span class="mono">${r.v.who}</span>${r.v.say}</p></div>`);
+      const p = div("c3-panel", `<span class="c3-mark" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span><div class="c3-art"></div><div class="c3-txt"><p class="mono c-kick">${r.k}</p><p class="c-big">${r.big}</p><p class="c-line">${r.line}</p><p class="c3-voice"><span class="mono">${r.v.who}</span>${r.v.say}</p>${vlink(r.v)}</div>`);
       const ic = icon(r.ic, 2); p.querySelector(".c3-art").appendChild(ic.svg); ic.lens = prep(ic.paths); p.ic = ic; track.appendChild(p); panels.push(p);
     });
     const end = div("c3-panel c3-end", `<div class="c3-art"></div><div class="c3-txt"><p class="mono c-kick">Coping With Capitalism</p><p class="c-line">Behind every number is a person.</p></div>`); const sn = sun("min(52vh, 60vw)"); end.querySelector(".c3-art").appendChild(sn.svg); track.appendChild(end); sn.init();
     // the long line
-    const line = el("svg", { class: "c3-line", viewBox: `0 0 ${N * 100} 100`, preserveAspectRatio: "none", "aria-hidden": "true" });
-    const pts = []; for (let i = 0; i <= N * 6; i++) { const x = (i / (N * 6)) * N * 100; pts.push([x, innerWidth < 760 ? 88 + 7 * Math.sin((i / 6) * Math.PI * 2 + 0.6) : 50 + 20 * Math.sin((i / 6) * Math.PI * 2 + 0.6)]); }
-    const lp = el("path", { d: d3.line().curve(d3.curveBasis)(pts), fill: "none", stroke: C.BLUE, "stroke-width": 2, "vector-effect": "non-scaling-stroke", "stroke-linecap": "round" }); line.appendChild(lp); track.appendChild(line);
-    lp.setAttribute("pathLength", 1); lp.style.strokeDasharray = 1; lp.style.strokeDashoffset = 1;
-    const marks = [...track.querySelectorAll(".c3-mark")], txts = [...track.querySelectorAll(".c3-txt")];
+    const line = el("svg", { class: "c3-line", "aria-hidden": "true" });
+    const lp = el("path", { fill: "none", stroke: C.BLUE, "stroke-width": 2, "stroke-linecap": "round" }); line.appendChild(lp); track.appendChild(line);
+    let lL = 1, lastP = 0;
+    const build3 = () => { const w = track.scrollWidth, h = stage.clientHeight || innerHeight, small = innerWidth < 760; line.setAttribute("width", w); line.setAttribute("height", h); line.setAttribute("viewBox", `0 0 ${w} ${h}`); lL = wave(lp, w, h, small ? 0.88 : 0.5, small ? 0.07 : 0.2, N * 1.0); lp.style.strokeDashoffset = lL * (1 - clamp(lastP * 1.04)); };
+    build3(); ScrollTrigger.addEventListener("refreshInit", build3);
+    const marks = [...track.querySelectorAll(".c3-mark")];
+    gsap.to({ v: 0 }, { v: 1, duration: 1.6, delay: 0.3, ease: "power2.inOut", onUpdate: function () { setDraw(introIc.paths, introIc.lens, this.targets()[0].v); } });
     const dist = () => Math.max(1, track.scrollWidth - innerWidth);
     gsap.to(track, { x: () => -dist(), ease: "none", scrollTrigger: { trigger: stage, start: "top top", end: () => "+=" + dist() * 1.15, pin: true, scrub: 0.8, anticipatePin: 1, invalidateOnRefresh: true,
       onUpdate: (s) => {
         const p = s.progress, pos = p * (N - 1); // 0..N-1 panel index at screen center
-        lp.style.strokeDashoffset = 1 - clamp(p * 1.04);
+        lastP = p; lp.style.strokeDashoffset = lL * (1 - clamp(p * 1.04));
         panels.forEach((pn, i) => { const idx = i + 1; setDraw(pn.ic.paths, pn.ic.lens, clamp((pos - (idx - 0.75)) / 0.8)); marks[i].style.transform = `translateX(${(pos - idx) * -14}vw)`; });
         sn.set(clamp((pos - (N - 1 - 0.8)) / 0.8));
       } } });
+    return () => ScrollTrigger.removeEventListener("refreshInit", build3);
   }
 
   /* ============ STORY 4: Kinetic type. Circle wipes between full-screen colour panels, with words that rise into place. ============ */
@@ -130,7 +144,7 @@
 
   /* ============ STORY 5: Voices wall. Giant headlines slide across the page; the line ties them to the sun. ============ */
   function story5(host) {
-    const { V, sun, scribble, C, el, say, stopSay, listenButton, reduce } = K(), F = facts();
+    const { V, sun, scribble, C, el, say, stopSay, listenButton, reduce, vlink } = K(), F = facts();
     const wrap = div("c5"); host.appendChild(wrap);
     const keys = ["gomez", "sen", "hamilton", "hotta", "ogamdi", "judge"];
     const inter = { 1: { k: "The wage floor", b: F.wage.val, l: "an hour, since 2009." }, 3: { k: "Poverty", b: "40.8 million", l: "people. One in eight." }, 5: { k: "The gap", b: F.gap.val, l: "top 5% against the bottom fifth." } };
@@ -139,7 +153,7 @@
     const rows = [];
     keys.forEach((k, i) => {
       const v = V[k]; const text = `${v.say} — `.repeat(4);
-      const r = div(`c5-row${i % 2 ? " alt" : ""}`, `<div class="c5-who"><svg class="sig" viewBox="0 0 100 100" aria-hidden="true"><path d="${scribble(i + 11)}"/></svg><span class="mono">${v.who}</span></div><div class="c5-clip"><div class="c5-run" aria-label="${v.say}">${text}</div></div>`);
+      const r = div(`c5-row${i % 2 ? " alt" : ""}`, `<div class="c5-who"><svg class="sig" viewBox="0 0 100 100" aria-hidden="true"><path d="${scribble(i + 11)}"/></svg><span class="mono">${v.who}</span>${vlink(v, "vlink c5-link")}</div><div class="c5-clip"><div class="c5-run" aria-label="${v.say}">${text}</div></div>`);
       wrap.appendChild(r); const sg = r.querySelector(".sig path"); const L = sg.getTotalLength(); sg.style.strokeDasharray = L; sg.style.strokeDashoffset = L;
       rows.push({ r, run: r.querySelector(".c5-run"), sg, L, v, i });
       if (inter[i]) wrap.appendChild(div("c5-inter", `<p class="mono c-kick">${inter[i].k}</p><p class="c-big">${inter[i].b}</p><p class="c-line">${inter[i].l}</p>`));
@@ -149,6 +163,7 @@
       const dir = o.i % 2 ? 1 : -1;
       gsap.fromTo(o.run, { xPercent: dir > 0 ? -45 : 0 }, { xPercent: dir > 0 ? 0 : -45, ease: "none", scrollTrigger: { trigger: o.r, start: "top bottom", end: "bottom top", scrub: 0.6 } });
       ScrollTrigger.create({ trigger: o.r, start: "top 75%", once: true, onEnter: () => gsap.to(o.sg, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }) });
+      o.r.querySelector(".vlink").addEventListener("mouseenter", (e) => e.stopPropagation());
       o.r.addEventListener("mouseenter", () => say(`${o.v.say}. By ${o.v.who}.`, o.i, () => o.r.classList.add("speaking"), () => o.r.classList.remove("speaking")));
       o.r.addEventListener("mouseleave", () => { stopSay(); o.r.classList.remove("speaking"); });
     });
@@ -160,46 +175,36 @@
     return () => { ro.disconnect(); vp.__tw && vp.__tw.kill(); };
   }
 
-  /* ============ STORY 6: Zoom descent. From a country to one household to one person, who becomes the sun. ============ */
+  /* ============ STORY 6: Start with one. Pull back to a hundred households, then fall into a single person, who becomes the sun. ============ */
   function story6(host) {
-    const { sun, C, S, atlas, worst, MEAS, el } = K(), F = facts();
+    const { sun, C } = K();
     const stage = div("c-stage c6"); host.appendChild(stage);
-    const mapBox = div("c6-map"), dotsBox = div("c6-dots"), caps = div("c6-caps"); stage.append(mapBox, dotsBox, caps);
-    // map: zoom toward the state with the highest food insecurity
-    const W = 960, H = 580; const [target] = worst("food");
-    const svg = d3.select(mapBox).append("svg").attr("viewBox", `0 0 ${W} ${H}`);
-    const feats = topojson.feature(atlas, atlas.objects.states).features.filter((f) => S[f.properties.name]);
-    const proj = d3.geoAlbersUsa().fitExtent([[10, 10], [W - 10, H - 10]], { type: "FeatureCollection", features: feats }), path = d3.geoPath(proj);
-    const col = K().scaleFor("food");
-    svg.append("g").selectAll("path").data(feats).join("path").attr("d", path).attr("fill", (d) => { const v = S[d.properties.name].food; return v == null ? C.GREY : col(v); }).attr("stroke", "#f1f0ec").attr("stroke-width", 0.8);
-    const tf = feats.find((f) => f.properties.name === target), [cx, cy] = path.centroid(tf);
-    gsap.set(mapBox, { xPercent: -50, yPercent: -50 }); mapBox.style.transformOrigin = `${(cx / W) * 100}% ${(cy / H) * 100}%`;
-    // 100 households, the last one is the person we follow
+    const dotsBox = div("c6-dots"), caps = div("c6-caps"); stage.append(dotsBox, caps);
     dotsBox.innerHTML = Array.from({ length: 100 }, (_, i) => `<i${i === 99 ? ' class="me"' : ""}></i>`).join(""); const dots = [...dotsBox.children], me = dots[99];
     const sn = sun("min(42vh, 60vw)"); sn.svg.classList.add("c6-sun"); stage.appendChild(sn.svg); sn.init();
-    const lines = [cap("One country", "", `51 places. In ${target}, ${F.food.val} of adults faced food insecurity.`, F.food.m.src), cap("Inside one place", "", "100 households.", ""), cap("One of them", "", "Not a number. A person.", ""), cap("Coping With Capitalism", "", "Behind every number is a person.", "")];
-    lines.forEach((c) => { caps.appendChild(c); gsap.set(c, { opacity: 0, y: 18 }); });
-    gsap.set(dotsBox, { opacity: 0, scale: 0.1 }); gsap.set(sn.svg, { opacity: 0, scale: 0.2 });
-    // zoom about the last dot: set transform-origin after layout
-    const setOrigin = () => { const b = dotsBox.getBoundingClientRect(), m = me.getBoundingClientRect(); const z = gsap.getProperty(dotsBox, "scale") || 1; dotsBox.style.transformOrigin = `${((m.left + m.width / 2 - b.left) / b.width) * 100}% ${((m.top + m.height / 2 - b.top) / b.height) * 100}%`; };
-    requestAnimationFrame(setOrigin);
-    const tl = pinTL(stage, 10, { onRefresh: setOrigin });
-    tl.to(lines[0], { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, 0.1)
-      .to(mapBox, { scale: 9, duration: 2.2, ease: "power2.in" }, 0.3)
-      .to(lines[0], { opacity: 0, y: -14, duration: 0.25 }, 1.5)
-      .to(mapBox, { opacity: 0, duration: 0.6 }, 2.0)
-      .to(dotsBox, { opacity: 1, scale: 1, duration: 1.4, ease: "power2.out" }, 1.6)
-      .to(lines[1], { opacity: 1, y: 0, duration: 0.3 }, 2.3)
-      .to(lines[1], { opacity: 0, y: -14, duration: 0.25 }, 3.4)
-      .to(lines[2], { opacity: 1, y: 0, duration: 0.3 }, 3.6)
-      .to(dots.slice(0, 99), { opacity: 0, duration: 0.8, stagger: 0.004 }, 3.4)
-      .to(dotsBox, { scale: 16, duration: 2.0, ease: "power2.in" }, 3.5)
-      .to(lines[2], { opacity: 0, y: -14, duration: 0.25 }, 5.1)
-      .to(me, { opacity: 0, duration: 0.5 }, 5.2)
-      .to(sn.svg, { opacity: 1, scale: 1, duration: 1.0, ease: "power2.out" }, 5.2)
-      .to(lines[3], { opacity: 1, y: 0, duration: 0.4 }, 6.0);
-    prox((v) => sn.set(v), tl, 5.4, 1.6, "power1.inOut");
-    tl.to({}, { duration: 0.6 }, 7.0);
+    const lines = [cap("It starts with one", "", "One household.", ""), cap("Now a hundred", "", "100 households. Some hold nearly everything. Some hold almost nothing.", "Federal Reserve Distributive Financial Accounts, 2024, rounded."), cap("One of them", "", "Not a number. A person.", ""), cap("Coping With Capitalism", "", "Behind every number is a person.", "")];
+    lines.forEach((c2) => { caps.appendChild(c2); gsap.set(c2, { opacity: 0, y: 18 }); });
+    gsap.set(sn.svg, { opacity: 0, scale: 0.2 });
+    // keep the followed dot at the centre while we zoom: zoom about it, nudged so it sits in the middle of the stage
+    const st = { tx: 0, ty: 0 };
+    const place = () => { const bw = dotsBox.offsetWidth, bh = dotsBox.offsetHeight, mx = me.offsetLeft + me.offsetWidth / 2, my = me.offsetTop + me.offsetHeight / 2; dotsBox.style.transformOrigin = `${(mx / bw) * 100}% ${(my / bh) * 100}%`; st.tx = bw / 2 - mx; st.ty = bh / 2 - my; };
+    place(); gsap.set(dotsBox, { x: () => st.tx, y: () => st.ty, scale: 11 }); gsap.set(dots.slice(0, 99), { opacity: 0 });
+    const tl = pinTL(stage, 10.5, { onRefresh: () => { place(); } });
+    tl.to(lines[0], { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 0.15)
+      .to(lines[0], { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" }, 1.7)
+      .to(dotsBox, { x: 0, y: 0, scale: 1, duration: 2.8, ease: "power2.inOut" }, 1.0)
+      .to(dots.slice(0, 99), { opacity: 1, duration: 1.2, stagger: 0.006, ease: "power1.out" }, 1.4)
+      .to(lines[1], { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 3.2)
+      .to(lines[1], { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" }, 4.7)
+      .to(dots.slice(0, 99), { opacity: 0, duration: 0.9, stagger: 0.004, ease: "power1.in" }, 4.5)
+      .to(dotsBox, { x: () => st.tx, y: () => st.ty, scale: 16, duration: 2.2, ease: "power2.inOut" }, 4.7)
+      .to(lines[2], { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 5.1)
+      .to(lines[2], { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" }, 6.5)
+      .to(me, { opacity: 0, duration: 0.7, ease: "power1.inOut" }, 6.5)
+      .to(sn.svg, { opacity: 1, scale: 1, duration: 1.1, ease: "power2.out" }, 6.5)
+      .to(lines[3], { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 7.6);
+    prox((v) => sn.set(v), tl, 6.6, 1.8, "power1.inOut");
+    tl.to({}, { duration: 0.7 }, 8.4);
   }
 
   window.CWC_STORIES = [

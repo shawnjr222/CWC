@@ -302,7 +302,7 @@
 
   /* ====================== Story 1: The thread ====================== */
   function mountThread(host) {
-    const wrap = div("thread"); host.appendChild(wrap);
+    let wrap = host.querySelector(".thread"); if (!wrap) { wrap = div("thread"); host.appendChild(wrap); } // the page already ships this wrapper around the intro, so the intro is never moved (moving it would replay its entrance animation)
     const T = TOP ? TOP.top : [], MORE = TOP && TOP.more ? TOP.more : [];
     const pick = (list, i) => list[i] || { title: "Stories that offer a path to care", author: "The writers", url: PUB };
 
@@ -332,7 +332,7 @@
 
     /* --- opening: it animates in on load, then the second sentence lights as you scroll --- */
     // the headline is already on the page (and has already played); adopt it so the layout is the same and nothing flashes
-    const intro = root.querySelector(".t-intro"); wrap.insertBefore(intro, wrap.firstChild);
+    const intro = root.querySelector(".t-intro"); if (intro.parentNode !== wrap) wrap.insertBefore(intro, wrap.firstChild);
     { // the scroll cue's line grows down with the scroll until it meets the start of the thread, so the two are one line
       const cueLine = intro.querySelector(".t-cue i"), pin = intro.querySelector(".t-sticky");
       if (cueLine && !reduce) {

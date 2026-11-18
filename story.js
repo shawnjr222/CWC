@@ -193,14 +193,14 @@
     const TAGS = { poverty: "People living below the poverty line", food: "Food insecurity", housing: "Housing insecurity", disability: "Adults living with a disability", mental: "Frequent mental distress", minwage: "The $7.25 minimum wage", ratio: "Income inequality", student: "Student loan debt" };
     const moments = [], issues = [];
     pairs.forEach((pr) => {
-      moments.push({ type: "voice", s: pr.s });
       const z = interactiveMap(pr.map);
       const c = pr.num(pr.nat != null ? pr.nat : z.worstVal), textNum = fmtNum(c.to, c); // the headline is the national figure; the map and readout still lead with the worst state
       const nStates = pr.minwage ? Object.values(S).filter((s) => s.minwage === z.worstVal).length : 0;
       const html = pr.lead(place(z.worstName), `<em data-count data-final="${textNum}">${textNum}</em>`, nStates);
       const val = MAPS[pr.map].fmt(z.worstVal), nm = z.worstName;
       issues.push({ tag: TAGS[pr.map], stat: pr.minwage ? `${nStates} states are stuck at ${val} an hour` : pr.map === "ratio" ? `${nm} has the widest gap, ${val}` : pr.map === "student" ? `${nm} has the highest average balance, ${val}` : `${nm} is highest, at ${val}` });
-      moments.push({ type: "fact", html, count: c, viz: z, src: MAPS[pr.map].src, speak: null });
+      moments.push({ type: "fact", html, count: c, viz: z, src: MAPS[pr.map].src, speak: null }); // the statistic first,
+      moments.push({ type: "voice", s: pr.s }); // then the Medium story that goes with it
     });
 
     /* --- opening: it animates in on load, then the second sentence lights as you scroll --- */

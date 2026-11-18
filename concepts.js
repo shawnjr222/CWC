@@ -8,7 +8,7 @@
     const tot = TOP ? TOP.totals : { stories: 467, writers: 123 }; const fol = window.CWC.followers;
 
     const P = [
-      { kind: "say", bg: C.BONE, fg: C.INK, ac: C.BLUE, text: "Behind every number is a person." },
+      { kind: "say", bg: C.BONE, fg: C.INK, ac: C.BLUE, text: "Behind every statistic is a person." },
       { kind: "stat", bg: C.INK, fg: "#fff", ac: "#fff", ic: "coin", num: { to: 7.25, dec: 2, pre: "$" }, line: "an hour. The federal minimum wage has not changed since 2009." },
       { kind: "stat", bg: C.BLUE, fg: "#fff", ac: "#fff", ic: "people", num: { to: 40.8, dec: 1, suf: " million" }, line: "people live below the poverty line. One in eight." },
       { kind: "stat", bg: C.BONE, fg: C.INK, ac: C.BLUE, ic: "clock", num: { to: US.top5avg / US.p20, dec: 1, suf: "×" }, line: `The average top-5% household earns ${fmt.money(US.top5avg)} a year. The bottom fifth, ${fmt.money(US.p20)} or less.` },

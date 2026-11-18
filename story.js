@@ -6,7 +6,7 @@
   const root = document.getElementById("story");
   if (!root || !window.gsap || !window.ScrollTrigger || !window.d3 || !window.topojson) return;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const [data, atlas, SUN, TOP] = await Promise.all([d3.json("assets/data/states.json?d=4"), d3.json("assets/data/states-10m.json"), d3.json("assets/data/sun.json"), d3.json("assets/data/medium-top10.json").catch(() => null)]);
+  const [data, atlas, SUN, TOP, STATS] = await Promise.all([d3.json("assets/data/states.json?d=4"), d3.json("assets/data/states-10m.json"), d3.json("assets/data/sun.json"), d3.json("assets/data/medium-top10.json").catch(() => null), fetch("assets/data/publication-stats.json", { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)).catch(() => null)]);
 
   /* ---------- shared ---------- */
   const C = { BLUE: "#1250c4", MID: "#6f8fd6", LIGHT: "#c3d0ee", PALE: "#e3e6f1", INK: "#111", GREY: "#d9d7d1", BONE: "#f1f0ec", DIM: "#6a6965" };
@@ -23,7 +23,9 @@
   const ord = (n) => { const s = ["th", "st", "nd", "rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); };
   const worst = (k, low) => Object.entries(S).filter(([, s]) => s[k] != null).sort((a, b) => (low ? a[1][k] - b[1][k] : b[1][k] - a[1][k]))[0];
   const POOR = 40763043, MINW = 7.25, TOPH = US.top5avg / 2080;
-  const followers = TOP && TOP.totals.followers ? TOP.totals.followers : 2.3;
+  // the three numbers at the bottom are read from assets/data/publication-stats.json every time the site loads (falling back to the top-10 file)
+  const pub = { stories: (STATS && STATS.stories) || (TOP && TOP.totals.stories) || 467, writers: (STATS && STATS.writers) || (TOP && TOP.totals.writers) || 123 };
+  const followers = STATS && STATS.followers ? STATS.followers / 1000 : (TOP && TOP.totals.followers) || 2.3; // in thousands
 
   /* ---------- the line illustrations (single blue strokes, drawn on scroll) ---------- */
   const ICONS = {
@@ -122,14 +124,14 @@
   /* ====================== interactive maps ====================== */
   // Each map leads with the worst case (outlined), and answers hover or touch with that state's own figure and rank.
   const MAPS = {
-    mental: { key: "mental", unit: "of adults report frequent mental distress", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023: adults with 14 or more poor mental health days a month." },
-    food: { key: "food", unit: "of adults faced food insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023. Gray states have no data." },
-    housing: { key: "housing", unit: "of adults faced housing insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023. Gray states have no data." },
-    poverty: { key: "poverty", unit: "of people live below the poverty line", fmt: (v) => v + "%", src: "U.S. Census Bureau, American Community Survey 2025 (1-year)." },
-    disability: { key: "disability", unit: "of adults report a disability", fmt: (v) => v.toFixed(1) + "%", src: "CDC PLACES (BRFSS) 2023: adults reporting a hearing, vision, cognitive, mobility, self-care or independent-living disability. Gray states have no data." },
-    ratio: { key: "ratio", unit: "times more income for the top fifth of households than the bottom fifth", fmt: (v) => v.toFixed(1) + "×", src: "80th ÷ 20th percentile household income. U.S. Census Bureau, ACS 2025 (1-year). Income, not wealth." },
-    minwage: { key: "minwage", low: true, unit: "minimum wage an hour", fmt: (v) => "$" + v.toFixed(2), src: "Higher of state or federal minimum wage, as of November 2026 (U.S. Department of Labor). Darker means lower." },
-    student: { key: "student", unit: "average federal student loan per borrower", fmt: (v) => fmt.money(v), src: "Federal Student Aid data, about 2023: state averages as charted by Axios; U.S. average from Federal Student Aid, end of 2023." },
+    mental: { key: "mental", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults report frequent mental distress", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023: adults with 14 or more poor mental health days a month." },
+    food: { key: "food", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults faced food insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023. Gray states have no data." },
+    housing: { key: "housing", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults faced housing insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023. Gray states have no data." },
+    poverty: { key: "poverty", url: "https://data.census.gov/table/ACSST1Y2025.S1701", unit: "of people live below the poverty line", fmt: (v) => v + "%", src: "U.S. Census Bureau, American Community Survey 2025 (1-year)." },
+    disability: { key: "disability", url: "https://data.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb", unit: "of adults report a disability", fmt: (v) => v.toFixed(1) + "%", src: "CDC PLACES (BRFSS) 2023: adults reporting a hearing, vision, cognitive, mobility, self-care or independent-living disability. Gray states have no data." },
+    ratio: { key: "ratio", url: "https://data.census.gov/table/ACSDT1Y2025.B19080", unit: "times more income for the top fifth of households than the bottom fifth", fmt: (v) => v.toFixed(1) + "×", src: "80th ÷ 20th percentile household income. U.S. Census Bureau, ACS 2025 (1-year). Income, not wealth." },
+    minwage: { key: "minwage", url: "https://www.dol.gov/agencies/whd/minimum-wage/state", low: true, unit: "minimum wage an hour", fmt: (v) => "$" + v.toFixed(2), src: "Higher of state or federal minimum wage, as of November 2026 (U.S. Department of Labor). Darker means lower." },
+    student: { key: "student", url: "https://studentaid.gov/data-center/student/portfolio", unit: "average federal student loan per borrower", fmt: (v) => fmt.money(v), src: "Federal Student Aid data, about 2023: state averages as charted by Axios; U.S. average from Federal Student Aid, end of 2023." },
   };
   let GEO = null;
   function interactiveMap(name) {
@@ -145,7 +147,7 @@
     const rankOf = (n) => { const v = S[n][key]; return 1 + ranked.filter(([, s2]) => (M.low ? s2[key] < v : s2[key] > v)).length; }; // ties share a rank
     const tiedWith = (n) => ranked.filter(([, s2]) => s2[key] === S[n][key]).length;
     const [wn, ws] = ranked[0];
-    const paths = svg.append("g").selectAll("path").data(feats).join("path").attr("d", path).attr("fill", C.GREY).attr("stroke", "#f1f0ec").attr("stroke-width", 0.8).style("cursor", "crosshair");
+    const paths = svg.append("g").selectAll("path").data(feats).join("path").attr("d", path).attr("fill", C.GREY).attr("stroke", "#f1f0ec").attr("stroke-width", 0.8).style("cursor", "pointer");
     const hl = svg.append("g").attr("pointer-events", "none");
     const readout = div("t-read"); readout.setAttribute("aria-live", "polite");
     const legend = div("t-legend", `<span>${M.low ? "Higher" : "Lower"}</span><i style="background:linear-gradient(90deg,${C.PALE},${C.BLUE})"></i><span>${M.low ? "Lower" : "Higher"}</span><span class="t-nodata"><b></b>No data</span>`);
@@ -165,7 +167,7 @@
       if (ties > 1) { hl.selectAll("*").remove(); ranked.slice(0, ties).forEach(([nm]) => { const dd = paths.filter((d) => d.properties.name === nm).node().getAttribute("d"); hl.append("path").attr("d", dd).attr("fill", "none").attr("stroke", C.BLUE).attr("stroke-width", 1.8).attr("stroke-linejoin", "round"); }); readout.innerHTML = `<b>${ties} states</b><strong>${M.fmt(ws[key])}</strong><span>${M.unit}</span><small>Tied for the lowest. Hover a state.</small>`; }
       else show(wn, true);
     }
-    paths.on("pointerenter", (e, d) => show(d.properties.name, false)).on("pointerdown", (e, d) => show(d.properties.name, false)).on("pointerleave", showDefault);
+    paths.on("pointerenter", (e, d) => show(d.properties.name, false)).on("pointerdown", (e, d) => show(d.properties.name, false)).on("pointerleave", showDefault).on("click", (e) => { if (e.pointerType !== "touch") window.open(M.url, "_blank", "noopener"); });
     box.append(legend, readout);
     showDefault();
     return { el: box, worstName: wn, worstVal: ws[key], enter() {
@@ -199,7 +201,7 @@
       const html = pr.lead(place(z.worstName), `<em data-count data-final="${textNum}">${textNum}</em>`, nStates);
       const val = MAPS[pr.map].fmt(z.worstVal), nm = z.worstName;
       issues.push({ tag: TAGS[pr.map], stat: pr.minwage ? `${nStates} states are stuck at ${val} an hour` : pr.map === "ratio" ? `${nm} has the widest gap, ${val}` : pr.map === "student" ? `${nm} has the highest average balance, ${val}` : `${nm} is highest, at ${val}` });
-      moments.push({ type: "fact", html, count: c, viz: z, src: MAPS[pr.map].src, speak: null }); // the statistic first,
+      moments.push({ type: "fact", html, count: c, viz: z, src: MAPS[pr.map].src, url: MAPS[pr.map].url, speak: null }); // the statistic first,
       moments.push({ type: "voice", s: pr.s }); // then the Medium story that goes with it
     });
 
@@ -229,14 +231,14 @@
       if (m.type === "voice") {
         const s = m.s; d.appendChild(div("t-art")); copy.innerHTML = `<h3 class="t-title">${esc(s.title)}</h3><p class="t-by">by ${esc(s.author)}</p><p class="t-meta">${vlink(s.url, "Read on Medium")}</p>`;
       } else {
-        copy.innerHTML = `<p class="t-say">${m.html}</p>`; const media = div("t-media"); media.appendChild(m.viz.el); copy.appendChild(media); copy.insertAdjacentHTML("beforeend", `<p class="t-src">${m.src}</p>`); enters[k] = m.viz.enter;
+        copy.innerHTML = `<p class="t-say">${m.html}</p>`; const media = div("t-media"); media.appendChild(m.viz.el); copy.appendChild(media); copy.insertAdjacentHTML("beforeend", `<p class="t-src"><a href="${m.url}" target="_blank" rel="noopener">${m.src}${ARROW}</a></p>`); enters[k] = m.viz.enter;
       }
       d.appendChild(copy); body.appendChild(d); nodes.push(d);
     });
 
     /* --- the end: the line runs into the sun, outlines it, then it fills --- */
     const end = div("t-end"); const sn = sun("min(40vw, 236px)"); sn.svg.style.transformOrigin = `${(sn.start.x / SUN.w) * 100}% ${(sn.start.y / SUN.h) * 100}%`; const sunWrap = div("t-sunwrap"); sunWrap.appendChild(sn.svg); end.appendChild(sunWrap);
-    end.insertAdjacentHTML("beforeend", `<p class="t-close"><span class="t-l1"><em data-n="${TOP ? TOP.totals.stories : 467}">${fmt.num(TOP ? TOP.totals.stories : 467)}</em> stories. <em data-n="${TOP ? TOP.totals.writers : 123}">${fmt.num(TOP ? TOP.totals.writers : 123)}</em> writers.</span> <span class="t-l2"><em data-n="${followers}" data-dec="1" data-suf="K">${followers.toFixed(1)}K</em> followers.</span></p><p class="t-close-sub">${HIATUS_LINE}</p>${vlink(PUB, "Read the publication", "vlink t-cta")}`);
+    end.insertAdjacentHTML("beforeend", `<p class="t-close"><span class="t-l1"><em data-n="${pub.stories}">${fmt.num(pub.stories)}</em> stories. <em data-n="${pub.writers}">${fmt.num(pub.writers)}</em> writers.</span> <span class="t-l2"><em data-n="${followers}" data-dec="1" data-suf="K">${followers.toFixed(1)}K</em> followers.</span></p><p class="t-close-sub">${HIATUS_LINE}</p>${vlink(PUB, "Read the publication", "vlink t-cta")}`);
     body.appendChild(end); sn.init();
     const closeNums = [...end.querySelectorAll("em[data-n]")];
 

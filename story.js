@@ -6,7 +6,7 @@
   const root = document.getElementById("story");
   if (!root || !window.gsap || !window.ScrollTrigger || !window.d3 || !window.topojson) return;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const [data, atlas, SUN, TOP] = await Promise.all([d3.json("assets/data/states.json"), d3.json("assets/data/states-10m.json"), d3.json("assets/data/sun.json"), d3.json("assets/data/medium-top10.json").catch(() => null)]);
+  const [data, atlas, SUN, TOP] = await Promise.all([d3.json("assets/data/states.json?d=3"), d3.json("assets/data/states-10m.json"), d3.json("assets/data/sun.json"), d3.json("assets/data/medium-top10.json").catch(() => null)]);
 
   /* ---------- shared ---------- */
   const C = { BLUE: "#1250c4", MID: "#6f8fd6", LIGHT: "#c3d0ee", PALE: "#e3e6f1", INK: "#111", GREY: "#d9d7d1", BONE: "#f1f0ec", DIM: "#6a6965" };
@@ -126,10 +126,10 @@
     food: { key: "food", unit: "of adults faced food insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023. Gray states have no data." },
     housing: { key: "housing", unit: "of adults faced housing insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023. Gray states have no data." },
     poverty: { key: "poverty", unit: "of people live below the poverty line", fmt: (v) => v + "%", src: "U.S. Census Bureau, American Community Survey 2023." },
-    uninsured: { key: "uninsured", unit: "of adults 18 to 64 have no health insurance", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023, adults 18 to 64." },
+    disability: { key: "disability", unit: "of adults report a disability", fmt: (v) => v.toFixed(1) + "%", src: "CDC PLACES (BRFSS) 2023: adults reporting a hearing, vision, cognitive, mobility, self-care or independent-living disability. Gray states have no data." },
     ratio: { key: "ratio", unit: "times more income for the top fifth of households than the bottom fifth", fmt: (v) => v.toFixed(1) + "×", src: "80th ÷ 20th percentile household income. U.S. Census Bureau, ACS 2023. Income, not wealth." },
     minwage: { key: "minwage", low: true, unit: "minimum wage an hour", fmt: (v) => "$" + v.toFixed(2), src: "Higher of state or federal minimum wage, 2025. Darker means lower." },
-    student: { key: "student", unit: "average federal student loan per borrower", fmt: (v) => fmt.money(v), src: "Federal Student Aid data, about 2023, as charted by Axios." },
+    student: { key: "student", unit: "average federal student loan per borrower", fmt: (v) => fmt.money(v), src: "Federal Student Aid data, about 2023: state averages as charted by Axios; U.S. average from Federal Student Aid, end of 2023." },
   };
   let GEO = null;
   function interactiveMap(name) {
@@ -181,21 +181,21 @@
 
     /* --- the moments: a writer, then the map that goes with the story --- */
     const pairs = [ // most pressing first: poverty, then the essentials, then mental health, then wages and inequality, then debt
-      { s: pick(T, 0), map: "poverty", lead: (p, n) => `In ${p}, ${n} of people live below the poverty line. Across the country, it is one in eight.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
-      { s: pick(T, 3), map: "food", lead: (p, n) => `In ${p}, ${n} of adults faced food insecurity in the past year.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
-      { s: pick(T, 5), map: "housing", lead: (p, n) => `In ${p}, ${n} of adults faced housing insecurity in the past year.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
-      { s: pick(T, 4), map: "uninsured", lead: (p, n) => `In ${p}, ${n} of working-age adults have no health insurance.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
-      { s: pick(T, 1), map: "mental", lead: (p, n) => `In ${p}, ${n} of adults report frequent mental distress.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
+      { s: pick(T, 0), map: "poverty", nat: US.poverty, lead: (p, n) => `${n} of people in the U.S. live below the poverty line. That is one in eight.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
+      { s: pick(T, 3), map: "food", nat: US.food, lead: (p, n) => `${n} of adults in the U.S. faced food insecurity in the past year.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
+      { s: pick(T, 5), map: "housing", nat: US.housing, lead: (p, n) => `${n} of adults in the U.S. faced housing insecurity in the past year.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
+      { s: pick(T, 4), map: "disability", nat: US.disability, lead: (p, n) => `${n} of adults in the U.S. report a disability.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
+      { s: pick(T, 1), map: "mental", nat: US.mental, lead: (p, n) => `${n} of adults in the U.S. report frequent mental distress.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
       { s: pick(T, 8), map: "minwage", lead: (p, n, extra) => `In ${extra} states, the minimum wage is still ${n} an hour. It has not changed since 2009.`, num: (v) => ({ to: v, dec: 2, pre: "$" }), minwage: true },
-      { s: pick(T, 2), map: "ratio", lead: (p, n) => `In ${p}, the top fifth of households earn ${n} what the bottom fifth does.`, num: (v) => ({ to: v, dec: 1, suf: "×" }) },
-      { s: pick(MORE, 0), map: "student", lead: (p, n) => `In ${p}, borrowers owe an average of ${n} in federal student loans.`, num: (v) => ({ to: v, pre: "$" }) },
+      { s: pick(T, 2), map: "ratio", nat: US.ratio, lead: (p, n) => `In the U.S., the top fifth of households earn ${n} what the bottom fifth does.`, num: (v) => ({ to: v, dec: 1, suf: "×" }) },
+      { s: pick(MORE, 0), map: "student", nat: US.student, lead: (p, n) => `In the U.S., federal student loan borrowers owe an average of ${n}.`, num: (v) => ({ to: v, pre: "$" }) },
     ];
-    const TAGS = { poverty: "People living below the poverty line", food: "Food insecurity", housing: "Housing insecurity", uninsured: "No health insurance", mental: "Frequent mental distress", minwage: "The $7.25 minimum wage", ratio: "Income inequality", student: "Student loan debt" };
+    const TAGS = { poverty: "People living below the poverty line", food: "Food insecurity", housing: "Housing insecurity", disability: "Adults living with a disability", mental: "Frequent mental distress", minwage: "The $7.25 minimum wage", ratio: "Income inequality", student: "Student loan debt" };
     const moments = [], issues = [];
     pairs.forEach((pr) => {
       moments.push({ type: "voice", s: pr.s });
       const z = interactiveMap(pr.map);
-      const c = pr.num(z.worstVal), textNum = fmtNum(c.to, c);
+      const c = pr.num(pr.nat != null ? pr.nat : z.worstVal), textNum = fmtNum(c.to, c); // the headline is the national figure; the map and readout still lead with the worst state
       const nStates = pr.minwage ? Object.values(S).filter((s) => s.minwage === z.worstVal).length : 0;
       const html = pr.lead(place(z.worstName), `<em data-count data-final="${textNum}">${textNum}</em>`, nStates);
       const val = MAPS[pr.map].fmt(z.worstVal), nm = z.worstName;

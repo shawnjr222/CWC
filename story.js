@@ -6,7 +6,7 @@
   const root = document.getElementById("story");
   if (!root || !window.gsap || !window.ScrollTrigger || !window.d3 || !window.topojson) return;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const [data, atlas, SUN, TOP] = await Promise.all([d3.json("assets/data/states.json?d=3"), d3.json("assets/data/states-10m.json"), d3.json("assets/data/sun.json"), d3.json("assets/data/medium-top10.json").catch(() => null)]);
+  const [data, atlas, SUN, TOP] = await Promise.all([d3.json("assets/data/states.json?d=4"), d3.json("assets/data/states-10m.json"), d3.json("assets/data/sun.json"), d3.json("assets/data/medium-top10.json").catch(() => null)]);
 
   /* ---------- shared ---------- */
   const C = { BLUE: "#1250c4", MID: "#6f8fd6", LIGHT: "#c3d0ee", PALE: "#e3e6f1", INK: "#111", GREY: "#d9d7d1", BONE: "#f1f0ec", DIM: "#6a6965" };
@@ -125,10 +125,10 @@
     mental: { key: "mental", unit: "of adults report frequent mental distress", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023: adults with 14 or more poor mental health days a month." },
     food: { key: "food", unit: "of adults faced food insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023. Gray states have no data." },
     housing: { key: "housing", unit: "of adults faced housing insecurity in the past year", fmt: (v) => v + "%", src: "CDC PLACES (BRFSS) 2023. Gray states have no data." },
-    poverty: { key: "poverty", unit: "of people live below the poverty line", fmt: (v) => v + "%", src: "U.S. Census Bureau, American Community Survey 2023." },
+    poverty: { key: "poverty", unit: "of people live below the poverty line", fmt: (v) => v + "%", src: "U.S. Census Bureau, American Community Survey 2025 (1-year)." },
     disability: { key: "disability", unit: "of adults report a disability", fmt: (v) => v.toFixed(1) + "%", src: "CDC PLACES (BRFSS) 2023: adults reporting a hearing, vision, cognitive, mobility, self-care or independent-living disability. Gray states have no data." },
-    ratio: { key: "ratio", unit: "times more income for the top fifth of households than the bottom fifth", fmt: (v) => v.toFixed(1) + "×", src: "80th ÷ 20th percentile household income. U.S. Census Bureau, ACS 2023. Income, not wealth." },
-    minwage: { key: "minwage", low: true, unit: "minimum wage an hour", fmt: (v) => "$" + v.toFixed(2), src: "Higher of state or federal minimum wage, 2025. Darker means lower." },
+    ratio: { key: "ratio", unit: "times more income for the top fifth of households than the bottom fifth", fmt: (v) => v.toFixed(1) + "×", src: "80th ÷ 20th percentile household income. U.S. Census Bureau, ACS 2025 (1-year). Income, not wealth." },
+    minwage: { key: "minwage", low: true, unit: "minimum wage an hour", fmt: (v) => "$" + v.toFixed(2), src: "Higher of state or federal minimum wage, as of November 2026 (U.S. Department of Labor). Darker means lower." },
     student: { key: "student", unit: "average federal student loan per borrower", fmt: (v) => fmt.money(v), src: "Federal Student Aid data, about 2023: state averages as charted by Axios; U.S. average from Federal Student Aid, end of 2023." },
   };
   let GEO = null;
@@ -181,7 +181,7 @@
 
     /* --- the moments: a writer, then the map that goes with the story --- */
     const pairs = [ // most pressing first: poverty, then the essentials, then mental health, then wages and inequality, then debt
-      { s: pick(T, 0), map: "poverty", nat: US.poverty, lead: (p, n) => `${n} of people in the U.S. live below the poverty line. That is one in eight.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
+      { s: pick(T, 0), map: "poverty", nat: US.poverty, lead: (p, n) => `${n} of people in the U.S. live below the poverty line.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
       { s: pick(T, 3), map: "food", nat: US.food, lead: (p, n) => `${n} of adults in the U.S. faced food insecurity in the past year.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
       { s: pick(T, 5), map: "housing", nat: US.housing, lead: (p, n) => `${n} of adults in the U.S. faced housing insecurity in the past year.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },
       { s: pick(T, 4), map: "disability", nat: US.disability, lead: (p, n) => `${n} of adults in the U.S. report a disability.`, num: (v) => ({ to: v, dec: 1, suf: "%" }) },

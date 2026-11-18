@@ -12,14 +12,14 @@ if (window.gsap && window.ScrollTrigger && !reduce) {
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  /* WORK: pinned horizontal scroll on large screens, native swipe below 900px */
+  /* WORK: pinned, then the project row slides sideways as you scroll down (at every screen size) */
   const track = document.getElementById("track");
   const cards = [...track.querySelectorAll(".card")];
   const wNow = document.getElementById("w-now");
   const setNow = (i) => (wNow.textContent = String(Math.min(cards.length, Math.max(1, i))).padStart(2, "0"));
   const mm = gsap.matchMedia();
 
-  mm.add("(min-width: 900px)", () => {
+  mm.add("(min-width: 0px)", () => {
     const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
     gsap.to(track, {
       x: () => -dist(),
@@ -37,15 +37,6 @@ if (window.gsap && window.ScrollTrigger && !reduce) {
     });
   });
 
-  mm.add("(max-width: 899px)", () => {
-    const onScroll = () => {
-      const step = cards[1].offsetLeft - cards[0].offsetLeft || 1;
-      setNow(Math.round(track.scrollLeft / step) + 1);
-    };
-    track.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => track.removeEventListener("scroll", onScroll);
-  });
 }
 
 /* About modal */

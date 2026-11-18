@@ -389,17 +389,14 @@ html.lenis, html.lenis body { height: auto; }
   .stand { min-height: 0; }
 }
 
-/* Smaller screens: even vertical rhythm between sections, swipeable project row instead of a pinned one */
+/* Smaller screens: the project row is still driven by scrolling down (pinned, then it slides sideways), same as large screens */
 @media (max-width: 899px) {
   :root { --sp: clamp(56px, 12vw, 96px); }
   .why { min-height: 0; }
   .why-pin { min-height: 0; justify-content: flex-start; gap: 20px; padding: var(--sp) var(--gutter); }
   .pause { margin-top: 0; padding: clamp(40px, 9vw, 72px) var(--gutter); }
   .work { margin-top: 0; }
-  .work-pin { height: auto; justify-content: flex-start; overflow: visible; padding: var(--sp) 0; gap: 20px; }
-  .track { width: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: var(--gutter); padding: 0 var(--gutter) 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-  .track::-webkit-scrollbar { display: none; }
-  .card { width: min(78vw, 420px); scroll-snap-align: start; }
+  .card { width: min(78vw, 420px); }
   .foot { margin-top: 0; }
 }
 

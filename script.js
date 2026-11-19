@@ -53,16 +53,18 @@ if (window.gsap && window.ScrollTrigger && !reduce) {
 const dlg = document.getElementById("about");
 const openBtn = document.getElementById("about-open");
 openBtn.addEventListener("click", () => { dlg.showModal(); document.body.style.overflow = "hidden"; window.lenis && lenis.stop(); });
-/* closing plays an exit first: the panel eases down and fades, the backdrop clears, then the dialog really closes */
+/* closing plays an exit first: the card drops fully, then the backdrop clears, then the dialog really closes */
 let closing = false;
 const calmMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const closeDlg = () => {
   if (!dlg.open || closing) return;
   if (calmMotion()) { dlg.close(); return; }
   closing = true; dlg.classList.add("closing");
-  const panel = dlg.querySelector(".about-panel"); let done = false;
+  let done = false;
   const finish = () => { if (done) return; done = true; dlg.classList.remove("closing"); closing = false; dlg.close(); };
-  panel.addEventListener("animationend", finish, { once: true }); setTimeout(finish, 600); // the timer is a safety net
+  // card drops (450ms), then the backdrop clears (450ms); finish when the backdrop is done, timer is a safety net
+  dlg.addEventListener("animationend", (e) => { if (e.pseudoElement === "::backdrop") finish(); }, { once: true });
+  setTimeout(finish, 930);
 };
 dlg.addEventListener("cancel", (e) => { e.preventDefault(); closeDlg(); }); // Escape gets the same exit
 document.getElementById("about-close").addEventListener("click", closeDlg);
